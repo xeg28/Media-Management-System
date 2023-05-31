@@ -35,14 +35,18 @@ class Image extends BaseController
             $newName = rename_image(pathinfo($targetFile));
             $file->move($targetPath, $newName);
             $model = new ImageModel();
-            
+
+            $name = $this->request->getPost("name");
+            $filename = trim($name) === "" ? $file->getName() : $name;
+            $note = $this->request->getPost("note");
     
             $imgData = [
-                'name' => $file->getName(),
+                'name' => $filename,
                 'type' => $file->getClientMimeType(),
                 'path' => $targetPath . $newName,
                 'caption' => $file->getName(),
                 'updated_at' => date('Y-m-d H:i:s', now()),
+                'note' => $note,
             ];
 
             $model->saveImage($imgData);

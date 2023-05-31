@@ -25,8 +25,7 @@ Dropzone.options.audioupload = {
                 fileDuration = audioElement.duration || 0;
                 console.log("element error");
                 
-                document.getElementById("fileDuration").value = fileDuration;
-                dropzoneInstance.processQueue(); 
+                document.getElementById("fileDuration").value = fileDuration; 
             });
 
             audioElement.addEventListener('loadedmetadata', function() {
@@ -34,7 +33,6 @@ Dropzone.options.audioupload = {
                 fileDuration = audioElement.duration || 0;
                 
                 document.getElementById("fileDuration").value = fileDuration;
-                dropzoneInstance.processQueue();    
             });
         }); 
 
@@ -44,8 +42,26 @@ Dropzone.options.audioupload = {
 };
 
 // Javascript for popups
+
+function escapeHTML(str) {
+  return str.replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/&/g, "&amp;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;")
+}
+
 $(document).ready(function(){
-    // When the button is clicked, show the popup
+	var dropzone = Dropzone.forElement("#audioupload");
+	$(".upload-btn").click(function() {
+		var name = escapeHTML($("#uploadname").val());
+		var note = escapeHTML($("#uploadnote").val());
+		$("#audioupload").append("<input type='hidden' name='name' value='" +name+ "'>");
+		$("#audioupload").append("<input type='hidden' name='note' value='" +note+ "'>");
+		dropzone.processQueue();
+	});
+	
+	// When the button is clicked, show the popup
     $(".edit-btn").click(function(){
       var index = $(".edit-btn").index($(this));
       console.log(index);

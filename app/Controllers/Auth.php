@@ -43,6 +43,9 @@ class Auth extends BaseController
                 return redirect()->to('/home');
             }
         }
+		if(session()->get('isLoggedIn')) {
+			return redirect()->to('/home');
+		}
         $data['title'] = 'Login';
         echo view('templates/header', $data);
         echo view('auth/login');

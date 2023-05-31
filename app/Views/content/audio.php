@@ -1,11 +1,18 @@
 <section class="vh-100" id="home">
     <div class="container-fluid">
         <div class="row pt-5 justify-content-center">
-            <div class="col-10">
-                <form action="<?php echo base_url(); ?>/AudioUpload" method="post" class="dropzone" id="audioupload">
-                <input type="hidden" id="fileDuration" name="fileDuration" value="">
-                </form>
-            </div>
+			<div class="col-10">
+				<div class="card">
+					<div class="card-body center-div">
+						<form action="<?php echo base_url(); ?>/AudioUpload" method="post" class="dropzone w-100 mb-2" id="audioupload">
+							<input type="hidden" id="fileDuration" name="fileDuration" value="">
+						</form>
+						<input class="form-control w-50 mb-2" id="uploadname" type="text" placeholder="File Name">
+                        <textarea class="form-control note w-50 mb-4" id="uploadnote" placeholder="Description"></textarea>
+                        <button class="upload-btn btn-green">Upload</button>	
+					</div>
+				</div>
+			</div>
         </div>
 
 
@@ -59,7 +66,7 @@
                                             <audio class="w-100" id="media<?=$index?>" controls><source src="public/audio/<?=$row->caption?>" type="<?=$row->type?>"></audio>
                                             <hr>
                                             <h5>Description:</h5>
-                                            <pre><?=htmlspecialchars($row->note)?></pre>
+                                            <pre class="note"><?=htmlspecialchars($row->note)?></pre>
                                         </div>
                                     </div>
                                 </div>

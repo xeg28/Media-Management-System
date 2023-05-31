@@ -2,9 +2,17 @@
     <div class="container-fluid">
         <div class="row pt-5 justify-content-center">
             <div class="col-10">
-                <form action="<?php echo base_url(); ?>/VideoUpload" method="post" class="dropzone" id="videoupload">
-                <input type="hidden" id="fileDuration" name="fileDuration" value="">
-                </form>
+				<div class="card">
+					<div class="card-body center-div"> 
+						<form action="<?php echo base_url(); ?>/VideoUpload" method="post" class="dropzone w-100 mb-2" id="videoupload">
+							<input type="hidden" id="fileDuration" name="fileDuration" value="">
+						</form>
+						
+						<input class="form-control w-50 mb-2" id="uploadname" type="text" placeholder="File Name">
+                        <textarea class="form-control note w-50 mb-4" id="uploadnote" placeholder="Description"></textarea>
+                        <button class="upload-btn btn-green">Upload</button>
+					</div>
+				</div>
             </div>
         </div>
 
@@ -59,7 +67,7 @@
                                             </div>
                                             <hr>
                                             <h5>Description:</h5>
-                                            <pre><?=htmlspecialchars($row->note)?></pre>
+                                            <pre class="note"><?=htmlspecialchars($row->note)?></pre>
                                         </div>
                                     </div>
                                 </div>

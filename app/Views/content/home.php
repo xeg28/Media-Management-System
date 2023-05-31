@@ -99,7 +99,7 @@
                                                     <?php } ?>
                                                     <hr>
                                                     <h5>Description:</h5>
-                                                    <pre><?=htmlspecialchars($row->note)?></pre>
+                                                    <pre class="note"><?=htmlspecialchars($row->note)?></pre>
                                                 </div>
                                             </div>
                                         </div>

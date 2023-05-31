@@ -3,7 +3,7 @@
 use CodeIgniter\Model;
 
 class VideoModel extends Model {
-    protected $table = 'video';
+    protected $table = 'videos';
     protected $allowedFields = ['id', 'name', 'type', 'path', 'caption', 
                                 'updated_at', 'duration', 'note'];
     protected $beforeInsert = ['beforeInsert'];

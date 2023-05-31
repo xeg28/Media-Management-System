@@ -21,9 +21,9 @@
                         <form action="<?=base_url('/login')?>" method="post" class="form">
                             <?= csrf_field() ?>
                             <div class="form-group">
-                                <input type="text" class="form-control mb-2" name="email" placeholder="Email Address" value="<?= set_value('email') ?>">
+                                <input type="text" class="form-control mb-2" name="email" placeholder="Email Address" value="<?= set_value('email') ?>" required>
 
-                                <input type="password" class="form-control mb-2" name="password" placeholder="Password" value="">
+                                <input type="password" class="form-control mb-2" name="password" placeholder="Password" value="" required>
 
                                 <?php if (isset($validation)) : ?>
                                     <div class="col-12">

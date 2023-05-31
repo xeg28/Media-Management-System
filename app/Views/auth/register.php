@@ -15,30 +15,35 @@
                                 class="form-control mb-2"
                                 name="first_name"
                                 placeholder="First Name"
-                                value="<?= set_value('first_name') ?>">
+                                value="<?= set_value('first_name') ?>"
+								required>
 
                                 <input type="text" 
                                 class="form-control mb-2"
                                 name="last_name"
                                 placeholder="Last Name"
-                                value="<?= set_value('last_name')?>">
+                                value="<?= set_value('last_name')?>"
+								required>
 
                                 <input type="text" 
                                 class="form-control mb-2"
                                 name="email"
                                 placeholder="Email Address"
-                                value="<?= set_value('email')?>">
+                                value="<?= set_value('email')?>"
+								required>
 
                                 <input type="password" 
                                 class="form-control mb-2"
                                 name="password"
                                 placeholder="Password"
-                                value="">
+                                value=""
+								required>
                                 
                                 <input type="password" 
                                 class="form-control mb-2"
                                 name="confirmPassword"
-                                placeholder="Confrim Password">
+                                placeholder="Confrim Password"
+								required>
 
                                 <?php if (isset($validation)): ?>
                                     <div class="col-12">

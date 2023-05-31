@@ -39,13 +39,18 @@ class Video extends BaseController
             $time = get_time_from_seconds($durationInSeconds);
             $duration = sprintf('%02d:%02d:%02d', $time['hours'], $time['minutes'], $time['seconds']);
 
-            $videoData = [
-                'name' => $file->getName(),
+			$name = $this->request->getPost("name");
+			$filename = (trim($name) === "") ? $file->getName() : $name;
+			$note = $this->request->getPost("note");
+			
+            $videoData = [    
+                'name' => $filename,
                 'type' => $file->getClientMimeType(),
                 'path' => $targetPath . $newName,
                 'caption' => $file->getName(),
                 'updated_at' => date('Y-m-d H:i:s', now()),
                 'duration' => $duration,
+				'note' => $note,
             ];
 
             $model->saveVideo($videoData);

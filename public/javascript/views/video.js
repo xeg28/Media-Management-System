@@ -9,6 +9,7 @@ Dropzone.options.videoupload = {
     dictDefaultMessage: "Drop files here to upload",
     acceptedFiles: "video/*",
     autoProcessQueue: false,
+	timeout: 600000,
     init: function () {
         var dropzoneInstance = this;
         
@@ -24,7 +25,6 @@ Dropzone.options.videoupload = {
                 fileDuration = videoElement.duration || 0;
                 
                 document.getElementById("fileDuration").value = fileDuration;
-                dropzoneInstance.processQueue(); 
             });
 
             videoElement.addEventListener('loadedmetadata', function() {
@@ -32,7 +32,6 @@ Dropzone.options.videoupload = {
                 fileDuration = videoElement.duration || 0;
                 
                 document.getElementById("fileDuration").value = fileDuration;
-                dropzoneInstance.processQueue(); 
             });
         });
 
@@ -43,7 +42,25 @@ Dropzone.options.videoupload = {
 };
 
 // Javascript for popups
+
+function escapeHTML(str) {
+  return str.replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/&/g, "&amp;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;")
+}
+
 $(document).ready(function(){
+	var dropzone = Dropzone.forElement("#videoupload");
+	$(".upload-btn").click(function() {
+		var name = escapeHTML($("#uploadname").val());
+		var note = escapeHTML($("#uploadnote").val());
+		$("#videoupload").append("<input type='hidden' name='name' value='" +name+ "'>");
+		$("#videoupload").append("<input type='hidden' name='note' value='" +note+ "'>");
+		dropzone.processQueue();
+	});
+	
     // When the button is clicked, show the popup
     $(".edit-btn").click(function(){
       var index = $(".edit-btn").index($(this));
