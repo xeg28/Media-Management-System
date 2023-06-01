@@ -51,6 +51,7 @@ class Video extends BaseController
                 'updated_at' => date('Y-m-d H:i:s', now()),
                 'duration' => $duration,
 				'note' => $note,
+				'user_id' => session()->get("id"),
             ];
 
             $model->saveVideo($videoData);
@@ -68,10 +69,16 @@ class Video extends BaseController
     public function edit() {
         if($this->request->getMethod() == 'post') {
             helper(['form', 'date']);
+			$id = $this->request->getPost('id');
             $model = new VideoModel();
-            
+            $video = $model->getVideo($id);
+			
+			if(!$video) {
+				return redirect()->to(previous_url());
+			}
+			
             $vidData = [
-                'id' => $this->request->getPost('id'),
+                'id' => $id,
                 'name' => $this->request->getPost('name'),
                 'updated_at' => date('Y-m-d H:i:s', now()),
                 'note' => $this->request->getPost('note'),
@@ -86,7 +93,12 @@ class Video extends BaseController
     public function delete($id) {
         helper(['form', 'url', 'upload']);
         $model = new VideoModel();
-
+		
+		$video = $model->getVideo($id);
+		if(!$video) {
+			return redirect()->to(previous_url());
+		}
+		
         $path = $model->getVideoPath($id);
         if(isset($path) && file_exists($path))
             unlink($path);

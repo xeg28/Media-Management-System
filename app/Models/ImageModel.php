@@ -4,7 +4,8 @@ use CodeIgniter\Model;
 
 class ImageModel extends Model {
     protected $table = 'images';
-    protected $allowedFields = ['id', 'name', 'type', 'path', 'caption', 'updated_at', 'note'];
+    protected $allowedFields = ['id', 'name', 'type', 'path', 'caption', 
+								'updated_at', 'note', 'user_id'];
     protected $beforeInsert = ['beforeInsert'];
     protected $beforeUpdate = ['beforeUpdate'];
     protected $db;
@@ -15,7 +16,10 @@ class ImageModel extends Model {
 
     public function getImage($id) {
         parent::__construct();
-        return $this->where('id', $id)->first();
+		$user_id = session()->get("id");
+        return $this->where('id', $id)
+			->where('user_id', $user_id)
+			->first();
     }
 
     public function saveImage($image) {
@@ -23,13 +27,15 @@ class ImageModel extends Model {
     }
 
     public function getLastTenUpdated() {
-        $builder = $this->db->table($this->table)->orderBy('uploaded_at','DESC')->limit(10);
+		$user_id = session()->get("id");
+        $builder = $this->db->table($this->table)->where('user_id', $user_id)->orderBy('uploaded_at','DESC')->limit(10);
         $query = $builder->get();
         return $query->getResult();
     }
 
     public function getAllByName() {
-        $builder = $this->db->table($this->table)->orderBy('name', 'ASC');
+		$user_id = session()->get("id");
+        $builder = $this->db->table($this->table)->where('user_id', $user_id)->orderBy('name', 'ASC');
         $query = $builder->get();
         return $query->getResult();
     }
@@ -55,31 +61,36 @@ class ImageModel extends Model {
 
     public function searchImages($query) {
         $query = $this->db->escapeString($query);
-
+		$user_id = session()->get("id");
         $words = null;
+		$builder = $this->db->table($this->table)
+					->select('*')
+					->select("'N/A' as duration")
+					->select("'Image' as filetype")
+					->where('user_id', $user_id);
         if(str_contains($query, " ")) {
             $words = explode(" ", $query);
         }
 
-        $sqlQuery = "SELECT *, 'N/A' as duration, 'Image' as filetype FROM " . $this->table .
-                     " WHERE name LIKE '%" . $query . "%'" ;
+		$builder->groupStart()->like('name', $query);
 
         if(!empty($words)) {
             foreach($words as $word) {
                 if(trim($word) == '') {
                     continue;
                 }
-                $sqlQuery = $sqlQuery . " OR name LIKE '%". $word . "%'"; 
+				$builder->orLike('name', $word);
             }
         }
+		$builder->groupEnd();
 
-        $sqlQuery = $sqlQuery . ';';
-
-        $result = $this->query($sqlQuery);
-
+		$result = $builder->get();
         return $result->getResult();
         
     }
-
+	
+	public function beforeUpdate($data) {
+		return $data;
+	}
  }
 ?>

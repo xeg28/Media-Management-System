@@ -38,6 +38,10 @@ Dropzone.options.audioupload = {
 
         this.on("success", function (file) {
             location.reload();});
+			
+		this.on('error', function(file, response) {
+			$(file.previewElement).find('.dz-error-message').text(response);
+		});
     }
 };
 

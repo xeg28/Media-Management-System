@@ -5,7 +5,7 @@ use CodeIgniter\Model;
 class VideoModel extends Model {
     protected $table = 'videos';
     protected $allowedFields = ['id', 'name', 'type', 'path', 'caption', 
-                                'updated_at', 'duration', 'note'];
+                                'updated_at', 'duration', 'note', 'user_id'];
     protected $beforeInsert = ['beforeInsert'];
     protected $beforeUpdate = ['beforeUpdate'];
     protected $db;
@@ -16,7 +16,10 @@ class VideoModel extends Model {
 
     public function getVideo($id) {
         parent::__construct();
-        return $this->where('id', $id)->first();
+		$user_id = session()->get("id");
+        return $this->where('id', $id)
+			->where('user_id', $user_id)
+			->first();
     }
 
     public function saveVideo($video) {
@@ -24,13 +27,19 @@ class VideoModel extends Model {
     }
 
     public function getLastTenUpdated() {
-        $builder = $this->db->table($this->table)->orderBy('uploaded_at','DESC')->limit(10);
+		$user_id = session()->get("id");
+        $builder = $this->db->table($this->table)
+				->where('user_id', $user_id)
+				->orderBy('uploaded_at','DESC')->limit(10);
         $query = $builder->get();
         return $query->getResult();
     }
 
     public function getAllByName() {
-        $builder = $this->db->table($this->table)->orderBy('name', 'ASC');
+		$user_id = session()->get("id");
+		$builder = $this->db->table($this->table)
+			->where('user_id', $user_id)
+			->orderBy('name', 'ASC');
         $query = $builder->get();
         return $query->getResult();
     }
@@ -53,30 +62,36 @@ class VideoModel extends Model {
 
     public function searchVideos($query) {
         $query = $this->db->escapeString($query);
-
+		$user_id = session()->get('id');
+		$builder = $this->db->table($this->table)
+				    ->select('*')
+					->select("'Video' as filetype")
+					->where('user_id', $user_id);
         $words = null;
         if(str_contains($query, " ")) {
             $words = explode(" ", $query);
         }
 
-        $sqlQuery = "SELECT *, 'Video' as filetype FROM " . $this->table .
-                     " WHERE name LIKE '%" . $query . "%'" ;
+		$builder->groupStart()->like('name', $query);
 
         if(!empty($words)) {
             foreach($words as $word) {
                 if(trim($word) == '') {
                     continue;
-                }
-                $sqlQuery = $sqlQuery . " OR name LIKE '%". $word . "%'"; 
+                }    
+				$builder->orLike('name', $word);
             }
-            
         }
 
-        $sqlQuery = $sqlQuery . ';';
+		$builder->groupEnd();
 
-        $result = $this->query($sqlQuery);
+        $result = $builder->get();
 
         return $result->getResult();
     }
+	
+	public function beforeUpdate($data) {
+		return $data;
+	}
 }
 ?>

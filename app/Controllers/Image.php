@@ -47,6 +47,7 @@ class Image extends BaseController
                 'caption' => $file->getName(),
                 'updated_at' => date('Y-m-d H:i:s', now()),
                 'note' => $note,
+				'user_id' => session()->get("id"),
             ];
 
             $model->saveImage($imgData);
@@ -64,10 +65,15 @@ class Image extends BaseController
     public function edit() {
         if($this->request->getMethod() == 'post') {
             helper(['form', 'date']);
+			$id = $this->request->getPost('id');
             $model = new ImageModel();
+			$image = $model->getImage($id);
+			if(!$image) {
+				return redirect()->to(previous_url());
+			}	
             
             $imgData = [
-                'id' => $this->request->getPost('id'),
+                'id' => $id,
                 'name' => $this->request->getPost('name'),
                 'updated_at' => date('Y-m-d H:i:s', now()),
                 'note' => $this->request->getPost('note'),
@@ -82,6 +88,10 @@ class Image extends BaseController
     public function delete($id) {
         helper(['form', 'url', 'upload']);
         $model = new ImageModel();
+		$image = $model->getImage($id);
+		if(!$image) {
+			return redirect()->to(previous_url());
+		}
 
         $path = $model->getImagePath($id);
         if(isset($path) && file_exists($path))

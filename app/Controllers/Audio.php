@@ -55,6 +55,7 @@ class Audio extends BaseController
                 'updated_at' => date('Y-m-d H:i:s', now()),
                 'duration' => $duration,
 				'note' => $note,
+				'user_id' => session()->get("id"),
             ];
 
             $model->saveAudio($audioData);
@@ -74,10 +75,16 @@ class Audio extends BaseController
     public function edit() {
         if($this->request->getMethod() == 'post') {
             helper(['form', 'date']);
+			$id = $this->request->getPost('id');
             $model = new AudioModel();
-            
+			
+            $audio = $model->getAudio($id);
+			if(!$audio) {
+				return redirect()->to(previous_url());
+			}
+			
             $audData = [
-                'id' => $this->request->getPost('id'),
+                'id' => $id,
                 'name' => $this->request->getPost('name'),
                 'updated_at' => date('Y-m-d H:i:s', now()),
                 'note' => $this->request->getPost('note'),
@@ -93,7 +100,12 @@ class Audio extends BaseController
     public function delete($id) {
         helper(['form', 'url', 'upload']);
         $model = new AudioModel();
-
+		
+	    $audio = $model->getAudio($id);
+		if(!$audio) {
+			return redirect()->to(previous_url());
+		}
+		
         $path = $model->getAudioPath($id);
         if(isset($path) && file_exists($path))
             unlink($path);
