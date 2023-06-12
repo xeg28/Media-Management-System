@@ -1,6 +1,7 @@
 <?php namespace App\Models;
 
 use CodeIgniter\Model;
+use App\Models\SharedVideoModel;
 
 class VideoModel extends Model {
     protected $table = 'videos';
@@ -50,6 +51,8 @@ class VideoModel extends Model {
     }
 
     public function deleteVideo($id) {
+        $sharedVidModel = new SharedVideoModel();
+		$sharedVidModel->deleteByVideoId($id);
         $this->delete($id);
     } 
 

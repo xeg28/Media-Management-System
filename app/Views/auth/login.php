@@ -14,9 +14,15 @@
                         <h4>Sign In</h4>
                         <hr>
                         <?php if (session()->get('success')) : ?>
-                            <div class="alert alert-success" role="alert">
-                                <?= session()->get('success') ?>
+                            <div class="col-12 success-msg">
+                                <div class="alert alert-success" role="alert">
+                                    <span class="close-btn success-btn">&times;</span>
+                                    <div class="row pt-2 pb-2">
+                                        <?= session()->get('success') ?>
+                                    </div>
+                                </div>
                             </div>
+                            
                         <?php endif; ?>
                         <form action="<?=base_url('/login')?>" method="post" class="form">
                             <?= csrf_field() ?>
@@ -26,9 +32,12 @@
                                 <input type="password" class="form-control mb-2" name="password" placeholder="Password" value="" required>
 
                                 <?php if (isset($validation)) : ?>
-                                    <div class="col-12">
+                                    <div class="col-12 error-msg">
                                         <div class="alert alert-danger" role="alert">
-                                            <?= $validation->listErrors() ?>
+                                            <span class="close-btn error-btn">&times;</span>
+                                            <div class="row pt-3">
+                                                <?= $validation->listErrors() ?>
+                                            </div>
                                         </div>
                                     </div>
                                 <?php endif; ?>

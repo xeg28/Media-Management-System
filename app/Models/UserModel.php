@@ -18,6 +18,16 @@ class UserModel extends Model {
     public function getUser($email) {
         return $this->where('email', $email)->first();
     }
+	
+	public function getUserIdByEmail($email) {
+		$user = $this->getUser($email);
+		
+		if(!$user) {
+			return null;
+		}
+		
+		return $user['id'];
+	}
 
     public function saveUser(array $user) {
         $this->save($user);

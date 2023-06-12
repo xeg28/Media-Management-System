@@ -52,6 +52,16 @@ function escapeHTML(str) {
 }
 
 $(document).ready(function(){
+    $("#uservideos").click(function(){
+		$(".shared-files").hide();
+		$(".user-files").show();
+	});
+	
+	$("#sharedvideos").click(function(){
+		$(".user-files").hide();
+		$(".shared-files").show();
+	});
+	
 	var dropzone = Dropzone.forElement("#videoupload");
 	$(".upload-btn").click(function() {
 		var name = escapeHTML($("#uploadname").val());
@@ -62,6 +72,22 @@ $(document).ready(function(){
 	});
 	
     // When the button is clicked, show the popup
+	$(".add-share-input").click(function() {
+		var index = $(".add-share-input").index($(this));
+		var form = $('.share-form').eq(index);
+		form.append('<input type="text" class="form-control mb-2 field" name="email[]" placeholder="Enter an email">');
+	});
+	
+	$(".share-submit-btn").click(function() {
+		var index = $(".share-submit-btn").index($(this));
+		$('.share-form').eq(index).submit();
+	});
+	
+	$(".share-btn").click(function(){
+		var index = $(".share-btn").index($(this));
+		$(".share-popup").eq(index).show();
+	});
+
     $(".edit-btn").click(function(){
       var index = $(".edit-btn").index($(this));
        $(".edit-popup").eq(index).show();
@@ -71,6 +97,7 @@ $(document).ready(function(){
     $(".close-popup").click(function(){
        $(this).closest(".edit-popup").hide();
        $(this).closest(".media-popup").hide();
+       $(this).closest(".share-popup").hide();
     });
 
     document.addEventListener('click', function(event) {

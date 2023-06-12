@@ -120,6 +120,15 @@ h1{
     top: 150px!important;
   }
   
+  .file-view {
+	color: black;
+	font-weight: 600;
+	background: linear-gradient(to right, #f8defa, #c9f2f7);
+  }
+  
+  .file-view:hover {
+	color: #222222;  
+  }
   
   /* Footer settings */
   footer {
@@ -135,9 +144,6 @@ h1{
     max-height: 100px;
   }
   
-  .link-primary {
-    text-decoration: none;
-  }
   
   /* Card Settings */
   .card-data-container::-webkit-scrollbar {
@@ -205,8 +211,48 @@ h1{
     width: 50%;
   }
   
+ /* Share popup */
+ .share-popup {
+    display: none;
+    position: fixed; /* Stay in place */
+    z-index: 2; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+
+  .share-popup::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .share-popup-content {
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    width: 50%;
+  }
   
   /* Media popup */
+
+  .popup {
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: -moz-hidden-unscrollable;
+    background-color: rgba(0,0,0,0.4);
+  }
+
+  .popup-content {
+    margin: 20% auto; /* 15% from the top and centered */
+    padding: 20px;
+    width: 50%;
+  }
   
   .media-popup {
     display: none;
@@ -236,7 +282,35 @@ h1{
     object-fit: contain;
   }
   
+  .shared-files {
+	display:none;  
+  }
+
+  .alert {
+    position: relative;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+  
   /* Close button */
+
+  .close-btn{
+    vertical-align: top;
+    text-align: center;
+    color:#222222;
+    float: right;
+    text-decoration: none;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close-btn:hover,
+  .close-btn:focus {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
   
   .close-popup {
     color: white;

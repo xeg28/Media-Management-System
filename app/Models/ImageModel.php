@@ -1,6 +1,7 @@
 <?php namespace App\Models;
 
 use CodeIgniter\Model;
+use App\Models\SharedImageModel;
 
 class ImageModel extends Model {
     protected $table = 'images';
@@ -47,6 +48,8 @@ class ImageModel extends Model {
     }
 
     public function deleteImage($id) {
+		$sharedImgModel = new SharedImageModel();
+		$sharedImgModel->deleteByImageId($id);
         $this->delete($id);
     }
 

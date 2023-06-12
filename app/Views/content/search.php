@@ -1,9 +1,30 @@
 <section class="vh-100" id="home">
+    <?php if (isset($errors)) : ?>  
+        <div class="error-msg popup">
+            <div class="popup-content">
+                <div class="alert alert-danger" role="alert">
+                    <span class="close-btn error-btn">&times;</span>
+                    <div class="row pt-2 pb-2">
+                        <?php foreach($errors as $error) {
+                            echo $error;    
+                        }?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endif;?>
+    
     <div class="container-fluid">
         <div class="container col-10 offset-1 pt-5 pb-10 mb-5">
         <div class="card">
-            <div class="card-header">
-                Files related to '<?=htmlspecialchars($query)?>'
+            <div class="card-header d-flex align-items-center">
+                <div class="col">
+                    Files related to '<?=htmlspecialchars($query)?>'    
+                </div>
+                <div class="ml-auto">
+                    <a class="btn btn-small file-view navbar-light user-files-btn">My Files</a>
+					<a class="btn btn-small file-view shared-files-btn">Shared Files</a>
+                </div>
             </div>
             <div class="card-body">
                 <div class="card-title">
@@ -14,12 +35,81 @@
                         <div class="col-2"><strong>Type</strong></div>
                     </div>
                 </div>
-                <div class="card-data-container">
+
+                <div class="card-data-container shared-files">
+                <?php
+                    $index = 0;
+                    if (!empty($sharedFiles)) {
+                        $fileData = [];
+                        foreach ($sharedFiles as $row) {
+                            if($row->filetype == 'Image') {
+                                $fileData['icon'] = base_url('public/images/' . $row->caption);
+                                $fileData['iconType'] = $row->type;  
+                            }
+                            else {
+                                $fileData['icon'] = ($row->filetype == 'Audio') ? base_url('public/audio/icon.png') : base_url('public/video/icon.png');
+                                $fileData['iconType'] = 'image/png'; 
+                            }
+                    ?>      
+                        <div class="card-data">
+                            <div class="row pb-2">
+                                <div class="col-1"><embed src="<?=$fileData['icon']?>" type="<?=$fileData['iconType']?>" width="30px" height="30px" style="object-fit: contain;"/></div>
+                                <div class="col-5">
+                                    <a class="show-media link-primary" href="#" id="<?=$index?>"><?=htmlspecialchars($row->name) ?></a>
+                                </div>
+                                <div class="col-2"><?=$row->duration?></div>
+                                <div class="col-2"><?php echo $row->type ?></div>
+                                <div class="col-2">
+                                </div>
+                            </div>
+                        </div>
+
+
+                    <!-- HTML for the media popup -->
+                    <div class="media-popup" id="media-popup-<?=$index?>">
+                        <div class="media-popup-content">
+                            <div class="card">
+                                <div class="card-header">
+                                <span class="close-popup"  index="<?=$index?>">&times;</span>
+                                    <div class="row">
+                                        <h5><?=htmlspecialchars($row->name)?></h5>
+                                    </div>
+                                </div>
+                                <div class="card-body" style="max-height: 60%">
+                                    <?php if($row->filetype == 'Image'){ ?>
+                                    <div class="embed-responsive">
+                                        <img class="media" id="media<?=$index?>" src="public/images/<?=$row->caption?>">
+                                    </div>
+                                        <?php }
+                                        if($row->filetype == 'Audio') {?>
+                                        <audio class="w-100" id="media<?=$index?>" controls><source src="public/audio/<?=$row->caption?>" type="<?=$row->type?>"></audio>
+                                        <?php }
+                                        if($row->filetype == 'Video') {?>
+                                        <div class="embed-responsive">
+                                            <video class="media" id="media<?=$index?>" controls><source src="public/video/<?=$row->caption?>" type="<?=$row->type?>"></video>
+                                        </div>
+                                    <?php } ?>
+                                    <hr>
+                                    <h5>Description:</h5>
+                                    <pre class="note"><strong>Shared by <?=$row->sender_email?> at <?=$row->shared_at?></strong>
+                                        </br><?=htmlspecialchars($row->note)?></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+
+                <?php $index++; }
+                    } else {?>
+                        <p>No shared file(s) found...</p>
+                    <?php }?>
+                </div>
+
+                <div class="card-data-container user-files">
                     <?php
                     if (!empty($files)) {
                         $fileData = [];
 
-                        foreach ($files as $index => $row) {
+                        foreach ($files as $row) {
                             if($row->filetype == 'Image') {
                                 $fileData['icon'] = base_url('public/images/' . $row->caption);
                                 $fileData['iconType'] = $row->type;  
@@ -40,10 +130,39 @@
                                 <div class="col-2">
                                     <a class="btn btn-primary btn-sm" href="<?=base_url($row->filetype)?>/delete/<?=$row->id?>">Delete</a>
                                     <button class="btn btn-primary btn-sm edit-btn">Edit</button>
+                                    <button class="btn btn-primary btn-sm share-btn">Share</button>
                                 </div>
                             </div>
                         </div>
-
+          
+                        <!-- HTML for the share popup -->
+                        <div class="share-popup" id="share-popup-<?=$index?>">
+                            <div class="share-popup-content">
+                                <div class="card">
+                                    <div class="card-header d-flex align-items-center">
+                                        <div class="col">
+                                            <h5>Share <?=$row->filetype?></h5>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <span class="close-popup">&times;</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <form action="<?=base_url('Share'.$row->filetype)?>" method="post" class="form share-form">
+                                            <div class="form-group">
+                                                <label for="inputName">User's Email</label>
+                                                <input type="hidden" name="id" value="<?=$row->id?>">
+                                                <input type="text" class="form-control mb-2 field" name="email[]" placeholder="Enter an email">
+                                            </div>
+                                        </form>
+                                        <div class="row d-flex justify-content-center"> 
+                                            <button class="btn btn-green mt-4 mx-auto add-share-input" index="<?=$index?>">Add</button>
+                                            <button class="btn btn-green mt-4 mx-auto share-submit-btn" index="<?=$index?>">Share</button>
+                                        </div>  
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
 
                         <!-- HTML for the media popup -->
                         <div class="media-popup" id="media-popup-<?=$index?>">
@@ -108,7 +227,7 @@
                         </div>
                         
                         <?php
-                        }
+                        $index++; }
                     } else {
                         ?>
                         <p>No file(s) found...</p>

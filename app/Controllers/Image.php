@@ -4,22 +4,27 @@ namespace App\Controllers;
 
 use CodeIgniter\Files\File;
 use App\Models\ImageModel;
-
+use App\Models\SharedImageModel;
+use App\Models\UserModel;
 class Image extends BaseController
 {
-
     public function index()
     {
-        $model = new ImageModel();
-        $data = [];
+        $imgModel = new ImageModel();
+		$sharedImgModel = new SharedImageModel();
         $data['title'] = 'Image';
         $data['showNavbar'] = true;
-        $files['images'] = $model->getAllByName() ;
+        $files['images'] = $imgModel->getAllByName();
+		$data['sharedImages'] = $sharedImgModel->getSharedImages();
+
+        if(session('errors') !== null && !empty(session('errors'))) {
+            $data['errors'] = session('errors');
+        }
+
         echo view('templates/header', $data);
         echo view('content/image', $files);
         echo view('templates/footer');
     }
-
 
 
     public function imageUpload()
@@ -65,11 +70,14 @@ class Image extends BaseController
     public function edit() {
         if($this->request->getMethod() == 'post') {
             helper(['form', 'date']);
+            $errors = [];
 			$id = $this->request->getPost('id');
             $model = new ImageModel();
+            $sharedImgModel = new SharedImageModel();
 			$image = $model->getImage($id);
 			if(!$image) {
-				return redirect()->to(previous_url());
+                $errors[] = "<li>You can't edit this image.</li>";
+                return redirect()->to(previous_url())->with('errors', $errors);
 			}	
             
             $imgData = [
@@ -84,6 +92,52 @@ class Image extends BaseController
             return redirect()->to(previous_url());
         }
     }
+	
+	public function share() {
+		 if($this->request->getMethod() == 'post') {
+            helper(['form', 'date']);
+			$imageId = $this->request->getPost('id');
+            $errors = [];
+            $sharedImgModel = new SharedImageModel();
+			$imgModel = new ImageModel();
+			$userModel = new UserModel();
+			$userId = session()->get('id');
+			
+			$image = $imgModel->getImage($imageId);
+			if(!$image) {
+                $errors[] = "<li>You cannot share this image</li>";
+				return redirect()->to(previous_url())->with('errors', $errors);
+			}	
+            
+			$emails = $this->request->getVar("email");
+			
+			foreach($emails as $email) {
+				$receiverId = $userModel->getUserIdByEmail($email);
+				if($receiverId === null) {
+                    $errors[] = "<li>Unable to send to ".$email."</li>";
+					continue;
+				}
+                if($receiverId == $userId) {
+                    $errors[] = "<li>You cannot send a file to yourself.</li>";
+                    continue;
+                }
+				
+				$sharedImgData = [
+					'sender_id' => $userId,
+					'receiver_id' => $receiverId,
+					'image_id' => $imageId,
+				];
+				if($sharedImgModel->sharedImageExists($sharedImgData)) {
+                    $errors[] = "<li>You already sent this file to ".$email."</li>";
+                    continue;
+                }
+					$sharedImgModel->saveSharedImage($sharedImgData);
+			}
+			
+            
+            return redirect()->to(previous_url())->with('errors', $errors);
+        }
+	}
 
     public function delete($id) {
         helper(['form', 'url', 'upload']);

@@ -4,18 +4,27 @@ namespace App\Controllers;
 
 use CodeIgniter\Files\File;
 use App\Models\VideoModel;
+use App\Models\UserModel;
+use App\Models\SharedVideoModel;
 
 class Video extends BaseController
 {
     public function index()
     {
-        $model = new VideoModel();
+        $vidModel = new VideoModel();
+        $sharedVidModel = new SharedVideoModel();
         $data = [];
         $data['title'] = 'Video';
         $data['showNavbar'] = true;
-        $files['video'] = $model->getAllByName();
+        $data['video'] = $vidModel->getAllByName();
+        $data['sharedVideos'] = $sharedVidModel->getSharedVideos();
+
+        if(session('errors') !== null && !empty(session('errors'))) {
+            $data['errors'] = session('errors');
+        }
+
         echo view('templates/header', $data);
-        echo view('content/video', $files);
+        echo view('content/video', $data);
         echo view('templates/footer');
     }
 
@@ -58,6 +67,52 @@ class Video extends BaseController
         }
     }
 
+    public function share() {
+        if($this->request->getMethod() == 'post') {
+            helper(['form', 'date']);
+            $errors = [];
+            $videoId = $this->request->getPost('id');
+            $sharedVidModel = new SharedVideoModel();
+            $vidModel = new VideoModel();
+            $userModel = new UserModel();
+            $userId = session()->get('id');
+           
+            $video = $vidModel->getVideo($videoId);
+            if(!$video) {
+                $errors[] = "<li>You cannot share this image.</li>";
+                return redirect()->to(previous_url())->with('errors', $errors);
+            }	
+           
+            $emails = $this->request->getVar("email");
+           
+            foreach($emails as $email) {
+                $receiverId = $userModel->getUserIdByEmail($email);
+                if($receiverId === null) {
+                    $errors[] = "<li>Unable to send to ".$email."</li>";
+                    continue;
+                }
+                if($receiverId == $userId) {
+                    $errors[] = "<li>You cannot send a file to yourself.</li>";
+                    continue;
+                }
+               
+                $sharedVidData = [
+                    'sender_id' => $userId,
+                    'receiver_id' => $receiverId,
+                    'video_id' => $videoId,
+                ];
+
+                if($sharedVidModel->sharedVideoExists($sharedVidData)) {
+                    $errors[] = "<li>You already sent this file to ".$email."</li>";     
+                    continue;
+                }
+                    $sharedVidModel->saveSharedVideo($sharedVidData);
+           }
+            
+           return redirect()->to(previous_url())->with('errors', $errors);
+       }
+   }
+
     public function videoDownload() {
         $model = new VideoModel();
         $id = $this->request->getVar('id');
@@ -74,7 +129,8 @@ class Video extends BaseController
             $video = $model->getVideo($id);
 			
 			if(!$video) {
-				return redirect()->to(previous_url());
+                $errors[] = "<li>You can't edit this image.</li>";
+				return redirect()->to(previous_url())->with('errors', $errors);
 			}
 			
             $vidData = [

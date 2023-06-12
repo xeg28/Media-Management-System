@@ -46,9 +46,12 @@
 								required>
 
                                 <?php if (isset($validation)): ?>
-                                    <div class="col-12">
+                                    <div class="col-12 error-msg">
                                         <div class="alert alert-danger" role="alert">
-                                            <?= $validation->listErrors() ?>
+                                            <span class="close-btn error-btn">&times;</span>
+                                            <div class="row pt-3">
+                                                <?= $validation->listErrors() ?>
+                                            </div>
                                         </div>
                                     </div>
                                 <?php endif; ?>

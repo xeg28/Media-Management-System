@@ -31,6 +31,16 @@
         }     
         return;
     });
+    $(document).ready(function() {
+        $(".error-btn").click(function() {
+            $(this).closest(".error-msg").hide();
+        });
+
+        $(".success-btn").click(function() {
+            $(this).closest(".success-msg").hide();
+        })
+    });
+
 
     document.addEventListener('click', function(event) {
         var target = event.target;
@@ -52,13 +62,6 @@
     ?> <script src='public/javascript/views/search.js'></script>
 <?php } ?>
     
-
-
-<!-- Dylan- I Added the navbar into the header file to remove clutter from view pages. 
-    By adding the following line to the index function of each controller it can be 
-    decided if you want the navbar to be visible    
-    $data['showNavbar'] = true; 
--->
 
 <?php if (isset($showNavbar) && $showNavbar): ?>
     <?php

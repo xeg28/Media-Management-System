@@ -1,6 +1,7 @@
 <?php namespace App\Models;
 
 use CodeIgniter\Model;
+use App\Models\SharedAudioModel;
 
 class AudioModel extends Model {
     protected $table = 'audios';
@@ -49,6 +50,8 @@ class AudioModel extends Model {
     }
 
     public function deleteAudio($id) {
+		$sharedAudModel = new SharedAudioModel();
+		$sharedAudModel->deleteByAudioId($id);
         $this->delete($id);
     }
 
