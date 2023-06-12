@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 05, 2023 at 06:28 PM
+-- Generation Time: Jun 12, 2023 at 08:43 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -89,6 +89,20 @@ CREATE TABLE `shared_images` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `shared_videos`
+--
+
+CREATE TABLE `shared_videos` (
+  `id` int(11) NOT NULL,
+  `sender_id` int(11) NOT NULL,
+  `receiver_id` int(11) NOT NULL,
+  `video_id` int(11) NOT NULL,
+  `shared_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -166,6 +180,15 @@ ALTER TABLE `shared_images`
   ADD KEY `image_id` (`image_id`);
 
 --
+-- Indexes for table `shared_videos`
+--
+ALTER TABLE `shared_videos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sender_id` (`sender_id`),
+  ADD KEY `receiver_id` (`receiver_id`),
+  ADD KEY `video_id` (`video_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -186,37 +209,43 @@ ALTER TABLE `videos`
 -- AUTO_INCREMENT for table `audios`
 --
 ALTER TABLE `audios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `images`
 --
 ALTER TABLE `images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `shared_audios`
 --
 ALTER TABLE `shared_audios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `shared_images`
 --
 ALTER TABLE `shared_images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+
+--
+-- AUTO_INCREMENT for table `shared_videos`
+--
+ALTER TABLE `shared_videos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `videos`
 --
 ALTER TABLE `videos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Constraints for dumped tables
@@ -249,6 +278,14 @@ ALTER TABLE `shared_images`
   ADD CONSTRAINT `shared_images_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `shared_images_ibfk_2` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `shared_images_ibfk_3` FOREIGN KEY (`image_id`) REFERENCES `images` (`id`);
+
+--
+-- Constraints for table `shared_videos`
+--
+ALTER TABLE `shared_videos`
+  ADD CONSTRAINT `shared_videos_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `shared_videos_ibfk_2` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `shared_videos_ibfk_3` FOREIGN KEY (`video_id`) REFERENCES `videos` (`id`);
 
 --
 -- Constraints for table `videos`
