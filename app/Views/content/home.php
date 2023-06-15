@@ -22,7 +22,7 @@
         $type = ['Image', 'Audio', 'Video'];
         for($i = 0; $i < 3; $i++) { ?>
         <div class="row pt-5 <?php if($type[$i] == 'Video') echo 'mb-5'?>">
-            <div class="col-10 offset-1">
+            <div class="col-12 col-md-10 offset-1">
                 <div class="card">
                     <div class="card-header d-flex align-items-center">
                         <div class="col">
@@ -105,7 +105,7 @@
                                                 <audio class="w-100" id="media<?=$index?>" controls><source src="public/audio/<?=$row->caption?>" type="<?=$row->type?>"></audio>
                                             <?php }
                                             if($type[$i] == 'Video') {?>
-                                                <div class="embed-responsive">
+                                                <div class="video-container">
                                                     <video class="media" id="media<?=$index?>" controls><source src="public/video/<?=$row->caption?>" type="<?=$row->type?>"></video>
                                                 </div>
                                             <?php } ?>
@@ -130,23 +130,33 @@
                                     if($i == 0) {
                             ?>      
                                     <div class="card-data">
-                                        <div class="row pb-2">
+                                        <div class="row pb-2 align-items-center">
                                             <div class="col-1"><embed src="<?php echo base_url('public/images/' . $row->caption); ?>" type="image/png" width="30px" height="30px" style="object-fit: contain;"/></div>
                                             <div class="col-5">
                                                 <a class="show-media link-primary" href="#" id="<?=$index?>"><?= htmlspecialchars($row->name) ?></a>
                                             </div>
                                             <div class="col-4"><?php echo $row->type ?></div>
-                                            <div class="col-2">
+                                            <div class="col-2 d-none d-lg-block">
                                                 <a class="btn btn-sm btn-primary" href="<?=base_url('/Image/delete/'.$row->id)?>">Delete</a>
-                                                <button class="btn btn-sm btn-primary edit-btn">Edit</button>
-                                                <button class="btn btn-primary btn-sm share-btn">Share</button>
+                                                <button class="btn btn-sm btn-primary edit-btn" index="<?=$index?>">Edit</button>
+                                                <button class="btn btn-primary btn-sm share-btn" index="<?=$index?>">Share</button>
+                                            </div>
+                                            <div class="col-2 btn-group d-lg-none">
+                                                <button type="button" class="btn btn-sm dropdown-toggle w-100" data-toggle="dropdown" aria-expanded="false">
+                                                    Actions
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="<?=base_url('/Image/delete/'.$row->id)?>">Delete</a></li>
+                                                    <li><a class="dropdown-item edit-btn" href="#" index="<?=$index?>">Edit</a></li>
+                                                    <li><a class="dropdown-item share-btn" href="#" index="<?=$index?>">Share</a></li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
                                     <?php } else { 
                                         ?> 
                                     <div class="card-data">
-                                        <div class="row pb-2">
+                                        <div class="row pb-2 align-items-center">
                                             <div class="col-1">
                                                 <embed src="<?php echo base_url('public/'. strtolower($type[$i]) . '/icon.png'); ?>" type="image/png" width="30px" height="30px"/>
                                             </div>
@@ -155,22 +165,33 @@
                                             </div>
                                             <div class="col-2"><?=$row->duration?></div>
                                             <div class="col-2"><?php echo $row->type ?></div>
-                                            <div class="col-2">
+                                            <div class="col-2 d-none d-lg-block">
                                                 <a class="btn btn-sm btn-primary" href="<?=base_url('/'.$type[$i].'/delete/'.$row->id)?>">Delete</a>
-                                                <button class="btn btn-sm btn-primary edit-btn">Edit</button>
-                                                <button class="btn btn-primary btn-sm share-btn">Share</button>
+                                                <button class="btn btn-sm btn-primary edit-btn" index="<?=$index?>">Edit</button>
+                                                <button class="btn btn-primary btn-sm share-btn" index="<?=$index?>">Share</button>
+                                            </div>
+
+                                            <div class="col-2 btn-group d-lg-none">
+                                                <button type="button" class="btn btn-sm dropdown-toggle w-100" data-toggle="dropdown" aria-expanded="false">
+                                                    Actions
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="<?=base_url('/'.$type[$i].'/delete/'.$row->id)?>">Delete</a></li>
+                                                    <li><a class="dropdown-item edit-btn" href="#" index="<?=$index?>">Edit</a></li>
+                                                    <li><a class="dropdown-item share-btn" href="#" index="<?=$index?>">Share</a></li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
                                     <?php } ?>
 
                                     <!-- HTML for the share popup -->
-                                    <div class="share-popup" id="share-popup-<?=$index?>">
+                                    <div class="share-popup" id="share-popup" index="<?=$index?>">
                                         <div class="share-popup-content">
                                             <div class="card">
                                                 <div class="card-header d-flex align-items-center">
                                                     <div class="col">
-                                                        <h5>Share <?=$type[$i]?></h5>
+                                                        <h5>Share <?=$row->name?></h5>
                                                     </div>
                                                     <div class="ml-auto">
                                                         <span class="close-popup">&times;</span>
@@ -215,7 +236,7 @@
                                                         <audio class="w-100" id="media<?=$index?>" controls><source src="public/audio/<?=$row->caption?>" type="<?=$row->type?>"></audio>
                                                     <?php }
                                                     if($type[$i] == 'Video') {?>
-                                                        <div class="embed-responsive">
+                                                        <div class="video-container">
                                                             <video class="media" id="media<?=$index?>" controls><source src="public/video/<?=$row->caption?>" type="<?=$row->type?>"></video>
                                                         </div>
                                                     <?php } ?>
@@ -228,7 +249,7 @@
                                     </div> 
 
                                      <!-- HTML for the edit popup -->
-                                    <div class="edit-popup" id="edit-popup<?=$index?>">
+                                    <div class="edit-popup" index="<?=$index?>">
                                         <div class="edit-popup-content">
                                             <div class="card">
                                                 <div class="card-header d-flex align-items-center">

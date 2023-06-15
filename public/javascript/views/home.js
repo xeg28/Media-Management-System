@@ -25,15 +25,16 @@ $(document).ready(function(){
 	});
 	
 	
-	$(".share-btn").click(function(){
-		var index = $(".share-btn").index($(this));
-		$(".share-popup").eq(index).show();
-	});
+    $(".share-btn").click(function() {
+        var index = $(this).attr("index");
+        $(".share-popup[index='" + index + "']").show();
+      });
+      
 
 
     $(".edit-btn").click(function(){
-      var index = $(".edit-btn").index($(this));
-       $(".edit-popup").eq(index).show();
+      var index = $(this).attr("index");
+       $(".edit-popup[index='" + index + "']").show();
     });
 
     // When the close button is clicked, hide the popup

@@ -49,7 +49,21 @@ h1{
     overflow:auto;
     background: -webkit-linear-gradient(to right, #e87eed, #08b6cd);
   
-    background: linear-gradient(to right, #e87eed, #08b6cd);  height: 100%;
+    background: linear-gradient(to right, #e87eed, #08b6cd);  
+    height: 100% !important;
+  }
+
+  body {
+    padding-bottom: 50px;
+    top:0px;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    overflow:auto;
+    background: -webkit-linear-gradient(to right, #e87eed, #08b6cd);
+  
+    background: linear-gradient(to right, #e87eed, #08b6cd);  
+    height: 100% !important;
   }
   
   #home::-webkit-scrollbar {
@@ -79,16 +93,16 @@ h1{
   
   
   /* NavBar Fonts */
-  .navbar-nav .nav-link {
+  .nav-link {
     font-size: 20px; /* set the font size */
     /* text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; */
-    color: white; 
+    color: white !important; 
   }
   .navbar-nav .active > .nav-link {
     font-weight: bold;
     /* text-decoration: underline; */
     /* text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; */
-    color: #a1d4f6; 
+    color: #a1d4f6 !important;
     font-size: 22px; /* set the font size */
 
   }
@@ -115,13 +129,22 @@ h1{
     background-color: #e87eed ;
     border-color:#0e6772
   }
+
+  .dropdown-toggle {
+    background-color: #e87eed ;
+    border-color:#0e6772;
+  }
+
+  .dropdown-item:hover {
+    background-color: #eaeaea;
+  }
   
   .dropzone .dz-preview .dz-error-message {
     top: 150px!important;
   }
   
   .file-view {
-	color: black;
+	color: black !important;
 	font-weight: 600;
 	background: linear-gradient(to right, #f8defa, #c9f2f7);
   }
@@ -153,6 +176,9 @@ h1{
   .card-data-container {
     overflow-y: auto; /* Enable vertical scrolling */
     overflow-x: hidden;
+    overflow: visible;
+    position: relative;
+
   }
   
   .form-control {
@@ -235,6 +261,8 @@ h1{
     width: 50%;
   }
   
+  
+  
   /* Media popup */
 
   .popup {
@@ -277,9 +305,9 @@ h1{
   }
   
   .media{
-    width: 100%;
-    max-height: 80vh;
-    object-fit: contain;
+    width: 100% !important;
+    max-height: 80vh !important;
+    object-fit: contain !important;
   }
   
   .shared-files {
@@ -327,5 +355,9 @@ h1{
     cursor: pointer;
   }
   
-  
+  /* dropdown-menu */
+  .dropdown-menu {
+    min-width: 100%;
+    width: auto;
+  }
   

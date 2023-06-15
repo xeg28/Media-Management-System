@@ -3,10 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <script src="public/javascript/dropzone.min.js"></script>
     <link rel="stylesheet" href="public/css/bootstrap.min.css">
+    <script src="public/javascript/dropzone.min.js"></script>
     <script src="public/javascript/jquery-3.5.1.slim.min.js"></script>
     <script src="public/javascript/bootstrap.bundle.min.js"></script>
+
     <link rel="stylesheet" type="text/css" href="public/css/dropzone.min.css" /> 
     <link rel="stylesheet" type="text/css" href="public/css/style.css?version=<%= Common.GetVersion%" /> 
     <link rel="shortcut icon" href="public/cat.png" type="image/x-icon">
@@ -69,14 +70,12 @@ $current_page = basename($_SERVER['REQUEST_URI'], ".php");
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#"> </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <img class="home-shortcut mx-3 navbar-brand" src="public/cat.png" alt="Cat" style="width: 70px; height: auto;">
+    <button class="navbar-toggler mx-3" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <img class="home-shortcut" src="public/cat.png" alt="Cat" style="width: 70px; height: auto;">
-    <h1 class="home-shortcut px-2">POUNCE</h1>
-    <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav mr-auto ">
+    <div class="collapse navbar-collapse mx-3" id="navbarText">
+        <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
             <li class="nav-item <?php if($current_page == 'home') {echo 'active';} ?>">
                 <a class="nav-link" href="<?=base_url('/home')?>">Home</a>
             </li>
@@ -89,17 +88,31 @@ $current_page = basename($_SERVER['REQUEST_URI'], ".php");
             <li class="nav-item <?php if($current_page == 'video') {echo 'active';} ?>">
                 <a class="nav-link" href="<?=base_url('/video')?>">Video</a>
             </li>
+            <a class="nav-item nav-link d-lg-none" href="<?=base_url('/logout')?>">Logout</a>
+            <form class="d-lg-none d-flex" action="<?=base_url()?>/search" method="get">
+                <div class="input-group">
+                    <input type="search" class="form-control field" name="query" placeholder="Search..." aria-label="Search">
+                    <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </form>
+           
         </ul>
     </div>
-    <form action="<?=base_url()?>/search" method="get">
-      <div class="input-group">
-        <input type="search" class="form-control field" name="query" placeholder="Search..." aria-label="Search">
-        <div class="input-group-append">
-          <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+
+    <form class="d-none d-lg-block" action="<?=base_url()?>/search" method="get">
+        <div class="input-group">
+            <input type="search" class="form-control field" name="query" placeholder="Search..." aria-label="Search">
+            <div class="input-group-append">
+            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+            </div>
         </div>
-      </div>
     </form>
-    <a class="nav-item nav-link px-5 " href="<?=base_url('/logout')?>">Logout</a>
+    
+     <a class="nav-item nav-link px-5 d-none d-lg-block" href="<?=base_url('/logout')?>">Logout</a>
+
+
 </nav>
 
 <?php endif; ?>
