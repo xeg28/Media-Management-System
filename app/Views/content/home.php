@@ -87,13 +87,9 @@
                         <div class="media-popup" id="media-popup-<?=$index?>">
                             <div class="media-popup-content">
                                 <div class="card">
-                                    <div class="card-header d-flex align-items-center">
-                                        <div class="col">
-                                            <h5><?=htmlspecialchars($row->name)?></h5>
-                                        </div>
-                                        <div class="ml-auto">
+                                    <div class="card-header">
                                             <span class="close-popup" index="<?=$index?>">&times;</span>
-                                        </div>
+                                            <h5><?=htmlspecialchars($row->name)?></h5>
                                     </div>
                                     <div class="card-body" style="max-height: 60%">
                                         <?php if($type[$i] == 'Image'){ ?>
@@ -218,13 +214,9 @@
                                     <div class="media-popup" id="media-popup-<?=$index?>">
                                         <div class="media-popup-content">
                                             <div class="card">
-                                                <div class="card-header d-flex align-items-center">
-                                                    <div class="col">
-                                                        <h5><?=htmlspecialchars($row->name)?></h5>
-                                                    </div>
-                                                    <div class="ml-auto">
-                                                        <span class="close-popup"  index="<?=$index?>">&times;</span>
-                                                    </div>
+                                                <div class="card-header">
+                                                    <span class="close-popup"  index="<?=$index?>">&times;</span>
+                                                    <h5><?=htmlspecialchars($row->name)?></h5>
                                                 </div>
                                                 <div class="card-body" style="max-height: 60%">
                                                     <?php if($type[$i] == 'Image'){ ?>

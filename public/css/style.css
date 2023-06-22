@@ -142,6 +142,9 @@ h1{
   .dropzone .dz-preview .dz-error-message {
     top: 150px!important;
   }
+  .dz-progress {
+    z-index: 900 !important;
+  }
   
   .file-view {
 	color: black !important;
@@ -262,12 +265,11 @@ h1{
   }
   
   
-  
   /* Media popup */
 
   .popup {
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 2; /* Sit on top */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -285,7 +287,7 @@ h1{
   .media-popup {
     display: none;
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 999; /* Sit on top */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -343,6 +345,7 @@ h1{
   .close-popup {
     color: white;
     float: right;
+    padding-left: 5px;
     text-decoration: none;
     font-size: 28px;
     font-weight: bold;

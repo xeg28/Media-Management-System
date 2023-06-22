@@ -70,10 +70,8 @@
                         <div class="media-popup-content">
                             <div class="card">
                                 <div class="card-header">
-                                <span class="close-popup"  index="<?=$index?>">&times;</span>
-                                    <div class="row">
-                                        <h5><?=htmlspecialchars($row->name)?></h5>
-                                    </div>
+                                    <span class="close-popup"  index="<?=$index?>">&times;</span>
+                                    <h5><?=htmlspecialchars($row->name)?></h5>
                                 </div>
                                 <div class="card-body" style="max-height: 60%">
                                     <?php if($row->filetype == 'Image'){ ?>
@@ -179,10 +177,8 @@
                             <div class="media-popup-content">
                                 <div class="card">
                                     <div class="card-header">
-                                    <span class="close-popup"  index="<?=$index?>">&times;</span>
-                                        <div class="row">
-                                            <h5><?=htmlspecialchars($row->name)?></h5>
-                                        </div>
+                                        <span class="close-popup"  index="<?=$index?>">&times;</span>
+                                        <h5><?=htmlspecialchars($row->name)?></h5>
                                     </div>
                                     <div class="card-body" style="max-height: 60%">
                                         <?php if($row->filetype == 'Image'){ ?>

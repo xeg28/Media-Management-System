@@ -3,15 +3,18 @@
 Dropzone.options.audioupload = {
     paramName: "file",
     maxFilesize: 100,
-    maxFiles: 1,
+    maxFiles: 10,
     addRemoveLinks: true,
     dictRemoveFile: "Remove",
     dictCancelUpload: "Cancel",
     dictDefaultMessage: "Drop files here to upload",
     acceptedFiles: "audio/*, .webm",
+    parallelUploads: 10,
+    uploadMultiple: true,
     autoProcessQueue: false,
     init: function () {
         var dropzoneInstance = this;
+        var index = 1;
         this.on("addedfile", function(file) {
             
             var audioElement = new Audio();
@@ -24,24 +27,49 @@ Dropzone.options.audioupload = {
                 // correct format
                 fileDuration = audioElement.duration || 0;
                 console.log("element error");
-                
-                document.getElementById("fileDuration").value = fileDuration; 
+                if(index <= 10 && (file.type.split('/')[0] == 'audio' || file.type.split('/')[1] == 'webm') && file.size <= 100000000) { 
+                    $('.dropzone').append("<input type='hidden' name='fileDuration[]' value='"+fileDuration+
+                    "' uuid='"+file.upload.uuid+"'>");
+                }
             });
 
             audioElement.addEventListener('loadedmetadata', function() {
                 // getting the duration of the file
                 fileDuration = audioElement.duration || 0;
-                
-                document.getElementById("fileDuration").value = fileDuration;
+                if(index <= 10 && (file.type.split('/')[0] == 'audio' || file.type.split('/')[1] == 'webm') && file.size <= 100000000) {
+                    $('.dropzone').append("<input type='hidden' name='fileDuration[]' value='"+fileDuration+
+                    "' uuid='"+file.upload.uuid+"'>");
+                }
             });
         }); 
 
+
         this.on("success", function (file) {
-            location.reload();});
+            location.reload();
+        });
+
+        this.on('addedfile', function (file) {
+            if(index <= 10 && (file.type.split('/')[0] == 'audio' || file.type.split('/')[1] == 'webm') && file.size <= 100000000) {
+                $('#AudioUploadContainer').append('<input class="form-control mb-2 '+
+                'upload-name" type="text" placeholder="File Name" value="' + file.name + '" uuid="'+file.upload.uuid+'">');
+                $('#AudioUploadContainer').append('<textarea class="form-control note mb-4 upload-note"' + 
+                ' type="text" placeholder="Description" uuid="'+ file.upload.uuid +'"></textarea>');
+                index++;
+              }
+        });
+
+        this.on('removedfile', function(file) {
+            $('[uuid="'+file.upload.uuid+'"]').remove();
+            index--;
+        });
 			
 		this.on('error', function(file, response) {
 			$(file.previewElement).find('.dz-error-message').text(response);
 		});
+
+        this.on("processing", function() {
+            this.options.autoProcessQueue = true;
+        });
     }
 };
 
@@ -69,10 +97,15 @@ $(document).ready(function(){
 	
 	var dropzone = Dropzone.forElement("#audioupload");
 	$(".upload-btn").click(function() {
-		var name = escapeHTML($("#uploadname").val());
-		var note = escapeHTML($("#uploadnote").val());
-		$("#audioupload").append("<input type='hidden' name='name' value='" +name+ "'>");
-		$("#audioupload").append("<input type='hidden' name='note' value='" +note+ "'>");
+        $('.upload-name').each(function() {
+            var name = escapeHTML($(this).val());
+            $("#audioupload").append("<input type='hidden' name='name[]' value='" +name+ "'>");
+        });
+
+        $('.upload-note').each(function() {
+            var note = escapeHTML($(this).val());
+            $("#audioupload").append("<input type='hidden' name='note[]' value='" +note+ "'>");
+        });
 		dropzone.processQueue();
 	});
 	

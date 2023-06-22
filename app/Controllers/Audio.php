@@ -39,37 +39,40 @@ class Audio extends BaseController
         // The upload helper is a custom helper that can be found in the helpers folder
         helper(['form', 'url', 'upload', 'date']);
 
-        $file = $this->request->getFile('file');
+        $files = $this->request->getFileMultiple('file');
+        $filenames = $this->request->getVar('name');
+        $notes = $this->request->getVar('note');
+        $durations = $this->request->getVar('fileDuration');
         $targetPath = ROOTPATH . 'public/audio/';
 
-        if($file->isValid() && !$file->hasMoved()) {
-            $targetFile = $targetPath . $file->getName();
-            $newName = rename_audio(pathinfo($targetFile));
-            $file->move($targetPath, $newName);
-            $model = new AudioModel();
-            
-            $durationInSeconds = $this->request->getVar('fileDuration');
-            $time = get_time_from_seconds($durationInSeconds);
-            $duration = sprintf('%02d:%02d:%02d', $time['hours'], $time['minutes'], $time['seconds']);
-			
-			$name = $this->request->getPost("name");
-			$filename = trim($name) === "" ? $file->getName() : $name;
-			$note = $this->request->getPost("note");
-
-            $audioData = [
-                'name' => $filename,
-                'type' => $file->getClientMimeType(),
-                'path' => $targetPath . $newName,
-                'caption' => $file->getName(),
-                'updated_at' => date('Y-m-d H:i:s', now()),
-                'duration' => $duration,
-				'note' => $note,
-				'user_id' => session()->get("id"),
-            ];
-
-            $model->saveAudio($audioData);
-
-           
+        foreach($files as $index => $file) {
+            if($file->isValid() && !$file->hasMoved()) {
+                $targetFile = $targetPath . $file->getName();
+                $newName = rename_audio(pathinfo($targetFile));
+                $file->move($targetPath, $newName);
+                $model = new AudioModel();
+                
+                $durationInSeconds = $durations[$index];
+                $time = get_time_from_seconds($durationInSeconds);
+                $duration = sprintf('%02d:%02d:%02d', $time['hours'], $time['minutes'], $time['seconds']);
+                
+                $name = $filenames[$index];
+                $filename = trim($name) === "" ? $file->getName() : $name;
+                $note = $notes[$index];
+    
+                $audioData = [
+                    'name' => $filename,
+                    'type' => $file->getClientMimeType(),
+                    'path' => $targetPath . $newName,
+                    'caption' => $file->getName(),
+                    'updated_at' => date('Y-m-d H:i:s', now()),
+                    'duration' => $duration,
+                    'note' => $note,
+                    'user_id' => session()->get("id"),
+                ];
+    
+                $model->saveAudio($audioData); 
+            }
         }
     }
 	

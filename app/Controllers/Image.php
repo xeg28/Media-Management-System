@@ -32,31 +32,35 @@ class Image extends BaseController
         // Set upload configuration
         helper(['form', 'url', 'upload', 'date']);
 
-        $file = $this->request->getFile('file');
+        $files = $this->request->getFileMultiple('file');
+        $filenames = $this->request->getVar('name');
+        $notes = $this->request->getVar('note');
         $targetPath = ROOTPATH . 'public/images/'; 
 
-        if($file->isValid() && !$file->hasMoved()) {
-            $targetFile = $targetPath.$file->getName();
-            $newName = rename_image(pathinfo($targetFile));
-            $file->move($targetPath, $newName);
-            $model = new ImageModel();
-
-            $name = $this->request->getPost("name");
-            $filename = trim($name) === "" ? $file->getName() : $name;
-            $note = $this->request->getPost("note");
+        foreach($files as $index => $file) {
+            if($file->isValid() && !$file->hasMoved()) {
+                $targetFile = $targetPath.$file->getName();
+                $newName = rename_image(pathinfo($targetFile));
+                $file->move($targetPath, $newName);
+                $model = new ImageModel();
     
-            $imgData = [
-                'name' => $filename,
-                'type' => $file->getClientMimeType(),
-                'path' => $targetPath . $newName,
-                'caption' => $file->getName(),
-                'updated_at' => date('Y-m-d H:i:s', now()),
-                'note' => $note,
-				'user_id' => session()->get("id"),
-            ];
-
-            $model->saveImage($imgData);
-        } 
+                $name = $filenames[$index];
+                $filename = trim($name) === "" ? $file->getName() : $name;
+                $note = $notes[$index];
+        
+                $imgData = [
+                    'name' => $filename,
+                    'type' => $file->getClientMimeType(),
+                    'path' => $targetPath . $newName,
+                    'caption' => $file->getName(),
+                    'updated_at' => date('Y-m-d H:i:s', now()),
+                    'note' => $note,
+                    'user_id' => session()->get("id"),
+                ];
+    
+                $model->saveImage($imgData);
+            } 
+        }
     }
 
     public function imageDownload() {

@@ -6,8 +6,8 @@
                     <div class="card-body center-div">
                         <form action="<?php echo base_url(); ?>/ImageUpload" method="post" class="dropzone w-100 mb-2" id="imageupload">
                         </form>
-                        <input class="form-control w-50 mb-2" id="uploadname" type="text" placeholder="File Name">
-                        <textarea class="form-control note w-50 mb-4" id="uploadnote" type="text" placeholder="Description"></textarea>
+                        <div class="w-50" id="ImageUploadContainer">
+                        </div>
                         <button class="upload-btn btn-green">Upload</button>
                     </div>
                 </div>
@@ -74,13 +74,9 @@
 							 <div class="media-popup" id="media-popup-<?=$index?>">
                                 <div class="media-popup-content">
                                     <div class="card">
-                                        <div class="card-header d-flex align-items-center">
-                                            <div class="col">
-                                                <h5><?=htmlspecialchars($row->name)?></h5>
-                                            </div>
-                                            <div class="ml-auto">
-                                                <span class="close-popup"  >&times;</span>                                             
-                                            </div>
+                                        <div class="card-header">
+                                            <span class="close-popup">&times;</span>  
+                                            <h5><?=htmlspecialchars($row->name)?></h5>                                         
                                         </div>
                                         <div class="card-body" style="max-height: 60%">
                                             <div class="embed-responsive">
@@ -163,10 +159,8 @@
                                 <div class="media-popup-content">
                                     <div class="card">
                                         <div class="card-header">
-                                        <span class="close-popup"  >&times;</span>
-                                            <div class="row">
-                                                <h5><?=htmlspecialchars($row->name)?></h5>
-                                            </div>
+                                            <span class="close-popup">&times;</span>
+                                            <h5><?=htmlspecialchars($row->name)?></h5>
                                         </div>
                                         <div class="card-body" style="max-height: 60%">
                                             <div class="embed-responsive">

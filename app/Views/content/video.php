@@ -5,11 +5,9 @@
 				<div class="card">
 					<div class="card-body center-div"> 
 						<form action="<?php echo base_url(); ?>/VideoUpload" method="post" class="dropzone w-100 mb-2" id="videoupload">
-							<input type="hidden" id="fileDuration" name="fileDuration" value="">
 						</form>
-						
-						<input class="form-control w-50 mb-2" id="uploadname" type="text" placeholder="File Name">
-                        <textarea class="form-control note w-50 mb-4" id="uploadnote" placeholder="Description"></textarea>
+						<div class="w-50" id="VideoUploadContainer">
+                        </div>
                         <button class="upload-btn btn-green">Upload</button>
 					</div>
 				</div>
@@ -65,10 +63,8 @@
                                     <div class="col-5">
                                         <a class="show-media link-primary" href="#" id="<?=$index?>"><?= htmlspecialchars($row->name) ?></a>
                                     </div>
-                                    <div class="col-4"><?php echo $row->type ?></div>
-                                    <div class="col-2">
-                                        
-                                    </div>
+                                    <div class="col-2"><?php echo $row->duration ?></div>
+                                    <div class="col-2"><?=$row->type?></div>
                                 </div>
                             </div>
                             
@@ -76,10 +72,8 @@
                                 <div class="media-popup-content">
                                     <div class="card">
                                         <div class="card-header">
-                                        <span class="close-popup" index="<?=$index?>">&times;</span>
-                                            <div class="row">
-                                                <h5><?=htmlspecialchars($row->name)?></h5>
-                                            </div>
+                                            <span class="close-popup" index="<?=$index?>">&times;</span>
+                                            <h5><?=htmlspecialchars($row->name)?></h5>
                                         </div>
                                         <div class="card-body" style="max-height: 60%">
                                             <div class="video-container">
@@ -162,10 +156,8 @@
                                 <div class="media-popup-content">
                                     <div class="card">
                                         <div class="card-header">
-                                        <span class="close-popup" index="<?=$index?>" >&times;</span>
-                                            <div class="row">
-                                                <h5><?=htmlspecialchars($row->name)?></h5>
-                                            </div>    
+                                            <span class="close-popup" index="<?=$index?>" >&times;</span>
+                                            <h5><?=htmlspecialchars($row->name)?></h5>
                                         </div>
                                         <div class="card-body" style="max-height: 60%">
                                             <div class="video-container">
