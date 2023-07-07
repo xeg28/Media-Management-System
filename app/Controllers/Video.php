@@ -151,13 +151,14 @@ class Video extends BaseController
         }
     }
 
-    public function delete($id) {
+    public function delete() {
         helper(['form', 'url', 'upload']);
+        $id = $this->request->getPost('id');
         $model = new VideoModel();
 		
 		$video = $model->getVideo($id);
 		if(!$video) {
-			return redirect()->to(previous_url());
+			return $this->fail("Error deleting video", 400);
 		}
 		
         $path = $model->getVideoPath($id);
@@ -166,7 +167,7 @@ class Video extends BaseController
             
         $model->deleteVideo($id);
 
-        return redirect()->to(previous_url());
+        return $this->response->setJSON(["message" => "Successfully deleted the video"]);
     }
 
 }

@@ -15,7 +15,7 @@ h4{
   font-family: "Pt Sans narrow", sans-serif;
   margin-top: 10px;
   font-weight: bold;
-  color: #a61f8d;
+  color: black;
 
 }
 /* Changes style of "Pounce" in navbar */
@@ -27,17 +27,26 @@ h1{
 
 }
 /* BG colors of login and registration page */
+  .light-background {
+    background: #CBF1F9;
+    height: 100%;
+  }
 
 
-.gradient-custom {
+  .background-theme {
   
     /* background: #3b5323; */
   
-    background: -webkit-linear-gradient(to right, #e87eed, #08b6cd);
-  
-    background: linear-gradient(to right, #e87eed, #08b6cd);
+    background: #5FE0FF;
+    background: linear-gradient(315deg, #5FE0FF, #CBF1F9);
     height: 100%;
   }
+
+  .shadow { 
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
+  }
+  
+
   /* BG colors of home/media pages */
   #home {
     /* position: absolute; */
@@ -60,9 +69,8 @@ h1{
     right:0px;
     bottom:0px;
     overflow:auto;
-    background: -webkit-linear-gradient(to right, #e87eed, #08b6cd);
-  
-    background: linear-gradient(to right, #e87eed, #08b6cd);  
+
+    background-color: #CBF1F9;
     height: 100% !important;
   }
   
@@ -81,10 +89,10 @@ h1{
   }
   
   .navbar-light {
-    background: -webkit-linear-gradient(to right, #e87eed, #08b6cd);
-  
-    background: linear-gradient(to right, #e87eed, #08b6cd);  height: 100%;
+    background: #0062b7 !important;
+    height: 100%;
   }
+
   footer{
     background: -webkit-linear-gradient(to right, #e87eed, #08b6cd);
   
@@ -102,7 +110,7 @@ h1{
     font-weight: bold;
     /* text-decoration: underline; */
     /* text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; */
-    color: #a1d4f6 !important;
+    color: #ffe05c !important;
     font-size: 22px; /* set the font size */
 
   }
@@ -112,9 +120,9 @@ h1{
   }
   
   /* Change color of buttons (must be declared as btn-green) */
-  .btn-green {
-    background: linear-gradient(to right, #e87eed, #08b6cd);
-    color: #fff;
+  .btn-theme {
+    background-color: #0062b7;
+    color:white;
     border-radius: 50px;
     padding: 10px 20px;
     font-size: 18px;
@@ -124,14 +132,19 @@ h1{
     text-decoration: none;
     display: inline-block;
   }
+
+  .btn-theme:hover {
+    background: #01cdff;
+    color: #000;
+  }
   
   .btn-primary {
-    background-color: #e87eed ;
-    border-color:#0e6772
+    background: #01cdff;
+    color: #000;
   }
 
   .dropdown-toggle {
-    background-color: #e87eed ;
+    background-color: #01cdff ;
     border-color:#0e6772;
   }
 
@@ -149,11 +162,11 @@ h1{
   .file-view {
 	color: black !important;
 	font-weight: 600;
-	background: linear-gradient(to right, #f8defa, #c9f2f7);
+	background: #01cdff;
   }
   
   .file-view:hover {
-	color: #222222;  
+	background: #0196d0;
   }
   
   /* Footer settings */
@@ -181,7 +194,7 @@ h1{
     overflow-x: hidden;
     overflow: visible;
     position: relative;
-
+    color: black;
   }
   
   .form-control {
@@ -193,13 +206,13 @@ h1{
   
   .card-body {
     padding: 20px;
-    background: linear-gradient(to right, #f8defa, #c9f2f7);
+    background: whitesmoke;
     /* border: 1px solid #80ded4; */
     border-radius: .25rem;
-    box-shadow: 0 0.125rem 0.25rem rgba(128, 164, 199, 0.55);
+    color: black;
   }
   .card-header {
-    background: linear-gradient(to right, #d52dde, #15abbe);
+    background: #0062b7;
     color: white;
     font-weight: bold;
   }

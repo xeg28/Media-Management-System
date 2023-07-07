@@ -143,12 +143,14 @@ class Image extends BaseController
         }
 	}
 
-    public function delete($id) {
+    public function delete() {
         helper(['form', 'url', 'upload']);
+        $id = $this->request->getPost("id");
         $model = new ImageModel();
 		$image = $model->getImage($id);
 		if(!$image) {
-			return redirect()->to(previous_url());
+			// return redirect()->to(previous_url());
+            return $this->fail("Error deleting image", 400);
 		}
 
         $path = $model->getImagePath($id);
@@ -157,6 +159,7 @@ class Image extends BaseController
         
         $model->deleteImage($id);
 
-        return redirect()->to(previous_url());
+        // return redirect()->to(previous_url());
+        return $this->response->setJSON(['message' => 'AJAX request processed successfully']);
     }
 }

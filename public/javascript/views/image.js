@@ -11,6 +11,7 @@ Dropzone.options.imageupload = {
     parallelUploads: 10,
     uploadMultiple: true,
     autoProcessQueue: false,
+    timeout: 600000,
     init: function(){
       var index = 1;
       this.on("success", function (file) {
@@ -49,6 +50,29 @@ function escapeHTML(str) {
 
 
 $(document).ready(function(){
+  // Deleting using ajax
+  $(".del-btn").click(function() {
+    var id = $(this).attr("rowId");
+    var row = $(this).closest(".card-data");
+    var index = row.attr("index");
+    var dataContainer = $(this).closest(".card-data-container");
+    $.ajax({
+      url: "/Image/delete",
+      type: "POST",
+      data: { id: id}, 
+      dataType: 'json',
+      success: function(response) { 
+        row.remove(); 
+        $(".share-popup[index='" + index + "']").remove();
+        $(".edit-popup[index='" + index + "']").remove();
+        $('.media-popup[index="'+index+'"]').remove();
+        if (dataContainer.find(".card-data").length === 0) { 
+            dataContainer.append("<p>No image(s) found...</p>");
+        }
+      }
+    });
+  });
+
 	$("#userimages").click(function(){
 		$(".shared-files").hide();
 		$(".user-files").show();
@@ -107,8 +131,8 @@ $(document).ready(function(){
     document.addEventListener('click', function(event) {
       var target = event.target;
       if(target.classList.contains('show-media')) {
-          var index = target.getAttribute('id');
-          $('.media-popup').eq(index).show();
+          var index = target.getAttribute('index');
+          $('.media-popup[index="'+index+'"]').show();
       }
     });
  });

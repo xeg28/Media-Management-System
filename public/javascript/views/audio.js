@@ -12,6 +12,7 @@ Dropzone.options.audioupload = {
     parallelUploads: 10,
     uploadMultiple: true,
     autoProcessQueue: false,
+    timeout: 600000,
     init: function () {
         var dropzoneInstance = this;
         var index = 1;
@@ -84,6 +85,30 @@ function escapeHTML(str) {
 }
 
 $(document).ready(function(){
+    // Deleting using ajax
+
+    $(".del-btn").click(function() {
+        var id = $(this).attr("rowId");
+        var row = $(this).closest(".card-data");
+        var index = row.attr("index");
+        var dataContainer = $(this).closest(".card-data-container");
+        $.ajax({
+            url: "Audio/delete",
+            type: "POST",
+            data: {id: id},
+            dataType: "json",
+            success: function(response) { 
+                row.remove();
+                $(".share-popup[index='" + index + "']").remove();
+                $(".edit-popup[index='" + index + "']").remove();
+                $('.media-popup[index="'+index+'"]').remove();
+                if (dataContainer.find(".card-data").length === 0) { 
+                    dataContainer.append("<p>No audios(s) found...</p>");
+                }
+             }
+        });
+    });
+
 	$("#useraudios").click(function(){
 		$(".shared-files").hide();
 		$(".user-files").show();
@@ -150,8 +175,9 @@ $(document).ready(function(){
       }
 
       if(target.classList.contains('show-media')) {
-          var index = target.getAttribute('id');
-          $('.media-popup').eq(index).show();
+          var index = target.getAttribute('index');
+          console.log(index);
+          $('.media-popup[index="'+index+'"]').show();
           document.getElementById("media"+index).play();
       }
     });

@@ -155,13 +155,14 @@ class Audio extends BaseController
     }
 
 
-    public function delete($id) {
+    public function delete() {
         helper(['form', 'url', 'upload']);
+        $id = $this->request->getPost("id");
         $model = new AudioModel();
 		
 	    $audio = $model->getAudio($id);
 		if(!$audio) {
-			return redirect()->to(previous_url());
+			return $this->fail("Error deleting audio", 400);
 		}
 		
         $path = $model->getAudioPath($id);
@@ -170,6 +171,6 @@ class Audio extends BaseController
             
         $model->deleteAudio($id);
 
-        return redirect()->to(previous_url());
+        return $this->response->setJSON(['message' => 'AJAX request processed successfully']);
     }
 }

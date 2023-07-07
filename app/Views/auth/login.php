@@ -1,8 +1,8 @@
-<section class="gradient-custom" id="auth">
+<section class="background-theme" id="auth">
     <div class="container-fluid py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                <div class="card" style="border-radius: 1rem">
+                <div class="card shadow" style="border-radius: 1rem">
                     <div class="m-3 m-md-4">
                         <h4>Sign In</h4>
                         <hr>
@@ -35,9 +35,9 @@
                                     </div>
                                 <?php endif; ?>
                                 <div class="row d-flex justify-content-center">   
-                                   <input type="submit" class="btn btn-info btn-green mt-4 mx-auto" value="Sign in">
+                                   <input type="submit" class="btn btn-info btn-theme mt-4 mx-auto" value="Sign in">
                                     
-                                    <button type="button" class="btn btn-info btn-green mt-4 mx-auto" onclick="location.href='<?=base_url('/register')?>'">
+                                    <button type="button" class="btn btn-info btn-theme mt-4 mx-auto" onclick="location.href='<?=base_url('/register')?>'">
                                         New User
                                     </button>
                     

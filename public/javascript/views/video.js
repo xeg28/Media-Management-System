@@ -81,6 +81,29 @@ function escapeHTML(str) {
 }
 
 $(document).ready(function(){
+    // Deleting using ajax
+    $('.del-btn').click(function() {
+        var id = $(this).attr("rowId");
+        var row = $(this).closest(".card-data");
+        var index = row.attr("index");
+        var dataContainer = $(this).closest(".card-data-container");
+        $.ajax({
+            url: 'Video/delete',
+            type: 'POST',
+            data: {id: id},
+            fileType: 'json',
+            success: function(response) {
+                row.remove();
+                $(".share-popup[index='" + index + "']").remove();
+                $(".edit-popup[index='" + index + "']").remove();
+                $('.media-popup[index="'+index+'"]').remove();
+                if (dataContainer.find(".card-data").length === 0) { 
+                    dataContainer.append("<p>No video(s) found...</p>");
+                }
+            }
+        });
+    });
+
     $("#uservideos").click(function(){
 		$(".shared-files").hide();
 		$(".user-files").show();
@@ -135,6 +158,7 @@ $(document).ready(function(){
        $(this).closest(".share-popup").hide();
     });
 
+
     document.addEventListener('click', function(event) {
       var target = event.target;
 
@@ -144,8 +168,8 @@ $(document).ready(function(){
       }
 
       if(target.classList.contains('show-media')) {
-          var index = target.getAttribute('id');
-          $('.media-popup').eq(index).show();
+          var index = target.getAttribute('index');
+          $('.media-popup[index="'+index+'"]').show();
           document.getElementById("media"+index).play();
       }
     });

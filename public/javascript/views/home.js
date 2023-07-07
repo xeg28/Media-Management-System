@@ -1,5 +1,29 @@
 // Javascript for popups
 $(document).ready(function(){
+    // Deleting using ajax
+    $(".del-btn").click(function() {
+        var id = $(this).attr("rowId");
+        var row = $(this).closest(".card-data");
+        var index = row.attr("index");
+        var dataContainer = $(this).closest(".card-data-container");
+        var type = dataContainer.attr("filetype");
+        $.ajax({
+            url: type+"/delete",
+            type: "POST",
+            data: {id: id},
+            dataType: "json",
+            success: function(response) { 
+                row.remove();
+                $(".share-popup[index='" + index + "']").remove();
+                $(".edit-popup[index='" + index + "']").remove();
+                $('.media-popup[index="'+index+'"]').remove();
+                if (dataContainer.find(".card-data").length === 0) { 
+                    dataContainer.append("<p>No "+type.toLowerCase()+"s(s) found...</p>");
+                }
+             }
+        });
+    });
+
     $(".user-files-btn").click(function(){
         var index = $(".user-files-btn").index($(this));
 		$(".shared-files").eq(index).hide();
@@ -55,8 +79,8 @@ $(document).ready(function(){
           }
       }
       if(target.classList.contains('show-media')) {
-          var index = target.getAttribute('id');
-          $('.media-popup').eq(index).show();
+          var index = target.getAttribute('index');
+          $('.media-popup[index="'+index+'"]').show();
           var element = document.getElementById("media"+index);
           if(element instanceof HTMLVideoElement || element instanceof HTMLAudioElement) {
               element.play();
