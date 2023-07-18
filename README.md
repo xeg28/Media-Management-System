@@ -1,3 +1,9 @@
+# About the wesite
+
+This website allows you to upload json files and zip folders that contains json files in them and the information within them will be processed and displayed.
+This only works on jsons that follow a specific format which is included as the file 'JSONSample.zip'
+
+
 # CodeIgniter 4 Framework
 
 ## What is CodeIgniter?
