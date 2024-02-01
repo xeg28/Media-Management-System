@@ -1,0 +1,342 @@
+:root {
+  --accent-color-dark: #313021;
+}
+
+.link {
+  max-width: fit-content;
+  text-decoration: none !important;
+}
+
+.link:hover {
+  color: #0068d6;
+}
+
+.container-fluid {
+  padding: 0px 0px;
+}
+
+.card {
+  border-color: #C0C0C0;
+  width: 550px;
+}
+
+.click-focus {
+  background-color: #C0C0C0;
+}
+
+/* change font of everything */
+.center-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+* {
+  font-family: "Pt Sans", sans-serif;
+}
+/* Changes style of "Sign In" "Login" and "Pounce" on login screen */
+h4{
+  font-family: "Pt Sans narrow", sans-serif;
+  margin-top: 10px;
+  font-weight: bold;
+  color: black;
+
+}
+/* Changes style of "Pounce" in navbar */
+h1{
+  margin-right: 20px;
+  font-family: "Pt Sans narrow", sans-serif;
+  font-weight: bold;
+  color: #cbf8fe;
+
+}
+/* BG colors of login and registration page */
+
+  .background-theme {
+    background: #f8f8f8;
+    height: 100%;
+  }
+
+  .shadow { 
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
+  }
+
+  body {
+    padding-bottom: 50px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: #f8f8f8;
+  }
+
+  *::-webkit-scrollbar {
+    width: 16px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #454545;
+    border-radius: 10px;
+    border: 3px solid white;
+  }
+  
+  
+  /* Change color of buttons (must be declared as btn-green) */
+  .btn-theme {
+    background-color: #0062b7;
+    color:white;
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-size: 18px;
+    width: 200px;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color .5s, color .5s;
+  }
+
+  .btn-theme:hover {
+    background: #004a8b;
+    color: white;
+  }
+  
+  .btn-primary {
+    background: #01cdff;
+    color: #000;
+  }
+
+  .dropdown-toggle {
+    background-color: #01cdff ;
+    border-color:#0e6772;
+  }
+  
+  .dropzone .dz-preview .dz-error-message {
+    top: 150px!important;
+  }
+  
+  .dz-progress {
+    z-index: 900 !important;
+  }
+  
+  .file-view {
+    color: black !important;
+    font-weight: 600;
+    background: #01cdff;
+  }
+  
+  .file-view:hover {
+	background: #0196d0;
+  }
+  
+  /* Footer styles */
+  footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #fff;
+    color: #000;
+    text-align: center;
+    height: 40px;
+    line-height: 50px;
+    max-height: 100px;
+  }
+  
+  
+  /* Card styles */
+
+  .card-data-container::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .card-data-container {
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: hidden;
+    overflow: visible;
+    position: relative;
+    color: black;
+  }
+  
+  .form-control {
+    white-space: nowrap;
+  }
+  .form-container {
+    background: linear-gradient(to right, #f8defa, #c9f2f7);
+  }
+  
+  .card-body {
+    padding: 20px;
+    /* border: 1px solid #80ded4; */
+    color: black;
+  }
+  .card-header {
+    color: black;
+    font-weight: bold;
+  }
+  
+  /*
+    Edit card settings
+  */
+  
+  .edit-popup {
+    display: none;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  .note {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+  }
+  
+  #inputNote {
+	height: 200px
+  }
+  
+  .edit-popup::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .edit-popup-content {
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    width: 50%;
+  }
+  
+  
+  /* Media popup */
+
+  .popup {
+    position: fixed; /* Stay in place */
+    z-index: 2; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: -moz-hidden-unscrollable;
+    background-color: rgba(0,0,0,0.4);
+  }
+
+  .popup-content {
+    margin: 20% auto; /* 15% from the top and centered */
+    padding: 20px;
+    width: 50%;
+  }
+  
+  .media-popup {
+    display: none;
+    position: fixed; /* Stay in place */
+    z-index: 999; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+
+  .media-popup::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .media-popup-content {
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    width: 50%;
+  }
+  
+  .media{
+    width: 100% !important;
+    max-height: 80vh !important;
+    object-fit: contain !important;
+  }
+  
+  .shared-files {
+	display:none;  
+  }
+
+  .alert {
+    position: relative;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  /* #f8d7da */
+  .error-msg {
+    position: absolute;
+    margin: auto;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+
+    /* #f8d7da */
+  .success-msg {
+    position: absolute;
+    margin: auto;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+
+  .alert-danger {
+    background-color: rgba(255, 55, 92, 0.4);
+    backdrop-filter: blur(3px);
+    border-radius: 10px;
+  }
+  
+  /* Close button */
+
+  .close-btn{
+    vertical-align: top;
+    text-align: center;
+    color:#222222;
+    float: right;
+    text-decoration: none;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close-btn:hover,
+  .close-btn:focus {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .close-popup {
+    color: #343434;
+    text-decoration: none;
+    font-size: 28px;
+    font-weight: bold;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 50%;
+    text-align: center;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    /* box-sizing: border-box; */
+  }
+  
+  .close-popup:hover,
+  .close-popup:focus {
+    background-color: lightgray;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  

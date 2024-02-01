@@ -1,0 +1,75 @@
+/* Share popup */
+.share-popup {
+    display: none;
+    position: fixed; /* Stay in place */
+    z-index: 2; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+
+  .share-popup-content > .card {
+    border-radius: 20px;
+    max-width: 90vw;
+    margin: 0 auto;
+    max-height: 50vh;
+  }
+
+  .share-popup-content > .card > .card-header{
+    height: fit-content;
+  }
+
+  .share-popup-content > .card > .card-header > h5{
+    margin: 0;
+  }
+
+  .share-emails {
+    overflow-y: auto;
+    max-height: 22vh;
+  }
+
+  .share-emails::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .share-emails::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .share-emails::-webkit-scrollbar-thumb {
+    background-color: #454545;
+    border-radius: 5px;
+    border: 3px solid white;
+  }
+
+  .share-input-btn{
+    font-size:25px;
+    font-weight: bold;
+    user-select: none;
+    border-radius: 2px;
+    display:inline-block;
+    width: 30px; 
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+  }
+  .share-input-btn:hover {
+    cursor: pointer;
+    background-color: #C8C8C8;
+  }
+
+  .share-popup {
+    overflow: hidden;
+  }
+  
+  .share-popup-content {
+    margin: 20vh auto;
+    overflow-y: hidden;
+    /* width: 50%; */
+  }
+
+
+  

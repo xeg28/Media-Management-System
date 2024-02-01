@@ -1,0 +1,50 @@
+.file-container {
+    width: 100%;
+    height: 70vh;
+    background-color: black;
+    text-align: center;
+}
+
+.file-container > img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    margin: auto;
+}
+
+.file-container > audio {
+    height: 100%;
+    width: 100%;
+}
+
+.file-container > video {
+    height: 100%;
+    width: 100%;
+}
+
+.file-info {
+    width: 65%;
+    padding: 0 2vw;
+}
+
+.related-files {
+    width: 35%;
+    padding: 1rem;
+}
+
+.description {
+    width: 100%;
+    padding: .5rem;
+    border: 1px solid #787878;
+    border-radius: 10px;
+}
+
+@media (max-width: 900px) {
+    .file-container {
+        height: auto;
+    }
+    .file-container > audio {
+        height: 40vh;
+        width: 100%;
+    }
+}

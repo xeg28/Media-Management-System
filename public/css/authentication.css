@@ -1,0 +1,26 @@
+
+#auth {
+  position: absolute;
+  top:0px;
+  left:0px;
+  right:0px;
+  bottom:0px;
+  overflow:auto
+}
+
+.auth-alert {
+  width:550px;
+  margin:auto;
+  z-index:1;
+}
+
+
+  @media (max-width: 700px) {
+    .card#login-card, .card#register-card {
+      width: 95vw;
+    }
+    .auth-alert {
+      width: 95vw;
+    }
+  }
+
