@@ -1,17 +1,3 @@
-<?php if (isset($errors)): ?>
-  <div class="error-msg popup">
-    <div class="popup-content">
-      <div class="alert alert-danger" role="alert">
-        <span class="close-btn error-btn">&times;</span>
-        <div class="row pt-2 pb-2">
-          <?php foreach ($errors as $error) {
-            echo $error;
-          } ?>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php endif; ?>
 
 <div class="container-fluid mt-3" id="main-container">
   <?php
@@ -23,7 +9,7 @@
       <div class="d-flex align-items-center mb-2">
         <h5>
           Last 10 Updated/Added
-          <?= $type[$i] ?>s
+          <?= $type[$i]?>s
         </h5>
       </div>
       <div class="preview-container" >
@@ -36,7 +22,7 @@
             $filetype = explode('/', $row->type)[1];
             if ($i == 0) {
               ?>
-              <div class="file-preview" filetype="<?= $type[$i] ?>" url="<?=base_url('/Open'.$type[$i].'?id='.$row->id)?>">
+              <div class="file-preview" filetype="<?= $row->filetype ?>" url="<?=base_url('/Open'. $row->filetype.'?id='.$row->id)?>">
                 <div class="img-wrapper" >
                 <?php if($row->is_shared == 1):?>
                 <svg width="20px" height="20px" viewBox="0 0 16 16"class="shared-icon" fill="">
@@ -47,7 +33,7 @@
                       L11.5,12 L16,12 L16,10.7 C16,9.03 12.67,8.2 11,8.2 L11,8.2 Z"></path></svg>
                     <span class="shared-hover">Shared by <?=$row->sender_email?></span>
                   <?php endif;?>
-                  <img class="<?=strtolower($type[$i])?>-icon" src="<?=base_url('public/'. strtolower($type[$i]) .'s/icon.svg');?>" 
+                  <img class="<?=strtolower($row->filetype)?>-icon" src="<?=base_url('public/'. strtolower( $row->filetype) .'s/icon.svg');?>" 
                     draggable="false">
                   <img src="<?php echo base_url('public/images/' . $row->caption); ?>" type="image/png"
                    draggable="false" style="object-fit: contain;" />
@@ -68,23 +54,25 @@
                       1.5-1.5zM10.5 12c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5
                         1.5zm0-6c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5z"></path>
                       </svg>
-                    </div class="d-flex flex-column justify-content-end">
+                    </div>
+                    <div class="d-flex flex-column justify-content-end">
                       <ul class="dropdown-menu">
                       <?php if($row->is_shared == 0):?>
                         <li><a class="dropdown-item share-btn" index="<?=$index?>">Share</a></li>
                         <li><a class="dropdown-item del-btn" rowId="<?=$row->id?>">Delete</a></li>
                       <?php endif;?>
-                        <li><a class="dropdown-item" href="<?=base_url('/Download'.$type[$i].'?id='.$row->id)?>">Download</a></li>
+                        <li><a class="dropdown-item" href="<?=base_url('/Download'. $row->filetype.'?id='.$row->id)?>">Download</a></li>
                       </ul>
+                    </div>
                   </div>
                 </div>
               </div>
             <?php } else {
-              $thumbnail = base_url('public/'. strtolower($type[$i]) . '/thumbnails/'.explode('.',$row->caption)[0].'.png');
-              $file = ROOTPATH .'public/' . strtolower($type[$i]) . '/thumbnails/'.explode('.',$row->caption)[0].'.png';
-              $thumbnail = (file_exists($file)) ? $thumbnail : base_url('public/'. strtolower($type[$i]) .'/icon.png');
+              $thumbnail = base_url('public/'. strtolower($row->filetype) . '/thumbnails/'.explode('.',$row->caption)[0].'.png');
+              $file = ROOTPATH .'public/' . strtolower($row->filetype) . '/thumbnails/'.explode('.',$row->caption)[0].'.png';
+              $thumbnail = (file_exists($file)) ? $thumbnail : base_url('public/'. strtolower($row->filetype) .'/icon.png');
               ?>
-              <div class="file-preview" filetype="<?= $type[$i] ?>" url="<?=base_url("/Open".$type[$i]."?id=".$row->id)?>">
+              <div class="file-preview" filetype="<?= $row->filetype ?>" url="<?=base_url("/Open".$row->filetype."?id=".$row->id)?>">
                 <div class="img-wrapper">
                   <?php if($row->is_shared == 1):?>
                   <svg width="20px" height="20px" viewBox="0 0 16 16"class="shared-icon" fill="">
@@ -96,7 +84,7 @@
                       <span class="shared-hover">Shared by <?=$row->sender_email?></span>
                   <?php endif;?>
 
-                  <img class="<?=strtolower($type[$i])?>-icon" src="<?=base_url('public/'. strtolower($type[$i]) .'/icon.svg');?>" 
+                  <img class="<?=strtolower( $row->filetype)?>-icon" src="<?=base_url('public/'. strtolower( $row->filetype) .'/icon.svg');?>" 
                     draggable="false">
 
                   <span class="duration-text"><?=trimDurationText($row->duration)?></span>
@@ -125,7 +113,7 @@
                         <li><a class="dropdown-item share-btn" index=<?=$index?>>Share</a></li>
                         <li><a class="dropdown-item del-btn" rowId="<?=$row->id?>">Delete</a></li> 
                         <?php endif;?>
-                        <li><a class="dropdown-item" href="<?=base_url('/Download'.$type[$i].'?id='.$row->id)?>">Download</a></li>
+                        <li><a class="dropdown-item" href="<?=base_url('/Download'.$row->filetype.'?id='.$row->id)?>">Download</a></li>
                       </ul>
                     </div>
                   </div>

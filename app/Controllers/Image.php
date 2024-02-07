@@ -10,18 +10,19 @@ class Image extends BaseController
 {
     public function index()
     {
+        helper(["utility"]);
         $imgModel = new ImageModel();
 		$sharedImgModel = new SharedImageModel();
         $data['title'] = 'Image';
         $data['showNavbar'] = true;
-        $files['images'] = $imgModel->getAllByName();
-		$data['sharedImages'] = $sharedImgModel->getSharedImages();
+        $files['files'] = $imgModel->getAllByName();
 
         if(session('errors') !== null && !empty(session('errors'))) {
             $data['errors'] = session('errors');
         }
 
         echo view('templates/header', $data);
+        echo view('content/sharepopup', $files);
         echo view('content/image', $files);
         echo view('templates/footer');
     }
@@ -80,7 +81,10 @@ class Image extends BaseController
             $sharedImgModel = new SharedImageModel();
 			$image = $model->getImage($id);
 			if(!$image) {
-                $errors[] = "<li>You can't edit this image.</li>";
+                $errors[] = "<li>You can't edit this image.</li>
+                            <li>image id: ".$id."</li>
+                            <li>note: ".$this->request->getPost('note')."</li>
+                            <li>".$this->request->getPost('name')."</li>";
                 return redirect()->to(previous_url())->with('errors', $errors);
 			}	
             

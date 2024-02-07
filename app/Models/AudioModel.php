@@ -18,7 +18,7 @@ class AudioModel extends Model {
         parent::__construct();
         $user_id = session()->get("id");
         $audio = $this->table($this->table)
-                ->select("audios.*, 0 as 'is_shared', 'audio' as 'filetype'")
+                ->select("audios.*, 0 as 'is_shared', 'Audio' as 'filetype'")
                 ->getWhere(['id' => $id, 'user_id' => $user_id])
                 ->getRow();
 
@@ -36,13 +36,12 @@ class AudioModel extends Model {
     public function getLastTenUpdated() {
 		$user_id = session()->get("id");
         $builder1 = $this->db->table($this->table)
-                    ->select($this->table.".*, 1 as 'is_shared', users.email as 'sender_email'")
+                    ->select($this->table.".*, 1 as 'is_shared', users.email as 'sender_email', 'Audio' as 'filetype'")
                     ->join('shared_'.$this->table, $this->table.'.id = shared_'.$this->table.'.audio_id')
                     ->join('users', 'users.id = shared_'.$this->table.'.sender_id')
                     ->where('shared_'.$this->table.'.receiver_id', $user_id);
         $builder2 = $this->db->table($this->table)
-                    ->select('*')->select("0 as 'is_shared'")
-                    ->select("0 as 'sender_email'")
+                    ->select("*, 0 as 'is_shared', 0 as 'sender_email', 'Audio' as 'filetype'")
                     ->where("user_id", $user_id);
         $builder1->union($builder2);
 
@@ -55,9 +54,18 @@ class AudioModel extends Model {
 
     public function getAllByName() {
 		$user_id = session()->get('id');
-        $builder = $this->db->table($this->table)
-					->where('user_id', $user_id)
-					->orderBy('name', 'ASC');
+        $builder1 = $this->db->table($this->table)
+                    ->select($this->table.".*, 1 as 'is_shared', users.email as 'sender_email', 'Audio' as 'filetype'")
+                    ->join('shared_'.$this->table, $this->table.'.id = shared_'.$this->table.'.audio_id')
+                    ->join('users', 'users.id = shared_'.$this->table.'.sender_id')
+                    ->where('shared_'.$this->table.'.receiver_id', $user_id);
+        $builder2 = $this->db->table($this->table)
+                    ->select("*, 0 as 'is_shared', 0 as 'sender_email', 'Audio' as 'filetype'")
+                    ->where("user_id", $user_id);
+        $builder1->union($builder2);
+
+        $builder =$this->db->table('(' . $builder1->getCompiledSelect(false) . ') AS union_result');
+        $builder->orderBy('name','ASC');
         $query = $builder->get();
         return $query->getResult();
     }
@@ -83,10 +91,22 @@ class AudioModel extends Model {
     public function searchAudios($query) {
         $query = $this->db->escapeString($query);
 		$user_id = session()->get('id');
-		$builder = $this->db->table($this->table)
-				    ->select('*')
-					->select("'Audio' as filetype")
-					->where('user_id', $user_id);
+		$builder1 = $this->db->table($this->table)
+					->select("audios.*, 1 as is_shared, users.email as sender_email,
+                            'Audio' as filetype")
+					->join('shared_audios', 'audios.id = shared_audios.audio_id')
+                    ->join('users', 'users.id = shared_audios.sender_id')
+                    ->where('shared_audios.receiver_id', $user_id);
+        
+        $builder2 = $this->db->table($this->table)
+                    ->select("*, 0 as is_shared, 0 as sender_email, 
+                             'Audio' as filetype")
+                    ->where('user_id', $user_id);
+
+        
+        $builder1->union($builder2);
+        $builder =$this->db->table('(' . $builder1->getCompiledSelect(false) . ') AS union_result');
+
         $words = null;
         if(str_contains($query, " ")) {
             $words = explode(" ", $query);

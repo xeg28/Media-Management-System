@@ -26,7 +26,7 @@ class SharedImageModel extends Model {
 					'users.email as sender_email',
 					"1 as 'is_shared'",
 					'images.*', 
-					"'image' as 'filetype'"
+					"'Image' as 'filetype'"
 				])
 				->join('users', $this->table.'.sender_id = users.id', 'left')
 				->join('images', $this->table.'.image_id = images.id', 'left')

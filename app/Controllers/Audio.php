@@ -15,12 +15,13 @@ class Audio extends BaseController
 
     public function index()
     {
+        helper(["utility"]);
         $audModel = new AudioModel();
 		$sharedAudModel = new SharedAudioModel();
         $data = [];
         $data['title'] = 'Audio';
         $data['showNavbar'] = true;
-        $files['audio'] = $audModel->getAllByName();
+        $files['files'] = $audModel->getAllByName();
 		$data['sharedAudios'] = $sharedAudModel->getSharedAudios();
 
         if(session('errors') !== null && !empty(session('errors'))) {
@@ -28,6 +29,7 @@ class Audio extends BaseController
         }
 
         echo view('templates/header', $data);
+        echo view('content/sharepopup', $files);
         echo view('content/audio', $files);
         echo view('templates/footer');
     }

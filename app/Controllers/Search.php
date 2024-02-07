@@ -12,13 +12,10 @@ class Search extends BaseController
 {
     public function index()
     {
+        helper(['utility']);
         $imgModel = new ImageModel();
         $audModel = new AudioModel();
         $vidModel = new VideoModel();
-
-        $sharedImgModel = new SharedImageModel();
-        $sharedAudModel = new SharedAudioModel();
-        $sharedVidModel = new SharedVideoModel();
 
         $query = $this->request->getVar('query');
 
@@ -29,18 +26,13 @@ class Search extends BaseController
         $audios = $audModel->searchAudios($query);
         $videos = $vidModel->searchVideos($query);
         $data['files'] = array_merge($images, $audios, $videos);
-        
-        $sharedImages = $sharedImgModel->searchSharedImages($query);
-        $sharedAudios = $sharedAudModel->searchSharedAudios($query);
-        $sharedVideos = $sharedVidModel->searchSharedVideos($query);
-
-        $data['sharedFiles'] = array_merge($sharedImages, $sharedAudios, $sharedVideos);
 
         if(session('errors') !== null && !empty(session('errors'))) {
             $data['errors'] = session('errors');
         }
         
         echo view('templates/header', $data);
+        echo view('content/sharepopup', $data);
         echo view('content/search', $data);
         echo view('templates/footer');
     }

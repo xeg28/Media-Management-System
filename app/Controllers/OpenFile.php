@@ -12,8 +12,6 @@ class OpenFile extends BaseController
     public function openImage() {
         helper(['utility']);
         $imgModel = new ImageModel();
-        $audModel = new AudioModel();
-        $vidModel = new VideoModel();
         $id = $this->request->getVar('id');
         $image = $imgModel->getImage($id);
 
@@ -24,10 +22,8 @@ class OpenFile extends BaseController
 
         $data['title'] = $image->name;
         $data['file'] = $image;
+        $data['related_files'] = $this->getRelatedFiles($image);
         $data['showNavbar'] = true;
-        $data['images'] = $imgModel->getLastTenUpdated();
-        $data['audio'] = $audModel->getLastTenUpdated();
-        $data['videos'] = $vidModel->getLastTenUpdated();
 
         if(session('errors') !== null && !empty(session('errors'))) {
             $data['errors'] = session('errors');
@@ -43,8 +39,6 @@ class OpenFile extends BaseController
 
     public function openVideo() {
         helper(['utility']);
-        $imgModel = new ImageModel();
-        $audModel = new AudioModel();
         $vidModel = new VideoModel();
         $id = $this->request->getVar('id');
         $video = $vidModel->getVideo($id);
@@ -56,10 +50,8 @@ class OpenFile extends BaseController
 
         $data['title'] = $video->name;
         $data['file'] = $video;
+        $data['related_files'] = $this->getRelatedFiles($video);
         $data['showNavbar'] = true;
-        $data['images'] = $imgModel->getLastTenUpdated();
-        $data['audio'] = $audModel->getLastTenUpdated();
-        $data['videos'] = $vidModel->getLastTenUpdated();
 
         if(session('errors') !== null && !empty(session('errors'))) {
             $data['errors'] = session('errors');
@@ -75,9 +67,7 @@ class OpenFile extends BaseController
 
     public function openAudio() {
         helper(['utility']);
-        $imgModel = new ImageModel();
         $audModel = new AudioModel();
-        $vidModel = new VideoModel();
         $id = $this->request->getVar('id');
         $audio = $audModel->getAudio($id);
 
@@ -88,10 +78,8 @@ class OpenFile extends BaseController
 
         $data['title'] = $audio->name;
         $data['file'] = $audio;
+        $data['related_files'] = $this->getRelatedFiles($audio);
         $data['showNavbar'] = true;
-        $data['images'] = $imgModel->getLastTenUpdated();
-        $data['audio'] = $audModel->getLastTenUpdated();
-        $data['videos'] = $vidModel->getLastTenUpdated();
 
         if(session('errors') !== null && !empty(session('errors'))) {
             $data['errors'] = session('errors');
@@ -103,5 +91,25 @@ class OpenFile extends BaseController
         echo view('content/openfile', $data);
         echo view('content/sharepopup', $data);
         echo view('templates/footer');
+    }
+
+    private function getRelatedFiles($file) {
+        $imgModel = new ImageModel();
+        $audModel = new AudioModel();
+        $vidModel = new VideoModel();
+        $images = $imgModel->searchImages($file->name);
+        $audios = $audModel->searchAudios($file->name);
+        $videos = $vidModel->searchVideos($file->name);
+        $merged_files = array_merge($images, $audios, $videos);
+        
+        $indexToDel = 0;
+        foreach($merged_files as $related_file) {
+            if($related_file->caption == $file->caption) { 
+                unset( $merged_files[$indexToDel] );
+                break;
+            }
+            $indexToDel++;
+        }
+        return $merged_files;
     }
 }

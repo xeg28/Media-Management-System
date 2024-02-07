@@ -15,13 +15,11 @@
     <?php if(in_array($title, array('Login', 'Registration'), true)): ?>
         <link rel="stylesheet" type="text/css" href="public/css/authentication.css?version=<%= Common.GetVersion%" /> 
     <?php endif?>
-    <?php if(in_array($title, array('Home','Image', 'Audio', 'Video'), true)): ?>
-        <link rel="stylesheet" type="text/css" href="public/css/media-pages.css?version=<%= Common.GetVersion%"/>
-    <?php endif?>
     <?php if(isset($file)): ?>
         <link rel="stylesheet" type="text/css" href="public/css/openfile.css?version=<%= Common.GetVersion%"/>
     <?php endif; ?>
     <?php if(isset($showNavbar) && $showNavbar): ?>
+            <link rel="stylesheet" type="text/css" href="public/css/media-pages.css?version=<%= Common.GetVersion%"/>
             <link rel="stylesheet" type="text/css" href="public/css/navbar.css?version=<%= Common.GetVersion%"/>
             <link rel="stylesheet" type="text/css" href="public/css/share-popup.css?version=<%= Common.GetVersion%"/>
     <?php endif?>
@@ -58,15 +56,13 @@
         })
     });
 
-
-    document.addEventListener('click', function(event) {
-        var target = event.target;
-        if(target.classList.contains('home-shortcut')) {
-            location.assign('<?=base_url('home')?>');
-      }
-    });
 </script>
-
+<?php if(in_array($title, array('Login', 'Registration'))): ?>
+    <script src="public/javascript/views/auth.js"></script>
+<?php endif;?>
+<?php if(isset($showNavbar) && $showNavbar): ?>
+    <script src='public/javascript/views/index.js'></script>
+<?php endif;?>
 <?php if($title == 'Home') {
     ?> <script src='public/javascript/views/home.js'></script>
 <?php } if($title == 'Image') { 
@@ -86,7 +82,7 @@ $current_page = basename($_SERVER['REQUEST_URI'], ".php");
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <img class="home-shortcut mx-3 navbar-brand logo" src="public/icon.png" alt="Media-icon" >
+    <a href="<?=base_url('home')?>"><img class="home-shortcut mx-3 navbar-brand logo" src="public/icon.png" alt="Media-icon" /></a>
     <button class="navbar-toggler mx-3" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -133,6 +129,20 @@ $current_page = basename($_SERVER['REQUEST_URI'], ".php");
 
 
 </nav>
+<?php if (isset($errors)): ?>
+  <div class="error-msg popup">
+    <div class="popup-content">
+      <div class="alert alert-danger" role="alert">
+        <span class="close-btn error-btn">&times;</span>
+        <div class="row pt-2 pb-2">
+          <?php foreach ($errors as $error) {
+            echo $error;
+          } ?>
+        </div>
+      </div>
+    </div>
+  </div>
+<?php endif; ?>
 
 <?php endif; ?>
 

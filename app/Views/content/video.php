@@ -1,218 +1,95 @@
-
 <div class="container-fluid">
-    <div class="row pt-5 justify-content-center">
-        <div class="col-10">
-            <div class="card">
-                <div class="card-body center-div"> 
-                    <form action="<?php echo base_url(); ?>/VideoUpload" method="post" class="dropzone w-100 mb-2" id="videoupload">
-                    </form>
-                    <div class="w-50" id="VideoUploadContainer">
-                    </div>
-                    <button class="upload-btn btn-theme">Upload</button>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="wrapper">
+		<div class="d-flex justify-content-center mb-2">
+			<div class="card">
+				<div class="card-body center-div">
+					<form action="<?php echo base_url(); ?>/VideoUpload" method="post" class="dropzone w-100 mb-2"
+						id="videoupload">
+					</form>
+					<div class="w-50" id="VideoUploadContainer">
+					</div>
+					<button class="upload-btn btn-theme">Upload</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <?php if (isset($errors)) : ?>
-        <div class="error-msg popup">
-            <div class="popup-content">
-                <div class="alert alert-danger" role="alert">
-                    <span class="close-btn error-btn">&times;</span>
-                    <div class="row pt-2 pb-2">
-                        <?php foreach($errors as $error) {
-                            echo $error;    
-                        }?>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-    <?php endif;?>
+	<div class="wrapper">
+		<div class="d-flex align-items-center mb-2">
+			<h5>Video Files</h5>
+		</div>
+		<div class="preview-container">
+			<?php
+			if (!empty($files)) {
+				$index = 0;
+				foreach ($files as $row) {
+					$thumbnail = base_url('public/' . strtolower($row->filetype) . '/thumbnails/' . explode('.', $row->caption)[0] . '.png');
+					$file = ROOTPATH . 'public/' . strtolower($row->filetype) . '/thumbnails/' . explode('.', $row->caption)[0] . '.png';
+					$thumbnail = (file_exists($file)) ? $thumbnail : base_url('public/' . strtolower($row->filetype) . '/icon.png');
 
-    <div class="col-10 offset-1 pt-5 pb-5">
-        <div class="card shadow">
-            <div class="card-header d-flex align-items-center">
-                <div class="col">
-                    Videos Files
-                </div>
-                <div class="ml-auto">
-                    <a class="btn btn-small file-view" id="uservideos">My Videos</a>
-                    <a class="btn btn-small file-view" id="sharedvideos">Shared Videos</a>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="card-title">
-                    <div class="row border-bottom pb-2">
-                        <div class="col-1"><strong>Icon</strong></div>
-                        <div class="col-5"><strong>Name</strong></div>
-                        <div class="col-2"><strong>Duration</strong></div>
-                        <div class="col-2"><strong>Type</strong></div>
-                    </div>
-                </div>
+					$upload_time = new DateTime($row->uploaded_at);
+					$date = new DateTime();
+					$difference = get_time_difference($date, $upload_time);
+					$filetype = explode('/', $row->type)[1];
+					?>
+					<div class="file-preview" filetype="<?= $row->filetype ?>"
+						url="<?= base_url('/Open' . $row->filetype . '?id=' . $row->id) ?>">
+						<div class="img-wrapper">
+							<?php if ($row->is_shared == 1): ?>
+								<svg width="20px" height="20px" viewBox="0 0 16 16" class="shared-icon" fill="">
+									<path d="M5,7 C6.11,7 7,6.1 7,5 C7,3.9 6.11,3 5,3 C3.9,3 3,3.9 3,5 C3,6.1 3.9,7 5,7
+									 L5,7 Z M11,7 C12.11,7 13,6.1 13,5 C13,3.9 12.11,3 11,3 C9.89,3 9,3.9 9,5 C9,6.1 9.9,7
+										11,7 L11,7 Z M5,8.2 C3.33,8.2 0,9.03 0,10.7 L0,12 L10,12 L10,10.7 C10,9.03 6.67,8.2 5,8.2
+										 L5,8.2 Z M11,8.2 C10.75,8.2 10.46,8.22 10.16,8.26 C10.95,8.86 11.5,9.66 11.5,10.7
+											L11.5,12 L16,12 L16,10.7 C16,9.03 12.67,8.2 11,8.2 L11,8.2 Z"></path>
+								</svg>
+								<span class="shared-hover">Shared by
+									<?= $row->sender_email ?>
+								</span>
+							<?php endif; ?>
+							<img class="video-icon" src="<?= base_url('public/video/icon.svg'); ?>" draggable="false">
+							<img src="<?= $thumbnail ?>" type="image/png" draggable="false" style="object-fit: contain;" />
+						</div>
 
-                <div class="card-data-container shared-files">
-                    <?php
-                    $index = 0;
-                    if (!empty($sharedVideos)) {
-                        foreach ($sharedVideos as $row) {
-                    ?>      
-                        <div class="card-data">
-                            <div class="row pb-2 align-items-center">
-                                <div class="col-1"><embed src="<?php echo base_url('public/video/icon.png'); ?>" type="image/png" width="30px" height="30px" /></div>
-                                <div class="col-5">
-                                    <a class="show-media link-primary" href="#" index="<?=$index?>"><?= htmlspecialchars($row->name) ?></a>
-                                </div>
-                                <div class="col-2"><?php echo $row->duration ?></div>
-                                <div class="col-2"><?=$row->type?></div>
-                            </div>
-                        </div>
-                        
-                        <div class="media-popup" index="<?=$index?>">
-                            <div class="media-popup-content">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <span class="close-popup" index="<?=$index?>">&times;</span>
-                                        <h5><?=htmlspecialchars($row->name)?></h5>
-                                    </div>
-                                    <div class="card-body" style="max-height: 60%">
-                                        <div class="video-container">
-                                            <video class="media" id="media<?=$index?>" controls><source src="public/video/<?=$row->caption?>" type="<?=$row->type?>"></video>
-                                        </div>
-                                        <hr>
-                                        <h5>Description:</h5>
-                                        <pre class="note"><strong>Shared by <?=$row->sender_email?> at <?=$row->shared_at?></strong>
-                                        </br><?=htmlspecialchars($row->note)?></pre>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-                        <?php $index++; }
-                        } else { ?>
-                        <p>No shared video(s) found...</p>
-                        <?php }?>
-                </div>
+						<div class="d-flex flex-row justify-content-between w-100">
+							<div class="d-flex flex-column m-2">
+								<span class="preview-title">
+									<?= htmlspecialchars($row->name) ?>
+								</span>
+								<span>Format:
+									<?= $filetype ?> &#8226;
+									<?php echo $difference; ?>
+								</span>
+							</div>
+							<div class="dropdown">
+								<div class="options" index="<?= $index ?>" data-toggle="dropdown" aria-expanded="false">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+										<path d="M12 16.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5
+										1.5-1.5zM10.5 12c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5
+											1.5zm0-6c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5z"></path>
+									</svg>
+								</div>
+								<div class="d-flex flex-column justifty-content-end">
+									<ul class="dropdown-menu">
+										<?php if ($row->is_shared == 0): ?>
+											<li><a class="dropdown-item share-btn" index="<?= $index ?>">Share</a></li>
+											<li><a class="dropdown-item del-btn" rowId="<?= $row->id ?>">Delete</a></li>
+										<?php endif; ?>
+										<li><a class="dropdown-item"
+												href="<?= base_url('/DownloadVideo?id=' . $row->id) ?>">Download</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					<?php
+					$index++;
+				}
+			} else {
+				?>
+				<p>No video(s) found...</p>
+			<?php } ?>
 
-                <div class="card-data-container user-files">
-                <?php
-                    if (!empty($video)) {
-                        foreach ($video as $row) {
-                    ?>      
-                        <div class="card-data" index="<?=$index?>">
-                            <div class="row pb-2 align-items-center">
-                                <div class="col-1"><embed src="<?php echo base_url('public/video/icon.png'); ?>" type="image/png" width="30px" height="30px" /></div>
-                                <div class="col-5">
-                                    <a class="show-media link-primary" href="#" index="<?=$index?>"><?=htmlspecialchars($row->name) ?></a>
-                                </div>
-                                <div class="col-2"><?=$row->duration?></div>
-                                <div class="col-2"><?php echo $row->type ?></div>
-                                <div class="col-2 d-none d-lg-block">
-                                    <a class="btn btn-sm btn-primary del-btn" rowId="<?=$row->id?>">Delete</a>
-                                    <button class="btn btn-sm btn-primary edit-btn" index="<?=$index?>">Edit</button>
-                                    <button class="btn btn-primary btn-sm share-btn" index="<?=$index?>">Share</button>
-                                </div>
-                                <div class="col-2 btn-group d-lg-none">
-                                    <button type="button" class="btn btn-sm dropdown-toggle w-100" data-toggle="dropdown" aria-expanded="false">
-                                        Actions
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item del-btn" rowId="<?=$row->id?>">Delete</a></li>
-                                        <li><a class="dropdown-item edit-btn" href="#" index="<?=$index?>">Edit</a></li>
-                                        <li><a class="dropdown-item share-btn" href="#" index="<?=$index?>">Share</a></li>
-                                    </ul>
-                                </div>     
-                            </div>
-                        </div> 
-                        
-                        <!-- HTML for the share popup -->
-                        <div class="share-popup" index="<?=$index?>">
-                            <div class="share-popup-content">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <span class="close-popup">&times;</span>
-                                        <div class="row">
-                                            <h5>Share Video</h5>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <form action="<?=base_url('ShareVideo')?>" method="post" class="form share-form">
-                                            <div class="form-group">
-                                                <label for="inputName">User's Email</label>
-                                                <input type="hidden" name="id" value="<?=$row->id?>">
-                                                <input type="text" class="form-control mb-2 field" name="email[]" placeholder="Enter an email">
-                                            </div>
-                                        </form>
-                                        <div class="row d-flex justify-content-center"> 
-                                            <button class="btn-theme mt-4 mx-auto add-share-input" index="<?=$index?>">Add</button>
-                                            <button class="btn-theme mt-4 mx-auto share-submit-btn" index="<?=$index?>">Share</button>
-                                        </div>  
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-
-                            <!-- HTML for the video player popup -->
-                        <div class="media-popup" index="<?=$index?>">
-                            <div class="media-popup-content">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <span class="close-popup" index="<?=$index?>" >&times;</span>
-                                        <h5><?=htmlspecialchars($row->name)?></h5>
-                                    </div>
-                                    <div class="card-body" style="max-height: 60%">
-                                        <div class="video-container">
-                                            <video class="media" id="media<?=$index?>" controls><source src="public/video/<?=$row->caption?>" type="<?=$row->type?>"></video>
-                                        </div>
-                                        <hr>
-                                        <h5>Description:</h5>
-                                        <pre class="note"><?=htmlspecialchars($row->note)?></pre>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-
-                        <!-- HTML for edit popup -->
-
-                        <div class="edit-popup" index="<?=$index?>">
-                            <div class="edit-popup-content">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <span class="close-popup" index="<?=$index?>">&times;</span>
-                                        <div class="row">
-                                            <h5>Edit Video</h5>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <form action="<?=base_url('EditVideo')?>" method="post" class="form">
-                                            <div class="form-group">
-                                                <label for="inputName">Name</label>
-                                                <input type="hidden" name="id" value="<?=$row->id?>">
-                                                <input type="text" class="form-control field mb-2" id="inputName" name="name" value="<?=htmlspecialchars($row->name)?>" placeholder="Name">
-
-                                                <label for="inputNote">Description</label>
-                                                <textarea class="form-control w-100 note" id="inputNote" name="note" wrap="hard" placeholder="Description"><?=htmlspecialchars($row->note)?></textarea>
-
-                                                <div class="row d-flex justify-content-center"> 
-                                                    <input type="submit" value="Save" class="btn-theme mt-4 mx-auto">
-                                                </div>  
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    <?php
-                        $index++;
-                        }
-                    } else {
-                        ?>
-                        <p>No video(s) found...</p>
-                    <?php } ?>
-                </div>
-            </div>
-        </div>
-    </div>
+		</div>
+	</div>
 </div>
-
-

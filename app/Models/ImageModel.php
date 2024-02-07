@@ -19,7 +19,7 @@ class ImageModel extends Model {
         parent::__construct();
 		$user_id = session()->get("id");
         $image = $this->table($this->table)
-                ->select("images.*, 0 as 'is_shared', 'image' as 'filetype'")
+                ->select("images.*, 0 as 'is_shared', 'Image' as 'filetype'")
                 ->getWhere(['id' => $id, 'user_id' => $user_id])
                 ->getRow();
 
@@ -47,13 +47,12 @@ class ImageModel extends Model {
     public function getLastTenUpdated() {
 		$user_id = session()->get("id");
         $builder1 = $this->db->table($this->table)
-                    ->select("images.*, 1 as 'is_shared', users.email as 'sender_email'")
+                    ->select("images.*, 1 as 'is_shared', users.email as 'sender_email', 'Image' as 'filetype'")
                     ->join('shared_images', 'images.id = shared_images.image_id')
                     ->join('users', 'users.id = shared_images.sender_id')
                     ->where('shared_images.receiver_id', $user_id);
         $builder2 = $this->db->table($this->table)
-                    ->select('*')->select("0 as 'is_shared'")
-                    ->select("0 as 'sender_email'")
+                    ->select("*, 0 as 'is_shared', 0 as 'sender_email', 'Image' as 'filetype'")
                     ->where("user_id", $user_id);
         $builder1->union($builder2);
 
@@ -66,7 +65,17 @@ class ImageModel extends Model {
 
     public function getAllByName() {
 		$user_id = session()->get("id");
-        $builder = $this->db->table($this->table)->where('user_id', $user_id)->orderBy('name', 'ASC');
+        $builder1 = $this->db->table($this->table)
+                    ->select("images.*, 1 as 'is_shared', users.email as 'sender_email', 'Image' as 'filetype'")
+                    ->join('shared_images', 'images.id = shared_images.image_id')
+                    ->join('users', 'users.id = shared_images.sender_id')
+                    ->where('shared_images.receiver_id', $user_id);
+        $builder2 = $this->db->table($this->table)
+                    ->select("*, 0 as 'is_shared', 0 as 'sender_email', 'Image' as 'filetype'")
+                    ->where("user_id", $user_id);
+        $builder1->union($builder2);
+        $builder =$this->db->table('(' . $builder1->getCompiledSelect(false) . ') AS union_result');
+        $builder->orderBy('name', 'ASC');
         $query = $builder->get();
         return $query->getResult();
     }
@@ -96,11 +105,24 @@ class ImageModel extends Model {
         $query = $this->db->escapeString($query);
 		$user_id = session()->get("id");
         $words = null;
-		$builder = $this->db->table($this->table)
-					->select('*')
-					->select("'N/A' as duration")
-					->select("'Image' as filetype")
-					->where('user_id', $user_id);
+		$builder1 = $this->db->table($this->table)
+					->select("images.*, 'N/A' as duration, 
+                            1 as is_shared, users.email as sender_email,
+                            'Image' as filetype")
+					->join('shared_images', 'images.id = shared_images.image_id')
+                    ->join('users', 'users.id = shared_images.sender_id')
+                    ->where('shared_images.receiver_id', $user_id);
+        
+        $builder2 = $this->db->table($this->table)
+                    ->select("*, 'N/A' as duration,
+                             0 as is_shared, 0 as sender_email, 
+                             'Image' as filetype")
+                    ->where('user_id', $user_id);
+
+        
+        $builder1->union($builder2);
+        $builder =$this->db->table('(' . $builder1->getCompiledSelect(false) . ') AS union_result');
+            
         if(str_contains($query, " ")) {
             $words = explode(" ", $query);
         }

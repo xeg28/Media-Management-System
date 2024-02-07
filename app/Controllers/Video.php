@@ -15,12 +15,13 @@ class Video extends BaseController
 {
     public function index()
     {
+        helper(['utility']);
         $vidModel = new VideoModel();
         $sharedVidModel = new SharedVideoModel();
         $data = [];
         $data['title'] = 'Video';
         $data['showNavbar'] = true;
-        $data['video'] = $vidModel->getAllByName();
+        $data['files'] = $vidModel->getAllByName();
         $data['sharedVideos'] = $sharedVidModel->getSharedVideos();
 
         if(session('errors') !== null && !empty(session('errors'))) {
@@ -28,6 +29,7 @@ class Video extends BaseController
         }
 
         echo view('templates/header', $data);
+        echo view('content/sharepopup', $data);
         echo view('content/video', $data);
         echo view('templates/footer');
     }

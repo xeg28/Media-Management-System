@@ -26,7 +26,7 @@ class SharedVideoModel extends Model {
 					'users.email as sender_email',
 					"1 as 'is_shared'",
 					'videos.*', 
-					"'video' as 'filetype'"
+					"'Video' as 'filetype'"
 				])
 				->join('users', $this->table.'.sender_id = users.id', 'left')
 				->join('videos', $this->table.'.video_id = videos.id', 'left')

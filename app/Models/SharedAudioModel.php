@@ -26,7 +26,7 @@ class SharedAudioModel extends Model {
 					'users.email as sender_email',
 					"1 as 'is_shared'",
 					'audios.*', 
-					"'audio' as 'filetype'"
+					"'Audio' as 'filetype'"
 				])
 				->join('users', $this->table.'.sender_id = users.id', 'left')
 				->join('audios', $this->table.'.audio_id = audios.id', 'left')
