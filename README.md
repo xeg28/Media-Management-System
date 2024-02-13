@@ -63,8 +63,8 @@ Add the following to xampp httpd.conf file
 LoadModule xsendfile_module modules/mod_xsendfile.so
 
 &lt;IfModule mod_xsendfile.c&gt;\
-    &nbsp;&nbsp;&nbsp; &nbspXSendFile On\
-    &nbsp;&nbsp;&nbsp; &nbspXSendFilePath absolute/path/to/uploads/folder\
+    &nbsp;&nbsp;&nbsp;&nbsp;XSendFile On\
+    &nbsp;&nbsp;&nbsp;&nbsp;XSendFilePath absolute/path/to/uploads/folder\
 &lt;/IfModule&gt;
 
 
