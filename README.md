@@ -62,9 +62,9 @@ that are not logged in and for users that don't own or have privileges to the fi
 Add the following to xampp httpd.conf file
 LoadModule xsendfile_module modules/mod_xsendfile.so
 
-&lt;IfModule mod_xsendfile.c&gt;
-    XSendFile On
-    XSendFilePath absolute/path/to/uploads/folder
+&lt;IfModule mod_xsendfile.c&gt;\
+    XSendFile On\
+    XSendFilePath absolute/path/to/uploads/folder\
 &lt;/IfModule&gt;
 
 
