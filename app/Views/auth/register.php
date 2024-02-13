@@ -1,15 +1,16 @@
 <section class="background-theme" id="auth">
   <div class="container-fluid py-5 h-100">
     <?php if (isset($validation)): ?>
-      <div class="error-msg auth-alert">
-        <div class="alert alert-danger" role="alert">
-          <span class="close-btn error-btn">&times;</span>
-          <div class="row pt-3">
+      <div class="popup">
+        <div class="alert-box">
+          <img src="http://100dayscss.com/codepen/alert.png"/>
+          <span class="alert-title">ops!</span>
             <?= $validation->listErrors() ?>
-          </div>
+          <button class="alert-btn error-btn" >OK</button>
         </div>
       </div>
     <?php endif; ?>
+
     <div class="d-flex flex-column justify-content-center align-items-center h-100">
       <div class="card" style="border-radius: 1rem" id="register-card">
         <div class="m-4 m-md-5 pb-1">

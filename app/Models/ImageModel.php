@@ -30,6 +30,13 @@ class ImageModel extends Model {
         return $image;
     }
 
+    public function getIdByName($file_name) {
+        $image_id = $this->db->table($this->table)
+                ->select('id')->getWhere(['caption' => $file_name])
+                ->getRow();
+        return $image_id->id;
+    }
+
     public function saveImage($image) {
         $this->save($image);
     }

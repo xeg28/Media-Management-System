@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    function play() {
+    $('#audioFile').click(function() {
         let file = document.getElementById("audioFile");
         if(file.paused) {
             file.play();
@@ -7,12 +7,17 @@ $(document).ready(function(){
         else {
             file.pause();
         }
-        
-    }
-
-    // Trigger play when the document is fully loaded
-    $(window).on("load", function() {
-        $('#audioFile').click(play);
     });
 
+    $('.edit-btn').click(function() {
+        $(this).hide();
+        $(this).siblings(".check-btn").show();
+        $('#inputName').show();
+        $('.file-name').hide();
+        $('.note').hide();
+        $('#inputNote').show();
+    }); 
+    $('.check-btn').click(function() {
+        $('#editForm').submit()
+    }); 
 });

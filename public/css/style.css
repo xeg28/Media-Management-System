@@ -1,5 +1,18 @@
 :root {
   --accent-color-dark: #313021;
+
+  --fs-500: clamp(18px, 2vw + 5px, 1.5rem)
+}
+
+html.no-scroll {
+  overflow-y: hidden;
+  margin-right: 16px;
+}
+
+@media (max-width: 750px) {
+  html.no-scroll {
+    margin-right: 0;
+  }
 }
 
 .link {
@@ -153,6 +166,8 @@ h1{
   .card-data-container::-webkit-scrollbar {
     display: none;
   }
+
+  .hide {display: none;}
   
   .card-data-container {
     overflow-y: auto; /* Enable vertical scrolling */
@@ -274,12 +289,58 @@ h1{
   }
 
   /* #f8d7da */
-  .error-msg {
+  .alert-box {
     position: absolute;
-    margin: auto;
-    top: 10%;
-    left: 50%;
-    transform: translate(-50%, 0);
+    background-color: white;
+    min-height: 250px;
+    max-height: 90vh;
+    padding-bottom: 60px;
+    width: 500px;
+    top:50%;
+    left:50%;
+    text-align: center;
+    border-radius: 3px;
+    box-shadow: 4px 8px 12px 0 rgba(0,0,0,0.4);
+    transform: translate(-50%,-50%);
+  }
+
+  @media (max-width: 420px) {
+    .alert-box {
+      width: 90vw;
+    }
+  }
+
+  .alert-title {
+    display: block;
+		font-size: 24px;
+		line-height: 28px;
+		font-weight: 400;
+		margin: 20px 0 14px 0;
+  }
+
+  .alert-box > img {
+    width: 54px;
+    height: 45.5px;
+    margin-top: 24px;
+  }
+
+  .error-btn {
+    position: absolute;
+		height: 60px;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background: #F65656;
+		color: #fff;
+		line-height: 40px;
+		font-size: 18px;
+    border-color: #F65656;
+		cursor: pointer;
+		transition: background .3s ease-in-out;
+  }
+
+  .error-btn:hover {
+    background: #EC3434;
   }
 
     /* #f8d7da */
@@ -292,8 +353,7 @@ h1{
   }
 
   .alert-danger {
-    background-color: rgba(255, 55, 92, 0.4);
-    backdrop-filter: blur(3px);
+    background-color: rgb(187, 91, 108);
     border-radius: 10px;
   }
   

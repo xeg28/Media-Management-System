@@ -20,7 +20,7 @@
 				<h5>Audio Files</h5>
 			</div>
 		</div>
-		<div class="preview-container">
+		<div class="preview-container <?=$audPreview === "small" ? 'small-preview' : ''?>">
 			<?php
 			if (!empty($files)) {
 				$index = 0;

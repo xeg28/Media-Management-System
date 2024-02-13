@@ -106,3 +106,5 @@ $host .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME'
 $http_https = isset($_SERVER['HTTPS']) ? "https://" : "http://";
 $baseURL = $http_https . $host;
 define('BASE_URL', $baseURL);
+
+define('UPLOADPATH', ROOTPATH .'writable/uploads/');

@@ -7,7 +7,7 @@
 				<?= $query ?>
 			</strong></h5>
 
-		<div class="preview-container">
+		<div class="preview-container <?= $preview === 'small' ? 'small-preview' : ''?>">
 			<?php
 			if (!empty($files)) {
 				foreach ($files as $row) {
@@ -19,7 +19,7 @@
 					$file = ROOTPATH . 'public/' . strtolower($row->filetype) . '/thumbnails/' . explode('.', $row->caption)[0] . '.png';
 					$thumbnail = (file_exists($file)) ? $thumbnail : base_url('public/' . strtolower($row->filetype) . '/icon.png');
 					$thumbnails = [
-						'Image' => base_url('public/images/' . $row->caption),
+						'Image' => base_url('writable/uploads/images/' . $row->caption),
 						'Audio' => $thumbnail,
 						'Video' => $thumbnail
 					];

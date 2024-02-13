@@ -4,6 +4,7 @@
   $index = 0;
   $files = [$images, $audio, $videos];
   $type = ['Image', 'Audio', 'Video'];
+  $previews = [$imgPreview, $audPreview, $vidPreview];
   for ($i = 0; $i < 3; $i++) { ?>
     <div class="wrapper">
       <div class="d-flex align-items-center mb-2">
@@ -12,7 +13,7 @@
           <?= $type[$i]?>s
         </h5>
       </div>
-      <div class="preview-container" >
+      <div class="preview-container <?=( $previews[$i] === 'small') ? 'small-preview' : ''?>" >
         <?php
         if (!empty($files[$i])) {
           foreach ($files[$i] as $row) {
@@ -35,7 +36,7 @@
                   <?php endif;?>
                   <img class="<?=strtolower($row->filetype)?>-icon" src="<?=base_url('public/'. strtolower( $row->filetype) .'s/icon.svg');?>" 
                     draggable="false">
-                  <img src="<?php echo base_url('public/images/' . $row->caption); ?>" type="image/png"
+                  <img src="<?php echo base_url('writable/uploads/images/' . $row->caption); ?>" type="image/png"
                    draggable="false" style="object-fit: contain;" />
                 </div>
             

@@ -1,6 +1,15 @@
-<IfModule authz_core_module>
-    Require all denied
-</IfModule>
-<IfModule !authz_core_module>
-    Deny from all
+
+<IfModule mod_rewrite.c>
+    Options +FollowSymlinks
+    RewriteEngine On
+
+    # Allow access to files in the 'allowed_dir' directory
+
+    RewriteCond %{REQUEST_URI} ^/writable/uploads/.*$ [NC]
+    RewriteRule .* /index.php [L]
+
+    # Deny access to all other files
+    RewriteCond %{REQUEST_URI} !^/writable/uploads/.*$ [NC]
+    RewriteRule .* - [F]
+
 </IfModule>

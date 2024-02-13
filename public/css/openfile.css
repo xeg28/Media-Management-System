@@ -23,13 +23,33 @@
 }
 
 .file-info {
-    width: 65%;
+    width: 100%;
     padding: 0 2vw;
+}
+
+.file-name {
+    width: calc(100% - 80px);
+    word-wrap: break-word;
+}
+
+h4.file-name {
+    font-size: var(--fs-500);
+}
+
+.related-info {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+#editForm {
+    width: 65%;
 }
 
 .related-files {
     width: 35%;
-    padding: 1rem;
+    padding: 5px 1rem;
+    height: fit-content;
 }
 
 .description {
@@ -39,12 +59,121 @@
     border-radius: 10px;
 }
 
-@media (max-width: 900px) {
-    .file-container {
-        height: auto;
+.option-btn {
+    height: 30px;
+    width: 30px;
+    padding: 3px;
+    border-radius: 5px;
+}
+
+.option-btn:hover {
+    cursor: pointer;
+    background-color: #C8C8C8;
+}
+
+.check-btn {display: none;}
+
+#inputName {
+    width: calc(100% - 90px);
+    font-size: calc(var(--fs-500) - 2px);
+}
+
+.preview-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 2; /* Number of lines to show */
+    text-overflow: ellipsis;
+}
+
+.preview-info {
+    padding: 3px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.btn-container {
+    width: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    align-self:stretch;
+    margin: 10px 0;
+}
+
+.btn-container img {
+    user-select: none;
+}
+
+.related-files {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 1rem;
+}
+
+.file-preview {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-gap: 16px;
+}
+
+.related-preview img{
+    border-radius: 10px;
+    position: absolute;
+    object-fit:cover;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    user-select:none;
+}
+
+.dropdown-menu {
+    transform: translate3d(-120px, 37px, 0px) !important;
+}
+
+@media (max-width: 1220px) {
+    .related-info {
+        flex-direction: column;
     }
+    .related-files {
+        width: 100%;
+    }
+    #editForm {
+        width: 100%;
+    }
+
+    .file-preview {
+        display: grid;
+        grid-template-columns: 200px 4fr;
+        grid-gap: 16px;
+    }
+}
+
+@media (max-width: 900px) {
+
+    .file-container {
+        height: fit-content;
+    }
+
+    .file-container > img{
+        max-height: 90vh;
+    }
+
     .file-container > audio {
         height: 40vh;
         width: 100%;
+    }
+}
+
+@media (max-width: 750px) {
+    .file-container {
+        height: fit-content;
+    }
+    .file-preview {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 8px;
     }
 }

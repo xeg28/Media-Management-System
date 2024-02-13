@@ -18,7 +18,7 @@
 		<div class="d-flex align-items-center mb-2">
 			<h5>Video Files</h5>
 		</div>
-		<div class="preview-container">
+		<div class="preview-container <?=$vidPreview === "small" ? 'small-preview' : ''?>">
 			<?php
 			if (!empty($files)) {
 				$index = 0;

@@ -29,6 +29,7 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
+
 $routes->get('/', 'Auth::index');
 $routes->post('/login', 'Auth::index');
 $routes->get('/home', 'Home::index', ['filter' => 'auth']);
@@ -41,24 +42,31 @@ $routes->post('Image/delete', 'Image::delete', ['filter' => 'auth']);
 $routes->match(['get', 'post'], '/EditImage', 'Image::edit', ['filter' => 'auth']);
 $routes->get('/DownloadImage', 'Image::imageDownload', ['filter' => 'auth']);
 $routes->post('/ShareImage', 'Image::share', ['filter' => 'auth']);
-$routes->get('/OpenImage', 'OpenFile::openImage', ['fiter' => 'auth']);
+$routes->get('/OpenImage', 'OpenFile::openImage', ['filter' => 'auth']);
+$routes->get('writable/uploads/images/(:segment)', 'Image::show/$1');
 
 $routes->post('/AudioUpload', 'Audio::audioUpload', ['filter' => 'auth']);
 $routes->post('Audio/delete', 'Audio::delete', ['filter' => 'auth']);
 $routes->match(['get', 'post'], '/EditAudio', 'Audio::edit', ['filter' => 'auth']);
 $routes->get('/DownloadAudio', 'Audio::audioDownload', ['filter' => 'auth']);
 $routes->post('/ShareAudio', 'Audio::share', ['filter' => 'auth']);
-$routes->get('/OpenAudio', 'OpenFile::openAudio', ['fiter' => 'auth']);
+$routes->get('/OpenAudio', 'OpenFile::openAudio', ['filter' => 'auth']);
+$routes->get('writable/uploads/audios/(:segment)', 'Audio::show/$1');
+
 
 $routes->post('/VideoUpload', 'Video::videoUpload', ['filter' => 'auth']);
 $routes->post('Video/delete', 'Video::delete', ['filter' => 'auth']);
 $routes->match(['get', 'post'], '/EditVideo', 'Video::edit', ['filter' => 'auth']);
 $routes->get('/DownloadVideo', 'Video::videoDownload', ['filter' => 'auth']);
 $routes->post('/ShareVideo', 'Video::share', ['filter' => 'auth']);
-$routes->get('/OpenVideo', 'OpenFile::openVideo', ['fiter' => 'auth']);
+$routes->get('/OpenVideo', 'OpenFile::openVideo', ['filter' => 'auth']);
+$routes->get('/writable/uploads/videos/(:segment)', 'Video::show/$1');
 
 
 $routes->get('/search', 'Search::index', ['filter' => 'auth']);
+
+
+// $route['public/images/(:any)'] = "FileController/imageHandler/$1";
 
 $routes->get('/login', 'Auth::index');
 $routes->match(['get', 'post'], '/register', 'Auth::register');

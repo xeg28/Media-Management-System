@@ -8,19 +8,10 @@
   overflow:auto
 }
 
-.auth-alert {
-  width:550px;
-  margin:auto;
-  z-index:1;
+.alert-box > .errors {
+  text-align: left;
 }
 
-
-  @media (max-width: 700px) {
-    .card#login-card, .card#register-card {
-      width: 95vw;
-    }
-    .auth-alert {
-      width: 95vw;
-    }
-  }
-
+.auth-alert {
+  width: 250px;
+}

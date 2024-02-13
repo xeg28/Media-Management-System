@@ -20,7 +20,7 @@
         <h5>Image Files</h5>
       </div>
     </div>
-    <div class="preview-container">
+    <div class="preview-container <?=($imgPreview === 'small') ? 'small-preview' : ''?>">
       <?php
       if (!empty($files)) {
         $index = 0;
@@ -44,7 +44,7 @@
                 <span class="shared-hover">Shared by <?= $row->sender_email ?></span>
               <?php endif; ?>
               <img class="image-icon" src="<?=base_url('public/images/icon.svg');?>" draggable="false">
-              <img src="<?php echo base_url('public/images/' . $row->caption); ?>" type="image/png"
+              <img src="<?php echo base_url('writable/uploads/images/' . $row->caption); ?>" type="image/png"
                    draggable="false" style="object-fit: contain;" />
             </div>
 

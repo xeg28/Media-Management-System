@@ -12,10 +12,10 @@ class Image extends BaseController
     {
         helper(["utility"]);
         $imgModel = new ImageModel();
-		$sharedImgModel = new SharedImageModel();
         $data['title'] = 'Image';
         $data['showNavbar'] = true;
         $files['files'] = $imgModel->getAllByName();
+        $files['imgPreview'] = (sizeof($files['files']) > 2) ? 'normal' : 'small';
 
         if(session('errors') !== null && !empty(session('errors'))) {
             $data['errors'] = session('errors');
@@ -27,6 +27,40 @@ class Image extends BaseController
         echo view('templates/footer');
     }
 
+    public function show($file_name)
+    {
+        if (!session()->get('isLoggedIn')) {
+            $this->show_404('Page not found');
+            return;
+        }
+        $imgModel = new ImageModel();
+        $img_id = $imgModel->getIdByName($file_name);
+        $img = $imgModel->getImage($img_id);
+        if ($img) // validation
+        {
+            $file = UPLOADPATH. 'images/' . $file_name;
+            $encodedFileName = rawurldecode($file_name);
+            if (file_exists($file)) // check the file is existing 
+            {
+                $this->response->setHeader('X-Sendfile', 'images/'.$encodedFileName);
+                $this->response->setHeader('Content-Type', $img->type);
+                return $this->response;
+            } else {
+                $this->show_404('File not found');
+            }
+        }
+        else {
+            $this->show_404('Page not found');
+        }
+    }
+
+
+    private function show_404($message)
+    {
+        $data= ['message' => $message];
+        echo view('errors/html/error_404', $data);
+    }
+
 
     public function imageUpload()
     {
@@ -36,13 +70,11 @@ class Image extends BaseController
         $files = $this->request->getFileMultiple('file');
         $filenames = $this->request->getVar('name');
         $notes = $this->request->getVar('note');
-        $targetPath = ROOTPATH . 'public/images/'; 
+        $targetPath = UPLOADPATH . 'images/'; 
 
         foreach($files as $index => $file) {
             if($file->isValid() && !$file->hasMoved()) {
-                $targetFile = $targetPath.$file->getName();
-                $newName = rename_image(pathinfo($targetFile));
-                $file->move($targetPath, $newName);
+                $file->move($targetPath, null);
                 $model = new ImageModel();
     
                 $name = $filenames[$index];
@@ -52,7 +84,7 @@ class Image extends BaseController
                 $imgData = [
                     'name' => $filename,
                     'type' => $file->getClientMimeType(),
-                    'path' => $targetPath . $newName,
+                    'path' => $targetPath . $file->getName(),
                     'caption' => $file->getName(),
                     'updated_at' => date('Y-m-d H:i:s', now()),
                     'note' => $note,
@@ -113,7 +145,7 @@ class Image extends BaseController
 			
 			$image = $imgModel->getImage($imageId);
 			if(!$image) {
-                $errors[] = "<li>You cannot share this image</li>";
+                $errors[] = "You cannot share this image";
 				return redirect()->to(previous_url())->with('errors', $errors);
 			}	
             
@@ -122,11 +154,11 @@ class Image extends BaseController
 			foreach($emails as $email) {
 				$receiverId = $userModel->getUserIdByEmail($email);
 				if($receiverId === null) {
-                    $errors[] = "<li>Unable to send to ".$email."</li>";
+                    $errors[] = "Unable to send to ".$email;
 					continue;
 				}
                 if($receiverId == $userId) {
-                    $errors[] = "<li>You cannot send a file to yourself.</li>";
+                    $errors[] = "You cannot send a file to yourself";
                     continue;
                 }
 				
@@ -136,7 +168,7 @@ class Image extends BaseController
 					'image_id' => $imageId,
 				];
 				if($sharedImgModel->sharedImageExists($sharedImgData)) {
-                    $errors[] = "<li>You already sent this file to ".$email."</li>";
+                    $errors[] = "You already sent this file to ".$email;
                     continue;
                 }
 					$sharedImgModel->saveSharedImage($sharedImgData);

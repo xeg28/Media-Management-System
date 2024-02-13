@@ -1,16 +1,16 @@
 <div class="container-fluid">
 	<div class="file-container">
 		<?php if ($file->filetype == 'Image'): ?>
-			<img src="<?= base_url('public/images/' . $file->caption) ?>" alt="Alternative Text for Image">
+			<img src="<?= base_url('writable/uploads/images/' . $file->caption) ?>" alt="Alternative Text for Image">
 		<?php endif; ?>
 		<?php if ($file->filetype == 'Audio'): ?>
 			<audio id="audioFile" controls autoplay="autoplay">
-				<source src="public/audio/<?= $file->caption ?>" type="<?= $file->type ?>">
+				<source src="writable/uploads/audios/<?= $file->caption ?>" type="<?= $file->type ?>">
 			</audio>
 		<?php endif; ?>
 		<?php if ($file->filetype == 'Video'): ?>
 			<video id="" controls autoplay="autoplay">
-				<source src="public/video/<?= $file->caption ?>" type="<?= $file->type ?>">
+				<source src="writable/uploads/videos/<?= $file->caption ?>" type="<?= $file->type ?>">
 			</video>
 		<?php endif; ?>
 	</div>
@@ -21,7 +21,7 @@
 			<div class="d-flex justify-content-between align-items-center">
 
 				<h4 class="file-name"><?= $file->name ?></h4>
-				<input type="text" class="form-control mb-2 field hide" id="inputName" name="name"
+				<input type="text" class="form-control mt-2 mb-2 field hide" id="inputName" name="name"
 					value="<?= htmlspecialchars($file->name) ?>" placeholder="Name">
 				<div class="btn-container">
 					<?php if (!$file->is_shared): ?>
@@ -62,7 +62,7 @@
 					$file = ROOTPATH . 'public/' . strtolower($row->filetype) . '/thumbnails/' . explode('.', $row->caption)[0] . '.png';
 					$thumbnail = (file_exists($file)) ? $thumbnail : base_url('public/' . strtolower($row->filetype) . '/icon.png');
 					$thumbnails = [
-						'Image' => base_url('public/images/' . $row->caption),
+						'Image' => base_url('writable/uploads/images/' . $row->caption),
 						'Audio' => $thumbnail,
 						'Video' => $thumbnail
 					];
@@ -74,7 +74,7 @@
 			?>
 
 
-			<div class="file-preview" url="<?= base_url('/Open' . $row->filetype . '?id=' . $row->id) ?>">
+			<div class="file-preview" url="<?= base_url('/Open' . $row->filetype . '?id=' . $row->id) ?>" filetype="<?=$row->filetype?>">
 				<div class="img-wrapper">
 					<?php if ($row->is_shared == 1): ?>
 							<svg width="20px" height="20px" viewBox="0 0 16 16" class="shared-icon" fill="">
@@ -106,25 +106,25 @@
 						</span>
 					</div>
 					<div class="dropdown">
-								<div class="options" index="<?= $index ?>" data-toggle="dropdown" aria-expanded="false">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-										<path d="M12 16.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5
-												1.5-1.5zM10.5 12c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5
-													1.5zm0-6c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5z"></path>
-									</svg>
-								</div>
-								<div class="d-flex flex-column justify-content-end">
-									<ul class="dropdown-menu">
-										<?php if ($row->is_shared == 0): ?>
-											<li><a class="dropdown-item share-btn" index="<?= $index ?>">Share</a></li>
-											<li><a class="dropdown-item del-btn" rowId="<?= $row->id ?>">Delete</a></li>
-										<?php endif; ?>
-										<li><a class="dropdown-item"
-												href="<?= base_url('/Download' . $row->filetype . '?id=' . $row->id) ?>">Download</a>
-										</li>
-									</ul>
-								</div>
-							</div>
+						<div class="options" index="<?= $index ?>" data-toggle="dropdown" aria-expanded="false">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+								<path d="M12 16.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5
+										1.5-1.5zM10.5 12c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5
+											1.5zm0-6c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5z"></path>
+							</svg>
+						</div>
+						<div class="d-flex flex-column justify-content-end">
+							<ul class="dropdown-menu">
+								<?php if ($row->is_shared == 0): ?>
+									<li><a class="dropdown-item share-btn" index="<?= $index ?>">Share</a></li>
+									<li><a class="dropdown-item del-btn" rowId="<?= $row->id ?>">Delete</a></li>
+								<?php endif; ?>
+								<li><a class="dropdown-item"
+										href="<?= base_url('/Download' . $row->filetype . '?id=' . $row->id) ?>">Download</a>
+								</li>
+							</ul>
+						</div>
+					</div>
 				</div>
 			</div>
 			<?php $index++; 

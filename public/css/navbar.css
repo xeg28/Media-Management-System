@@ -1,6 +1,133 @@
 nav {
   user-select: none;
+  justify-content: start !important;
 }
+nav .navbar-toggler-icon {
+  fill: black;
+}
+
+nav .form-control {
+  border-radius: 25px;
+}
+
+nav .btn-primary {
+  border-radius: 25px;
+  width: 50px;
+}
+
+nav .input-group {
+  width: 30vw;
+}
+
+nav .nav-btns {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  top: 13.5px;
+  right: 20px;
+}
+
+.nav-options {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 3px;
+  width: 35px;
+  cursor: pointer;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 0.25rem;
+  height:39.6px;
+  margin-top: 0;
+}
+
+.nav-options:hover {
+  background-color: #eaeaea;
+}
+
+.nav-btns .dropdown-menu {
+  /* top: 10px; */
+  transform: translate3d(-120px, 5px, 0px) !important;
+}
+
+.navbar-collapse {
+  flex-grow:initial;
+}
+
+.search-icon {
+  height: 39.6px;
+  width: 39.6px;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 0.25rem;
+   cursor: pointer;
+   padding: 6px;
+}
+.search-icon:hover {
+  background-color: #eaeaea;
+}
+
+.search-container .input-group {
+  width: 45vw;
+}
+
+.nav-search.shown {
+  display: flex;
+}
+
+.nav-search > * {
+  margin-left: 1rem;
+}
+
+.nav-search .form-control {
+  border-radius: 25px;
+}
+
+.nav-search .btn-primary {
+  border-radius: 25px;
+  width: 50px;
+}
+
+.nav-search > .back-icon {
+  position: initial;
+  height: 40px;
+  width: 40px;
+  padding: 5px;
+  top: 15.9px;
+  left: 10px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.nav-search > .back-icon:hover {
+  background-color:#C0C0C0;
+}
+
+.nav-search form {
+  flex:1;
+  margin-right: 1rem;
+}
+
+.nav-search {
+  display: none;
+  width: 100%;
+  justify-content: start;
+  position: relative;
+  height: 66.8px;
+  align-items: center;
+}
+
+@media (max-width: 992px) {
+  .search-container {
+    position: absolute;
+    top: 14.6px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .search-container .input-group {
+    width: 60vw;
+  }
+}
+
 
 .navbar-light {
     background: #f8f8f8 !important;

@@ -26,6 +26,7 @@ class Search extends BaseController
         $audios = $audModel->searchAudios($query);
         $videos = $vidModel->searchVideos($query);
         $data['files'] = array_merge($images, $audios, $videos);
+        $data['preview'] = (sizeof($data['files'])) > 2 ? 'normal' : 'small';
 
         if(session('errors') !== null && !empty(session('errors'))) {
             $data['errors'] = session('errors');

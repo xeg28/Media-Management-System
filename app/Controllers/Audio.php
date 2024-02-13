@@ -23,6 +23,7 @@ class Audio extends BaseController
         $data['showNavbar'] = true;
         $files['files'] = $audModel->getAllByName();
 		$data['sharedAudios'] = $sharedAudModel->getSharedAudios();
+        $files['audPreview'] = (sizeof($files['files']) > 2) ? 'normal' : 'small';
 
         if(session('errors') !== null && !empty(session('errors'))) {
             $data['errors'] = session('errors');
@@ -32,6 +33,41 @@ class Audio extends BaseController
         echo view('content/sharepopup', $files);
         echo view('content/audio', $files);
         echo view('templates/footer');
+    }
+
+    public function show($file_name) {
+        if(!session()->get('isLoggedIn')) {
+            $this->show_404('Page not found');
+            return;
+        }
+        $audModel = new AudioModel();
+        $audio_id = $audModel->getIdByName($file_name);
+
+        if($audio_id == null) {
+            $this->show_404('File not found');
+            return;
+        }
+
+        $audio = $audModel->getAudio($audio_id);
+        if($audio) {
+            $file = UPLOADPATH . 'audios/'. $file_name;
+            if(file_exists($file)) {
+                $this->response->setHeader('X-Sendfile', 'audios/'.$file_name);
+                $this->response->setHeader('Content-Type', $audio->type);
+                return $this->response;
+            }
+            else {
+                $this->show_404('File not found');
+            }
+        }
+        else {
+            $this->show_404('Page not found');
+        }
+    }
+
+    private function show_404($message) {
+        $data['message'] = $message;
+        echo view('errors/html/error_404', $data);
     }
 
 
@@ -45,13 +81,11 @@ class Audio extends BaseController
         $filenames = $this->request->getVar('name');
         $notes = $this->request->getVar('note');
         $durations = $this->request->getVar('fileDuration');
-        $targetPath = ROOTPATH . 'public/audio/';
+        $targetPath = UPLOADPATH . 'audios/';
 
         foreach($files as $index => $file) {
             if($file->isValid() && !$file->hasMoved()) {
-                $targetFile = $targetPath . $file->getName();
-                $newName = rename_audio(pathinfo($targetFile));
-                $file->move($targetPath, $newName);
+                $file->move($targetPath, null);
                 $model = new AudioModel();
                 
                 $durationInSeconds = $durations[$index];
@@ -65,7 +99,7 @@ class Audio extends BaseController
                 $audioData = [
                     'name' => $filename,
                     'type' => $file->getClientMimeType(),
-                    'path' => $targetPath . $newName,
+                    'path' => $targetPath . $file->getName(),
                     'caption' => $file->getName(),
                     'updated_at' => date('Y-m-d H:i:s', now()),
                     'duration' => $duration,

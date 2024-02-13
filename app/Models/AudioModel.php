@@ -14,6 +14,14 @@ class AudioModel extends Model {
         $this->db = db_connect();
     }
 
+    public function getIdByName($file_name) {
+        $audio_id = $this->db->table($this->table)
+                    ->select('id')
+                    ->getWhere(['caption' => $file_name])
+                    ->getRow();
+        return ($audio_id == null) ? null : $audio_id->id;
+    }
+
     public function getAudio($id) {
         parent::__construct();
         $user_id = session()->get("id");

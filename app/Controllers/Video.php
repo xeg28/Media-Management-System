@@ -1,7 +1,5 @@
 <?php
 namespace App\Controllers;
-require 'vendor/autoload.php';
-
 use CodeIgniter\Entity\Exceptions\CastException;
 use CodeIgniter\Files\File;
 use App\Models\VideoModel;
@@ -23,6 +21,7 @@ class Video extends BaseController
         $data['showNavbar'] = true;
         $data['files'] = $vidModel->getAllByName();
         $data['sharedVideos'] = $sharedVidModel->getSharedVideos();
+        $data['vidPreview'] = (sizeof($data['files']) > 2 ? 'normal' : 'small');
 
         if(session('errors') !== null && !empty(session('errors'))) {
             $data['errors'] = session('errors');
@@ -34,6 +33,38 @@ class Video extends BaseController
         echo view('templates/footer');
     }
 
+    public function show($file_name) {
+        if(!session()->get('isLoggedIn')) {
+            $this->show_404('Page not found');
+            return;
+        }
+        $videoModel = new VideoModel();
+        $video_id = $videoModel->getIdByName($file_name);
+        $vid = $videoModel->getVideo($video_id);
+        if($vid) {
+            $file = UPLOADPATH . 'videos/'.$file_name;
+            $encodedFileName = rawurldecode($file_name);
+            if(file_exists($file)) {
+                $this->response->setHeader('X-Sendfile', 'videos/'.$encodedFileName);
+                $this->response->setHeader('Content-Type', $vid->type);
+                return $this->response;
+            }
+            else {
+                $this->show_404('File not found');
+            }
+        }
+        else {
+            $this->show_404('Page not found');
+            return;
+        }
+    }
+
+
+    private function show_404($message)
+    {
+        $data= ['message' => $message];
+        echo view('errors/html/error_404', $data);
+    }
 
 
     public function videoUpload()
@@ -45,21 +76,19 @@ class Video extends BaseController
         $filenames = $this->request->getVar('name');
         $notes = $this->request->getVar('note');
         $durations = $this->request->getVar('fileDuration');
-        $targetPath = ROOTPATH . 'public/video/';
+        $targetPath = ROOTPATH . 'writable/uploads/videos/';
 
         foreach($files as $index => $file) {
             if ($file->isValid() && !$file->hasMoved()) {
-                $targetFile = $targetPath . $file->getName();
-                $newName = rename_video(pathinfo($targetFile));
-                $thumbnail = $targetPath . '/thumbnails/'.explode('.', $newName)[0].'.png';
-                $file->move($targetPath, $newName);
+                $file->move($targetPath, null);
+                $thumbnail = ROOTPATH . 'public/video/' . '/thumbnails/'.explode('.', $file->getName())[0].'.png';
                 $model = new VideoModel();  
                 
                 $ffmpeg = FFMpeg::create([
                     'ffmpeg.binaries'  => 'app\ffmpeg\bin\ffmpeg.exe',
                     'ffprobe.binaries' => 'app\ffmpeg\bin\ffprobe.exe'
                 ]);
-                $video = $ffmpeg->open($targetPath . $newName);
+                $video = $ffmpeg->open($targetPath . $file->getName());
                 $frame = $video->frame(TimeCode::fromSeconds(1));
                 $frame->save($thumbnail);
     
@@ -74,7 +103,7 @@ class Video extends BaseController
                 $videoData = [    
                     'name' => $filename,
                     'type' => $file->getClientMimeType(),
-                    'path' => $targetPath . $newName,
+                    'path' => $targetPath . $file->getName(),
                     'caption' => $file->getName(),
                     'updated_at' => date('Y-m-d H:i:s', now()),
                     'duration' => $duration,

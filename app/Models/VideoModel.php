@@ -15,6 +15,14 @@ class VideoModel extends Model {
         $this->db = db_connect();
     }
 
+    public function getIdByName($file_name) {
+        $video_id = $this->db->table($this->table)
+            ->select('id')
+            ->getWhere(['caption' => $file_name])
+            ->getRow();
+        return $video_id->id;
+    }
+
     public function getVideo($id) {
         parent::__construct();
         $user_id = session()->get("id");

@@ -12,15 +12,18 @@
     <?php endif; ?>
 
       <?php if (isset($validation)): ?>
-        <div class="error-msg auth-alert" >
-          <div class="alert alert-danger" role="alert">
-            <span class="close-btn error-btn">&times;</span>
-            <div class="row pt-3">
+        <div class="popup" >
+          <div class="alert-box">
+          <img src="http://100dayscss.com/codepen/alert.png"/>
+            <span class="alert-title">ops!</span>
+            <p>
               <?= $validation->listErrors() ?>
-            </div>
+            </p>
+            <button class="alert-btn error-btn" >OK</button>
           </div>
         </div>
      <?php endif; ?>
+
     <div class="d-flex flex-column justify-content-center align-items-center h-100">
       <div class="card p-2" style="border-radius: 1rem" id="login-card">
         <div class="m-3 m-md-4">
@@ -30,9 +33,9 @@
             <?= csrf_field() ?>
             <div class="form-group">
               <input type="text" class="form-control mb-3" name="email" placeholder="Email Address"
-                value="<?= set_value('email') ?>" required>
+                value="<?= set_value('email') ?>" required autocomplete='on'>
 
-              <input type="password" class="form-control mb-3" name="password" placeholder="Password" value="" required>
+              <input type="password" class="form-control mb-3" name="password" placeholder="Password" value="" required autocomplete='on'>
 
               <div class="d-flex flex-column">
                 <input type="submit" class="btn btn-info btn-theme mt-2 mx-auto w-100" value="Sign in">
