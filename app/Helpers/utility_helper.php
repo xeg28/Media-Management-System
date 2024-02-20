@@ -41,6 +41,24 @@ function get_time_difference($date1, $date2) {
     
 }
 
+function nameOfFile($filename) {
+    $splitIndex = 0;
+    for($i = strlen($filename) - 1; $i >= 0; $i--) {
+        if($filename[$i] == '.') {
+            $splitIndex = $i;
+            break;
+        }
+    }
+
+    return substr($filename,0 ,$splitIndex);
+}
+
+function getThumbnailURL($caption, $type) {
+    $captionArr = explode('.', $caption);
+    $extension = end($captionArr);
+    return base_url('/writable/uploads/'.$type.'/'.nameOfFile($caption) . '_thumb.' . $extension);
+}
+
 function trimDurationText($duration) {
     $i = 1;
     while(in_array($duration[$i], array('0', ':'))) $i++;

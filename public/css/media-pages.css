@@ -38,7 +38,7 @@
   .file-preview img {
     border-radius: 10px;
     position: absolute;
-    object-fit:cover;
+    object-fit:contain;
     top: 0;
     left: 0;
     height: 100%;

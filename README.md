@@ -53,7 +53,7 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 - [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
 - [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
 
-# mod_xsendfile
+## mod_xsendfile
 
 I added this module to xampp to allow files to be sent back to the server 
 to display them. This is necessary to restrict access to files for users
@@ -61,7 +61,18 @@ that are not logged in and for users that don't own or have privileges to the fi
 
 Add the following to xampp httpd.conf file
 LoadModule xsendfile_module modules/mod_xsendfile.so
-<IfModule mod_xsendfile.c>
-    XSendFile On
-    XSendFilePath absolute/path/to/uploads/folder
-</IfModule>
+
+&lt;IfModule mod_xsendfile.c&gt;\
+    &nbsp;&nbsp;&nbsp;&nbsp;XSendFile On\
+    &nbsp;&nbsp;&nbsp;&nbsp;XSendFilePath absolute/path/to/uploads/folder\
+&lt;/IfModule&gt;
+
+
+## FFmpeg Library
+
+I added this library to the project so I can get a thumbnail for video files. 
+You can download the library using spark. 
+
+You will also need to download the ffmpeg binaries which you can find [here] (https://ffmpeg.org/download.html).
+Include those binaries in the following directory: projectroot/app/ffmpeg
+

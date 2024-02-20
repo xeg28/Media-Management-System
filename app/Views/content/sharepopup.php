@@ -11,7 +11,7 @@ if(isset($related_files)) {
 for ($i = 0; $i < sizeof($files); $i++) {
   foreach( $files[$i] as $row ) { 
 ?>
-<div class="share-popup" index="<?= $index ?>">
+<div class="share-popup">
   <div class="share-popup-content position-relative">
     <div class="card">
       <div class="card-header">
@@ -22,7 +22,7 @@ for ($i = 0; $i < sizeof($files); $i++) {
         <form action="<?= base_url('Share'.$row->filetype) ?>" method="post" class="form share-form">
           <div class="">
             <div class="d-flex justify-content-between">
-              <label for="inputName">User's Email</label>
+              <label>User's Email</label>
               <div>
                 <span class="add-share-input share-input-btn">&plus;</span>
                 <span class="remove-share-input share-input-btn ">&minus;</span>
@@ -35,7 +35,7 @@ for ($i = 0; $i < sizeof($files); $i++) {
           </div>
         </form>
         <div class="row d-flex justify-content-center">
-          <button class="btn btn-theme mt-4 mx-auto share-submit-btn" index="<?= $index ?>">Share</button>
+          <button class="btn btn-theme mt-4 mx-auto share-submit-btn">Share</button>
         </div>
       </div>
     </div>

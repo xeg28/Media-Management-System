@@ -75,7 +75,8 @@ class Video extends BaseController
         $files = $this->request->getFileMultiple('file');
         $filenames = $this->request->getVar('name');
         $notes = $this->request->getVar('note');
-        $durations = $this->request->getVar('fileDuration');
+        $durations = json_decode($this->request->getVar('durations'), true);
+        $uuid = $this->request->getVar('uuid');
         $targetPath = ROOTPATH . 'writable/uploads/videos/';
 
         foreach($files as $index => $file) {
@@ -88,11 +89,12 @@ class Video extends BaseController
                     'ffmpeg.binaries'  => 'app\ffmpeg\bin\ffmpeg.exe',
                     'ffprobe.binaries' => 'app\ffmpeg\bin\ffprobe.exe'
                 ]);
+                
                 $video = $ffmpeg->open($targetPath . $file->getName());
                 $frame = $video->frame(TimeCode::fromSeconds(1));
                 $frame->save($thumbnail);
     
-                $durationInSeconds = $durations[$index];
+                $durationInSeconds = $durations[$uuid[$index]];
                 $time = get_time_from_seconds($durationInSeconds);
                 $duration = sprintf('%02d:%02d:%02d', $time['hours'], $time['minutes'], $time['seconds']);
     

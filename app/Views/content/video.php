@@ -34,7 +34,7 @@
 					?>
 					<div class="file-preview" filetype="<?= $row->filetype ?>"
 						url="<?= base_url('/Open' . $row->filetype . '?id=' . $row->id) ?>">
-						<div class="img-wrapper">
+						<div class="img-wrapper blur-load">
 							<?php if ($row->is_shared == 1): ?>
 								<svg width="20px" height="20px" viewBox="0 0 16 16" class="shared-icon" fill="">
 									<path d="M5,7 C6.11,7 7,6.1 7,5 C7,3.9 6.11,3 5,3 C3.9,3 3,3.9 3,5 C3,6.1 3.9,7 5,7
@@ -48,7 +48,10 @@
 								</span>
 							<?php endif; ?>
 							<img class="video-icon" src="<?= base_url('public/video/icon.svg'); ?>" draggable="false">
-							<img src="<?= $thumbnail ?>" type="image/png" draggable="false" style="object-fit: contain;" />
+							<span class="duration-text"><?=trimDurationText($row->duration)?></span>
+							<picture>
+								<img src="<?= $thumbnail ?>" type="image/png" draggable="false" style="object-fit: contain;" />
+							</picture>
 						</div>
 
 						<div class="d-flex flex-row justify-content-between w-100">

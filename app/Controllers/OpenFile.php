@@ -10,7 +10,7 @@ class OpenFile extends BaseController
 {
     // instead of using index, create other functions and routes for specific file type
     public function openImage() {
-        helper(['utility']);
+        helper(['utility', 'render']);
         $imgModel = new ImageModel();
         $id = $this->request->getVar('id');
         $image = $imgModel->getImage($id);

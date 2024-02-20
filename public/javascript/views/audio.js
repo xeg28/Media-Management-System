@@ -1,5 +1,5 @@
 // Dropzone settings 
-
+var durations = {};
 Dropzone.options.audioupload = {
     paramName: "file",
     maxFilesize: 100,
@@ -29,8 +29,7 @@ Dropzone.options.audioupload = {
                 fileDuration = audioElement.duration || 0;
                 console.log("element error");
                 if(index <= 10 && (file.type.split('/')[0] == 'audio' || file.type.split('/')[1] == 'webm') && file.size <= 100000000) { 
-                    $('.dropzone').append("<input type='hidden' name='fileDuration[]' value='"+fileDuration+
-                    "' uuid='"+file.upload.uuid+"'>");
+                    durations[file.upload.uuid] = fileDuration;
                 }
             });
 
@@ -38,8 +37,7 @@ Dropzone.options.audioupload = {
                 // getting the duration of the file
                 fileDuration = audioElement.duration || 0;
                 if(index <= 10 && (file.type.split('/')[0] == 'audio' || file.type.split('/')[1] == 'webm') && file.size <= 100000000) {
-                    $('.dropzone').append("<input type='hidden' name='fileDuration[]' value='"+fileDuration+
-                    "' uuid='"+file.upload.uuid+"'>");
+                    durations[file.upload.uuid] = fileDuration;
                 }
             });
         }); 
@@ -55,6 +53,8 @@ Dropzone.options.audioupload = {
                 'upload-name" type="text" placeholder="File Name" value="' + file.name + '" uuid="'+file.upload.uuid+'">');
                 $('#AudioUploadContainer').append('<textarea class="form-control note mb-4 upload-note"' + 
                 ' type="text" placeholder="Description" uuid="'+ file.upload.uuid +'"></textarea>');
+                $('.dropzone').append('<input type="hidden" name="uuid[]" value="' + file.upload.uuid +
+                    '" uuid="' +file.upload.uuid+ '">');
                 index++;
               }
         });
@@ -88,6 +88,8 @@ $(document).ready(function(){
 	
     var dropzone = Dropzone.forElement("#audioupload");
 	$(".upload-btn").click(function() {
+        $('.dropzone').append("<input type='hidden' name='durations' value='" +JSON.stringify(durations)+ "'>");
+
         $('.upload-name').each(function() {
             var name = escapeHTML($(this).val());
             $("#audioupload").append("<input type='hidden' name='name[]' value='" +name+ "'>");

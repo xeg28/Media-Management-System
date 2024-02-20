@@ -1,7 +1,8 @@
 <div class="container-fluid">
-	<div class="file-container">
+	<div class="file-container blur-load" id="fileContainer">
 		<?php if ($file->filetype == 'Image'): ?>
-			<img src="<?= base_url('writable/uploads/images/' . $file->caption) ?>" alt="Alternative Text for Image">
+			<?=createImagePlaceholder($file->path)?>
+			<img src="<?= base_url('writable/uploads/images/' . $file->caption) ?>" alt="Alternative Text for Image" id="image">
 		<?php endif; ?>
 		<?php if ($file->filetype == 'Audio'): ?>
 			<audio id="audioFile" controls autoplay="autoplay">
@@ -62,7 +63,7 @@
 					$file = ROOTPATH . 'public/' . strtolower($row->filetype) . '/thumbnails/' . explode('.', $row->caption)[0] . '.png';
 					$thumbnail = (file_exists($file)) ? $thumbnail : base_url('public/' . strtolower($row->filetype) . '/icon.png');
 					$thumbnails = [
-						'Image' => base_url('writable/uploads/images/' . $row->caption),
+						'Image' => getThumbnailURL($row->caption, 'images'),
 						'Audio' => $thumbnail,
 						'Video' => $thumbnail
 					];
@@ -75,7 +76,7 @@
 
 
 			<div class="file-preview" url="<?= base_url('/Open' . $row->filetype . '?id=' . $row->id) ?>" filetype="<?=$row->filetype?>">
-				<div class="img-wrapper">
+				<div class="img-wrapper blur-load">
 					<?php if ($row->is_shared == 1): ?>
 							<svg width="20px" height="20px" viewBox="0 0 16 16" class="shared-icon" fill="">
 								<path d="M5,7 C6.11,7 7,6.1 7,5 C7,3.9 6.11,3 5,3 C3.9,3 3,3.9 3,5 C3,6.1 3.9,7 5,7
@@ -93,7 +94,9 @@
 					<?php if(in_array($row->filetype, array("Audio", "Video"), true)):?>
 						<span class="duration-text"><?=trimDurationText($row->duration)?></span>
 					<?php endif ?>
-					<img src="<?= $thumbnails[$row->filetype] ?>" type="image/png" draggable="false" style="object-fit: contain;" />
+					<picture>
+						<img src="<?= $thumbnails[$row->filetype] ?>" type="image/png" draggable="false" style="object-fit: contain;" />
+					</picture>
 				</div>
 				<div class="preview-info">
 					<div>

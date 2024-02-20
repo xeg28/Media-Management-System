@@ -2,8 +2,9 @@ nav {
   user-select: none;
   justify-content: start !important;
 }
-nav .navbar-toggler-icon {
-  fill: black;
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,<svg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'><path stroke='rgba(0, 0, 0, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/></svg>") !important;
+  
 }
 
 nav .form-control {
@@ -116,7 +117,7 @@ nav .nav-btns {
   align-items: center;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 991px) {
   .search-container {
     position: absolute;
     top: 14.6px;
@@ -127,7 +128,6 @@ nav .nav-btns {
     width: 60vw;
   }
 }
-
 
 .navbar-light {
     background: #f8f8f8 !important;
@@ -164,6 +164,29 @@ nav .nav-btns {
   .logo {
     height: 50px;
   }
+
+  @media (max-width: 767px) {
+    .logo {
+      height: 40px;
+    }
+    .search-icon {
+      height: 35px;
+    }
+    .navbar-toggler {
+      height: 35px;
+    }
+    .nav-options {
+      height: 35px;
+    }
+
+    nav .nav-btns {
+      top:10.9px;
+    }
+    .navbar-toggler-icon {
+      height:25.1px !important;
+    }
+  }
+  
 
   @media (max-width: 990px) {
     .nav-item {

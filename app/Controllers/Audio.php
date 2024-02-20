@@ -80,7 +80,8 @@ class Audio extends BaseController
         $files = $this->request->getFileMultiple('file');
         $filenames = $this->request->getVar('name');
         $notes = $this->request->getVar('note');
-        $durations = $this->request->getVar('fileDuration');
+        $uuid =  $this->request->getVar('uuid');
+        $durations = json_decode($this->request->getVar('durations'), true);
         $targetPath = UPLOADPATH . 'audios/';
 
         foreach($files as $index => $file) {
@@ -88,7 +89,7 @@ class Audio extends BaseController
                 $file->move($targetPath, null);
                 $model = new AudioModel();
                 
-                $durationInSeconds = $durations[$index];
+                $durationInSeconds = $durations[$uuid[$index]];
                 $time = get_time_from_seconds($durationInSeconds);
                 $duration = sprintf('%02d:%02d:%02d', $time['hours'], $time['minutes'], $time['seconds']);
                 

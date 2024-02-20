@@ -1,2 +1,4 @@
 app/ffmpeg/
 writable/
+public/video/thumbnails/
+vendor/

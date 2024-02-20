@@ -33,8 +33,12 @@ class Image extends BaseController
             $this->show_404('Page not found');
             return;
         }
+        $testFile = $file_name;
+        if(str_contains($file_name,'_thumb')) {
+             $testFile= str_replace('_thumb', '', $file_name);
+        }
         $imgModel = new ImageModel();
-        $img_id = $imgModel->getIdByName($file_name);
+        $img_id = $imgModel->getIdByName($testFile);
         $img = $imgModel->getImage($img_id);
         if ($img) // validation
         {
@@ -46,11 +50,12 @@ class Image extends BaseController
                 $this->response->setHeader('Content-Type', $img->type);
                 return $this->response;
             } else {
-                $this->show_404('File not found');
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
             }
         }
         else {
             $this->show_404('Page not found');
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
     }
 
@@ -76,6 +81,8 @@ class Image extends BaseController
             if($file->isValid() && !$file->hasMoved()) {
                 $file->move($targetPath, null);
                 $model = new ImageModel();
+
+                $this->createThumbnail($targetPath . $file->getName());
     
                 $name = $filenames[$index];
                 $filename = trim($name) === "" ? $file->getName() : $name;
@@ -179,8 +186,39 @@ class Image extends BaseController
         }
 	}
 
+    private function createThumbnail($file) {
+        helper('utility');
+        $image = \Config\Services::image();
+
+        $originalImagePath = $file;
+        $temp = explode('/', $file);
+        $filename = nameOfFile(end($temp));
+
+        $lowQualityImagePath = UPLOADPATH . '/images/' . $filename . '_thumb.'.pathinfo($file)['extension'];
+
+        $targetWidth = 500;
+
+        $image->withFile($originalImagePath);
+
+        $originalWidth = $image->getWidth();
+        
+        $originalHeight = $image->getHeight();
+
+        $newHeight = ($originalHeight / $originalWidth) * $targetWidth;
+
+        $image->resize($targetWidth, $newHeight);
+
+        $image->save($lowQualityImagePath);
+
+        // $webpVersionPath =  UPLOADPATH . '/images/' . $filename . '_thumb.' . 'webp';
+        // $image->convert(IMAGETYPE_WEBP);
+        // $image->save($webpVersionPath);
+
+        $image->clear();
+    }
+
     public function delete() {
-        helper(['form', 'url', 'upload']);
+        helper(['form', 'url', 'upload', 'utility', 'render']);
         $id = $this->request->getPost("id");
         $model = new ImageModel();
 		$image = $model->getImage($id);
@@ -190,12 +228,27 @@ class Image extends BaseController
 		}
 
         $path = $model->getImagePath($id);
+        $thumbPath =  UPLOADPATH . 'images/'. nameOfFile($image->caption) . '_thumb.' . pathinfo($path)['extension'];
         if(isset($path) && file_exists($path))
             unlink($path);
+        if(file_exists($thumbPath)) {
+            unlink($thumbPath);
+        }
+        
         
         $model->deleteImage($id);
+        $images = $model->getLastTenUpdated();
+        $image = null;
+        if(sizeof($images) === 10 && previous_url() == base_url('/home')) {
+            $image = $images[9];
+        }
 
+        $filePreview = createFilePreview($image);
+        $sharePopup = createSharePopup($image);
         // return redirect()->to(previous_url());
-        return $this->response->setJSON(['message' => 'AJAX request processed successfully']);
+        return $this->response->setJSON(['message' => 'AJAX request processed successfully', 
+                                        'filePreview' => $filePreview,
+                                        'sharePopup' => $sharePopup,
+                                        'images' => $images]);
     }
 }

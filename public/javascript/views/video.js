@@ -1,3 +1,4 @@
+var durations = {};
 // Dropzone settings
 Dropzone.options.videoupload = {
     paramName: "file",
@@ -28,8 +29,7 @@ Dropzone.options.videoupload = {
                 fileDuration = videoElement.duration || 0;
                 
                 if(index <= 10 && file.type.split('/')[0] == 'video' && file.size <= 1000000000) {
-                    $('.dropzone').append('<input type="hidden" name="fileDuration[]" value="' +fileDuration+
-                    '" uuid="' +file.upload.uuid+ '">');
+                    durations[file.upload.uuid] = fileDuration;
                 }
                 
             });
@@ -39,8 +39,7 @@ Dropzone.options.videoupload = {
                 fileDuration = videoElement.duration || 0;
                 
                 if(index <= 10 && file.type.split('/')[0] == 'video' && file.size <= 1000000000) {
-                    $('.dropzone').append('<input type="hidden" name="fileDuration[]" value="' +fileDuration+
-                    '" uuid="' +file.upload.uuid+ '">');
+                    durations[file.upload.uuid] = fileDuration;
                 }
             });
         });
@@ -55,12 +54,15 @@ Dropzone.options.videoupload = {
                 'upload-name" type="text" placeholder="File Name" value="' + file.name + '" uuid="'+file.upload.uuid+'">');
                 $('#VideoUploadContainer').append('<textarea class="form-control note mb-4 upload-note"' + 
                 ' type="text" placeholder="Description" uuid="'+ file.upload.uuid +'"></textarea>');
+                $('.dropzone').append('<input type="hidden" name="uuid[]" value="' + file.upload.uuid +
+                    '" uuid="' +file.upload.uuid+ '">');
                 index++;
               }
         });
 
         this.on('removedfile', function(file) {
             $('[uuid="'+file.upload.uuid+'"]').remove();
+            delete durations[file.uplaod.uuid];
             index--;
         });
 
@@ -83,6 +85,8 @@ function escapeHTML(str) {
 $(document).ready(function(){
 	var dropzone = Dropzone.forElement("#videoupload");
 	$(".upload-btn").click(function() {
+        $('.dropzone').append("<input type='hidden' name='durations' value='" +JSON.stringify(durations)+ "'>");
+
         $('.upload-name').each(function() {
             var name = escapeHTML($(this).val());
             $("#videoupload").append("<input type='hidden' name='name[]' value='" +name+ "'>");

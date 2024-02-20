@@ -17,6 +17,9 @@
         <?php
         if (!empty($files[$i])) {
           foreach ($files[$i] as $row) {
+            $thumbnails = [ 'default' => getThumbnailURL($row->caption, 'images'),
+            'webp' => base_url('writable/uploads/images/'. explode('.', $row->caption)[0] . '_thumb.' . 'webp')  
+            ];
             $upload_time = new DateTime($row->uploaded_at);
             $date = new DateTime();
             $difference = get_time_difference($date, $upload_time);
@@ -24,7 +27,7 @@
             if ($i == 0) {
               ?>
               <div class="file-preview" filetype="<?= $row->filetype ?>" url="<?=base_url('/Open'. $row->filetype.'?id='.$row->id)?>">
-                <div class="img-wrapper" >
+                <div class="img-wrapper blur-load">
                 <?php if($row->is_shared == 1):?>
                 <svg width="20px" height="20px" viewBox="0 0 16 16"class="shared-icon" fill="">
                   <path d="M5,7 C6.11,7 7,6.1 7,5 C7,3.9 6.11,3 5,3 C3.9,3 3,3.9 3,5 C3,6.1 3.9,7 5,7
@@ -35,9 +38,12 @@
                     <span class="shared-hover">Shared by <?=$row->sender_email?></span>
                   <?php endif;?>
                   <img class="<?=strtolower($row->filetype)?>-icon" src="<?=base_url('public/'. strtolower( $row->filetype) .'s/icon.svg');?>" 
-                    draggable="false">
-                  <img src="<?php echo base_url('writable/uploads/images/' . $row->caption); ?>" type="image/png"
-                   draggable="false" style="object-fit: contain;" />
+                  draggable="false">
+                  <picture class="">
+                    <source srcset="<?=$thumbnails['default']?>" type="<?=$row->type?>"/>
+                    <img src="<?php echo base_url('writable/uploads/images/' . $row->caption); ?>" type="<?=$row->type?>"
+                    draggable="false" style="object-fit: contain;" />
+                  </picture>
                 </div>
             
                 <div class="d-flex flex-row justify-content-between w-100">
@@ -74,7 +80,7 @@
               $thumbnail = (file_exists($file)) ? $thumbnail : base_url('public/'. strtolower($row->filetype) .'/icon.png');
               ?>
               <div class="file-preview" filetype="<?= $row->filetype ?>" url="<?=base_url("/Open".$row->filetype."?id=".$row->id)?>">
-                <div class="img-wrapper">
+                <div class="img-wrapper blur-load">
                   <?php if($row->is_shared == 1):?>
                   <svg width="20px" height="20px" viewBox="0 0 16 16"class="shared-icon" fill="">
                     <path d="M5,7 C6.11,7 7,6.1 7,5 C7,3.9 6.11,3 5,3 C3.9,3 3,3.9 3,5 C3,6.1 3.9,7 5,7
@@ -89,8 +95,10 @@
                     draggable="false">
 
                   <span class="duration-text"><?=trimDurationText($row->duration)?></span>
-                  <img src="<?=$thumbnail?>" type="image/png"
-                  draggable="false" style="object-fit: contain;" />
+                  <picture>
+                    <img src="<?=$thumbnail?>" type="image/png"
+                    draggable="false" style="object-fit: contain;" />
+                  </picture>
                 </div>
                 <div class="d-flex flex-row justify-content-between">
                   <div class="d-flex flex-column m-2">

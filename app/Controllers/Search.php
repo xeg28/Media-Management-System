@@ -12,7 +12,7 @@ class Search extends BaseController
 {
     public function index()
     {
-        helper(['utility']);
+        helper(['utility', 'render']);
         $imgModel = new ImageModel();
         $audModel = new AudioModel();
         $vidModel = new VideoModel();

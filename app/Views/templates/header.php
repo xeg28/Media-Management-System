@@ -79,7 +79,7 @@
 		?>
 
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<a class="d-lg-none" href="<?= base_url('home') ?>"><img class="home-shortcut ml-3 navbar-brand logo"
+			<a class="d-lg-none" href="<?= base_url('home') ?>"><img class="home-shortcut ml-2 navbar-brand logo"
 					src="public/icon.png" alt="Media-icon" /></a>
 
 			<div class="collapse navbar-collapse" id="navbarText">
@@ -109,7 +109,7 @@
 				</ul>
 			</div>
 
-			<div class="d-none d-md-block search-container">
+			<div class="d-none d-md-block ml-lg-2 search-container">
 				<form class="d-flex" action="<?= base_url() ?>/search" method="get">
 					<div class="input-group">
 						<input type="search" class="form-control field" name="query" placeholder="Search..." aria-label="Search">
