@@ -54,6 +54,7 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 - [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
 
 ## mod_xsendfile
+## mod_xsendfile
 
 I added this module to xampp to allow files to be sent back to the server 
 to display them. This is necessary to restrict access to files for users
