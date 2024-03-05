@@ -117,7 +117,6 @@ class Image extends BaseController
             $errors = [];
 			$id = $this->request->getPost('id');
             $model = new ImageModel();
-            $sharedImgModel = new SharedImageModel();
 			$image = $model->getImage($id);
 			if(!$image) {
                 $errors[] = "<li>You can't edit this image.</li>
@@ -126,12 +125,14 @@ class Image extends BaseController
                             <li>".$this->request->getPost('name')."</li>";
                 return redirect()->to(previous_url())->with('errors', $errors);
 			}	
+
+            $note = $this->request->getPost('note');
             
             $imgData = [
                 'id' => $id,
                 'name' => $this->request->getPost('name'),
                 'updated_at' => date('Y-m-d H:i:s', now()),
-                'note' => $this->request->getPost('note'),
+                'note' => $note,
             ];
 
             $model->saveImage($imgData);

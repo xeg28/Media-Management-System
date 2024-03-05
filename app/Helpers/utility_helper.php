@@ -61,7 +61,7 @@ function getThumbnailURL($caption, $type) {
 
 function trimDurationText($duration) {
     $i = 1;
-    while(in_array($duration[$i], array('0', ':'))) $i++;
+    while($i < 4 && in_array($duration[$i], array('0', ':'))) $i++;
     return substr($duration,$i);
 }   
 

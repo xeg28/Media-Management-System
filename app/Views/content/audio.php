@@ -1,28 +1,22 @@
 <div class="container-fluid mt-3">
-	<div class="wrapper">
-		<div class="d-flex justify-content-center mb-2">
-			<div class="card">
-				<div class="card-body center-div">
-					<form action="<?php echo base_url(); ?>/AudioUpload" method="post" class="dropzone w-100 mb-2"
-						id="audioupload">
-					</form>
-					<div class="w-50" id="AudioUploadContainer">
-					</div>
-					<button class="upload-btn btn-theme">Upload</button>
-				</div>
+
+	<?php if(sizeof($files) == 0):?>
+		<div class="wrapper">
+			<div class="no-files-wrapper">
+				<h3 class="mb-4" >No audios found</h3>
+				<img src="<?=base_url('public/icons/no-content.png')?>" alt="no content" class="mb-4 no-content-icon">
+				<a class="btn-theme" href="<?=base_url('/upload')?>" style='text-decoration: none;'>Upload</a>
 			</div>
 		</div>
-	</div>
+  <?php endif; ?>
 
+	<?php if (!empty($files)) {?>
 	<div class="wrapper">
 		<div class="d-flex align-items-center mb-2">
-			<div class="col">
 				<h5>Audio Files</h5>
-			</div>
 		</div>
 		<div class="preview-container <?=$audPreview === "small" ? 'small-preview' : ''?>">
 			<?php
-			if (!empty($files)) {
 				$index = 0;
 				foreach ($files as $row) {
 					$upload_time = new DateTime($row->uploaded_at);
@@ -32,7 +26,7 @@
 					?>
 					<div class="file-preview" filetype="<?= $row->filetype ?>"
 						url="<?= base_url('/Open' . $row->filetype . '?id=' . $row->id) ?>">
-						<div class="img-wrapper blur-load">
+						<div class="img-wrapper blur-load" <?=($row->sender_email != '0') ?'title="Shared by '.$row->sender_email.'"': ''?>>
 							<?php if ($row->is_shared == 1): ?>
 								<svg width="20px" height="20px" viewBox="0 0 16 16" class="shared-icon" fill="">
 									<path d="M5,7 C6.11,7 7,6.1 7,5 C7,3.9 6.11,3 5,3 C3.9,3 3,3.9 3,5 C3,6.1 3.9,7 5,7
@@ -41,9 +35,6 @@
 										 L5,8.2 Z M11,8.2 C10.75,8.2 10.46,8.22 10.16,8.26 C10.95,8.86 11.5,9.66 11.5,10.7
 											L11.5,12 L16,12 L16,10.7 C16,9.03 12.67,8.2 11,8.2 L11,8.2 Z"></path>
 								</svg>
-								<span class="shared-hover">Shared by
-									<?= $row->sender_email ?>
-								</span>
 							<?php endif; ?>
 							<span class="duration-text"><?=trimDurationText($row->duration)?></span>
 							<img class="image-icon" src="<?= base_url('public/audio/icon.svg'); ?>" draggable="false">
@@ -55,7 +46,7 @@
 
 						<div class="d-flex flex-row justify-content-between w-100">
 							<div class="d-flex flex-column m-2">
-								<span class="preview-title">
+								<span class="preview-title" title="<?=$row->name?>">
 									<?= htmlspecialchars($row->name) ?>
 								</span>
 								<span>Format:
@@ -86,11 +77,10 @@
 					<?php
 					$index++;
 				}
-			} else {
 				?>
-				<p>No audio(s) found...</p>
-			<?php } ?>
-
+			</div>
 		</div>
-	</div>
+			<?php 
+				} 
+			?>
 </div>

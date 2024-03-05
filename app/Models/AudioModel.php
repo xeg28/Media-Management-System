@@ -55,7 +55,7 @@ class AudioModel extends Model {
 
         $builder =$this->db->table('(' . $builder1->getCompiledSelect(false) . ') AS union_result');
         $builder->limit(10)
-                ->orderBy('uploaded_at','DESC');
+                ->orderBy('uploaded_at DESC, name ASC');
         $query = $builder->get();
         return $query->getResult();
     }

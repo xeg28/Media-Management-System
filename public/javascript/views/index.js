@@ -10,14 +10,70 @@ function checkForPopups() {
         $('html').addClass("no-scroll");
 }
 
+function loadImage(container) {
+    let picture = $(container).find(':last-child');
+    let image = $(picture).find('img');
+    if(image[0] && image[0].complete){
+        $(container).addClass('loaded');
+    }
+    $(image).on('load', function() {
+        $(container).addClass('loaded');
+    });
+}
+
+function setTheme(val, toggle) {
+    if(val % 3 == 0) {
+        $(document.documentElement).removeAttr('theme');
+        $(toggle).attr('val', '0');
+        $(toggle).html("Theme: System 💻");
+    }
+    else if (val % 3 == 1) {
+        $(document.documentElement).attr('theme', 'dark');
+        $(toggle).attr('val', '1');
+        $(toggle).html("Theme: Dark 🌙");
+    }
+    else {
+        $(document.documentElement).attr('theme', 'light');
+        $(toggle).attr('val', '2');
+        $(toggle).html("Theme: Light ☀️");
+    }
+}
+setTheme(localStorage.getItem('theme'), $('#theme'));
 $(document).ready(function() {
     checkForPopups();
+    setTheme(localStorage.getItem('theme'), $('#theme'));
+    $('[data-toggle="tooltip"]').tooltip();
+
+    // toggles theme
+    $('#theme').on({
+        click: function(event) {
+            event.stopPropagation();
+            let val = Number($(this).attr('val')) + 1;
+            localStorage.setItem('theme', val);
+            setTheme(val, this);
+        }
+    });
 
     function updatePreviews() {
         $(".preview-container").each(function (){
             var itemCount = $(this).children().length;
             if(itemCount < 3) {
                 $(this).addClass('small-preview');
+            }
+            if(itemCount == 0) {
+                this.closest('.wrapper').remove();
+            }
+            if($('.wrapper').length == 0) {
+                let searchParam = new URLSearchParams(window.location.search);
+                let filetype = (['Image', 'Audio', 'Video'].includes(document.title)) ? document.title.toLowerCase() + 's' : 'files';
+                filetype = (searchParam.has('query')) ? 'results for ' + "'" + searchParam.get('query')+ "'" : filetype;
+                $('.container-fluid').prepend('<div class="wrapper">'+
+                  '<div class="no-files-wrapper">'+
+                    '<h3 class="mb-4" >No '+filetype+' found</h3>'+
+                    '<img src="'+window.location.origin+'/public/icons/no-content.png" alt="no content" class="mb-4 no-content-icon"/>'+
+                    '<a class="btn-theme" href="http://localhost/upload" style=\'text-decoration: none;\'>Upload</a>'+
+                    '</div>'+
+                '</div>')
             }
         });
     }
@@ -43,14 +99,7 @@ $(document).ready(function() {
     });
 
     $('.blur-load').each(function(index, container) {
-        let picture = $(container).find(':last-child');
-        let image = $(picture).find('img');
-        if(image[0] && image[0].complete){
-            $(container).addClass('loaded');
-        }
-        $(image).on('load', function() {
-            $(container).addClass('loaded');
-        });
+        loadImage(container);
     });
 
     $('.preview-container').on({
@@ -113,13 +162,14 @@ $(document).ready(function() {
                 dataType: "json",
                 success: function(response) { 
                     preview.remove();
-                    if (container.find(".file-preview").length === 0) { 
-                        container.append("<p>No "+type.toLowerCase()+"s(s) found...</p>");
-                    }
-                    console.log(response.images);
+                    // if (container.find(".file-preview").length === 0) { 
+                    //     container.append("<p>No "+type.toLowerCase()+"s(s) found...</p>");
+                    // }
                     if(response.filePreview) {
                         container.append(response.filePreview);
                         $('body').append(response.sharePopup);
+                        $newPreview = container.find(':last-child');
+                        loadImage($newPreview.find('.blur-load'));
                     }
     
                     updatePreviews();

@@ -79,7 +79,7 @@ function createFilePreview($file)
 
 	return '<div class="file-preview" filetype="'.$file->filetype.'"'
 					.'url="'.base_url('/Open'.$file->filetype.'?id='.$file->id).'">'
-						.'<div class="img-wrapper blur-load">'
+						.'<div class="img-wrapper blur-load" '.(($file->is_shared == 1) ? 'title="Shared by' .$file->sender_email .'"': ''). '>'
 						. (($file->is_shared == 1) ? 
 						'<svg width="20px" height="20px" viewBox="0 0 16 16" class="shared-icon" fill="">
 							<path d="M5,7 C6.11,7 7,6.1 7,5 C7,3.9 6.11,3 5,3 C3.9,3 3,3.9 3,5 C3,6.1 3.9,7 5,7
@@ -87,10 +87,7 @@ function createFilePreview($file)
 									11,7 L11,7 Z M5,8.2 C3.33,8.2 0,9.03 0,10.7 L0,12 L10,12 L10,10.7 C10,9.03 6.67,8.2 5,8.2
 									L5,8.2 Z M11,8.2 C10.75,8.2 10.46,8.22 10.16,8.26 C10.95,8.86 11.5,9.66 11.5,10.7
 										L11.5,12 L16,12 L16,10.7 C16,9.03 12.67,8.2 11,8.2 L11,8.2 Z"></path>
-						</svg>
-						<span class="shared-hover">Shared by
-							<?= $row->sender_email ?>
-						</span>' : '')
+						</svg>' : '')
 						.'<img class="' . strtolower($file->filetype) .'-icon" src="'. $iconpaths[$file->filetype] .'/icon.svg"'.
 							'draggable="false"/>' 
 							.(($file->filetype != 'Image') ? 
@@ -100,7 +97,7 @@ function createFilePreview($file)
 
 						.'<div class="d-flex flex-row justify-content-between w-100">
 								<div class="d-flex flex-column m-2">
-									<span class="preview-title">'
+									<span class="preview-title" title="'.$file->name.'">'
 									.	htmlspecialchars($file->name)
 								.'</span>'
 								. '<span>Format: '.$filetype.' &#8226; '

@@ -65,7 +65,7 @@ class ImageModel extends Model {
 
         $builder =$this->db->table('(' . $builder1->getCompiledSelect(false) . ') AS union_result');
         $builder->limit(10)
-                ->orderby('name','ASC')->orderBy('uploaded_at','DESC');
+                ->orderby('uploaded_at DESC, name ASC');
         $query = $builder->get();
         return $query->getResult();
     }

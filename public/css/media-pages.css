@@ -3,7 +3,7 @@
     margin: 0 auto;
     width: 85%;
     overflow-x: hidden;
-    border-bottom: 1px solid #CCC;
+    border-bottom: 1px solid var(--accent-color);
     padding-top: 2.5rem;
     padding-bottom: 2.5rem;
   }
@@ -122,22 +122,37 @@
     border-radius: 3px;
   }
 
-  .shared-hover {
-    font-size: 10px;
+  .tooltip-wrapper > .shared-hover {
+    font-size: 12px;
     color: white;
-    height: 20px;
-    display:none;
+    height: 24px;
+    /* display:none; */
     position: absolute;
-    top: 5%;
-    right: 12%;
+    top: -15px;
+    left: 50%;
+    opacity: 0;
+    transform: translateX(-50%);
+    white-space: nowrap;
     border-radius: 3px;
     padding: 3px;
-    z-index: 1;
-    background-color: rgba(0, 0, 0, .7);
+    z-index: 10;
+    background-color: rgba(0, 0, 0, .8);
+    transition: all 0.3s ease;
   }
 
-  .shared-icon:hover + .shared-hover {
+  .tooltip-wrapper {
+    position: absolute;
+    top: 5%;
+    right: 3%;
+    height: 20px;
+    width: 20px;
+    z-index: 2;
+  }
+
+  .tooltip-wrapper:hover > .shared-hover {
     display: block;
+    opacity: 1;
+    top: -30px;
   }
 
 
@@ -148,7 +163,15 @@
 
   .preview-title {
     font-weight: bold;
-    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 2; /* Number of lines to show */
+    text-overflow: ellipsis;
+  }
+
+  .card#upload {
+    width: 80%;
   }
 
   @media (max-width: 750px) {
@@ -169,16 +192,48 @@
     border-radius: 50%;
     cursor: pointer;
   }
+
+  .options svg {
+    filter: var(--img-invert);
+  }
   
   .dropdown-menu {
     width: auto;
     border-radius: 10px;
     user-select: none;
+    background-color: var(--bg-color);
+    color: var(--font-color);
+    border-color: var(--accent-color);
   }
   
+  .dropdown-item {
+    color: var(--font-color);
+  }
+
   .dropdown-item:hover {
     cursor: pointer;
+    color: var(--font-color);
     background-color: #eaeaea;
     z-index: 1;
   }
+
+  /* @media (prefers-color-scheme:dark) {
+    .options svg {
+      filter:invert(1);
+    }
+    .dropdown-menu {
+      background-color: #2f2f2f;
+      color: white;
+    }
+    .dropdown-item {
+      color: white;
+    }
+    .dropdown-item:hover {
+      background-color: var(--accent-color-dark);
+      color: white;
+    }
+    .wrapper {
+      border-bottom: 1px solid var(--accent-color-dark);
+    }
+  } */
 

@@ -4,6 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="color-scheme" content="light dark">
 	<link rel="stylesheet" href="public/css/bootstrap.min.css">
 	<script src="public/javascript/dropzone.min.js"></script>
 	<script src="public/javascript/jquery-3.5.1.min.js"></script>
@@ -51,7 +52,10 @@
 		});
 	</script>
 <script src='public/javascript/views/index.js'></script>		
-	<?php if ($title == 'Home') {
+	<?php if($title == 'Upload') { ?>
+		<script src='public/javascript/views/upload.js'></script>
+	<?php }
+	if ($title == 'Home') {
 		?>
 		<script src='public/javascript/views/home.js'></script>
 	<?php }
@@ -79,32 +83,37 @@
 		?>
 
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<a class="d-lg-none" href="<?= base_url('home') ?>"><img class="home-shortcut ml-2 navbar-brand logo"
+			<a class="d-lg-none" href="<?= base_url('home') ?>"><img class="home-shortcut mx-2 navbar-brand logo"
 					src="public/icon.png" alt="Media-icon" /></a>
 
 			<div class="collapse navbar-collapse" id="navbarText">
 				<a class="d-none d-lg-block" href="<?= base_url('home') ?>"><img class="home-shortcut mx-3 navbar-brand logo"
 						src="public/icon.png" alt="Media-icon" /></a>
 				<ul class="navbar-nav me-auto mx-2 my-2 my-lg-0 navbar-nav-scroll">
-					<li class="nav-item <?php if ($current_page == 'home') {
+					<li class="nav-item <?php if ($current_page == 'home'):
 						echo 'active';
-					} ?>">
+					endif; ?>">
 						<a class="nav-link" href="<?= base_url('/home') ?>">Home</a>
 					</li>
-					<li class="nav-item <?php if ($current_page == 'image') {
+					<li class="nav-item <?php if ($current_page == 'image'):
 						echo 'active';
-					} ?>">
+					endif; ?>">
 						<a class="nav-link" href="<?= base_url('image') ?>">Image</a>
 					</li>
-					<li class="nav-item <?php if ($current_page == 'audio') {
+					<li class="nav-item <?php if ($current_page == 'audio'):
 						echo 'active';
-					} ?>">
+					endif;?>">
 						<a class="nav-link" href="<?= base_url('/audio') ?>">Audio</a>
 					</li>
-					<li class="nav-item <?php if ($current_page == 'video') {
+					<li class="nav-item <?php if ($current_page == 'video'):
 						echo 'active';
-					} ?>">
+					endif;?>">
 						<a class="nav-link" href="<?= base_url('/video') ?>">Video</a>
+					</li>
+					<li class="nav-item <?php if($current_page == 'upload'): 
+					 echo 'active';
+					endif; ?>">
+						<a href="<?=base_url('/upload')?>" class="nav-link">Upload</a>
 					</li>
 				</ul>
 			</div>
@@ -137,6 +146,7 @@
 					</div>
 					<div class="d-flex flex-column justify-content-end">
 						<ul class="dropdown-menu">
+							<li><a class="dropdown-item" id='theme' val="0">Theme: System 💻</a></li>
 							<li><a class="dropdown-item" href="<?= base_url('/logout') ?>">Logout</a></li>
 						</ul>
 					</div>
@@ -161,7 +171,7 @@
 		<?php if (isset($errors)): ?>
 			<div class="popup">
 				<div class="alert-box">
-					<img src="http://100dayscss.com/codepen/alert.png"/>
+					<img src="<?=base_url('public/icons/alert.png')?>"/>
 					<span class="alert-title">ops!</span>
 						<?php foreach ($errors as $error) {
 							echo '<p>'.$error.'</p>';

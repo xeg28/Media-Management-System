@@ -243,3 +243,7 @@ h4.file-name {
         grid-gap: 8px;
     }
 }
+
+.btn-container > * {
+    filter: var(--img-invert);
+}
