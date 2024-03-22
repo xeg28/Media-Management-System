@@ -118,6 +118,7 @@
 				</ul>
 			</div>
 
+			<div class="nav-btns">
 			<div class="d-none d-md-block ml-lg-2 search-container">
 				<form class="d-flex" action="<?= base_url() ?>/search" method="get">
 					<div class="input-group">
@@ -128,25 +129,27 @@
 					</div>
 				</form>
 			</div>
-
-			<div class="nav-btns">
-				<img class="search-btn search-icon d-md-none" src="<?= base_url('public/icons/search.svg') ?>"
+				<button class="search-btn d-md-none">
+				<img class="search-icon" src="<?= base_url('public/icons/search.svg') ?>"
 					draggable="false"></img>
+				</button>
 				<button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarText"
 					aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
 				<div class="dropdown collapsed">
-					<div class="nav-options" data-toggle="dropdown" aria-expanded="false">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-							<path d="M12 16.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5
-									1.5-1.5zM10.5 12c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5
-									1.5zm0-6c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5z"></path>
-						</svg>
-					</div>
+					<button class="nav-options" data-toggle="dropdown" aria-expanded="false">
+						<span tabindex="-1" class="btn-content">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+								<path d="M12 16.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5
+										1.5-1.5zM10.5 12c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5
+										1.5zm0-6c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5z"></path>
+							</svg>
+						</span>
+					</button>
 					<div class="d-flex flex-column justify-content-end">
 						<ul class="dropdown-menu">
-							<li><a class="dropdown-item" id='theme' val="0">Theme: System 💻</a></li>
+							<li><a tabindex="0" class="dropdown-item" id='theme' val="0">Theme: System 💻</a></li>
 							<li><a class="dropdown-item" href="<?= base_url('/logout') ?>">Logout</a></li>
 						</ul>
 					</div>
@@ -155,7 +158,9 @@
 		</nav>
 
 		<div class="nav-search">
-			<img class="back-btn back-icon" src="<?= base_url('public/icons/back.svg') ?>" draggable="false"></img>
+			<button class="back-btn">
+				<img class="back-icon" src="<?= base_url('public/icons/back.svg') ?>" draggable="false"></img>
+			</button>
 			<form class="d-flex" action="<?= base_url() ?>/search" method="get">
 				<div class="input-group">
 					<input type="search" id="searchField" class="form-control field" name="query" placeholder="Search..."

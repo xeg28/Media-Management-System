@@ -5,12 +5,12 @@
 			<img src="<?= base_url('writable/uploads/images/' . $file->caption) ?>" alt="Alternative Text for Image" id="image">
 		<?php endif; ?>
 		<?php if ($file->filetype == 'Audio'): ?>
-			<audio id="audioFile" controls autoplay="autoplay">
+			<audio class="playable" id="audioFile" controls autoplay="autoplay">
 				<source src="writable/uploads/audios/<?= $file->caption ?>" type="<?= $file->type ?>">
 			</audio>
 		<?php endif; ?>
 		<?php if ($file->filetype == 'Video'): ?>
-			<video id="" controls autoplay="autoplay">
+			<video class="playable" id="" controls autoplay="autoplay">
 				<source src="writable/uploads/videos/<?= $file->caption ?>" type="<?= $file->type ?>">
 			</video>
 		<?php endif; ?>
@@ -27,10 +27,16 @@
 				<div class="btn-container">
 					<?php if (!$file->is_shared): ?>
 						<input type="hidden" name="id" value="<?=$file->id?>">
-						<img title="Edit" data-toggle="tooltip" data-placement="bottom" 
-							class="edit-btn option-btn" index="0" src="<?= base_url('/public/icons/edit.svg') ?>" draggable="false">
-						<img title="Confirm" data-toggle="tooltip" data-placement="bottom" class="check-btn option-btn" index="0" src="<?= base_url('/public/icons/check.svg') ?>" draggable="false">
-						<img title="Share" data-toggle="tooltip" data-placement="bottom" class="share-btn option-btn" index="0" src="<?= base_url('/public/icons/share.svg') ?>" draggable="false">
+						<a href="javascript:undefined;" class="edit-btn">
+							<img title="Edit" data-toggle="tooltip" data-placement="bottom" 
+								class="option-btn" index="0" src="<?= base_url('/public/icons/edit.svg') ?>" draggable="false">
+						</a>
+						<a href="javascript:undefined;" class="check-btn">
+							<img title="Confirm" data-toggle="tooltip" data-placement="bottom" class="option-btn" index="0" src="<?= base_url('/public/icons/check.svg') ?>" draggable="false">
+						</a>
+						<a href="javascript:undefined;" class="share-btn">
+							<img title="Share" data-toggle="tooltip" data-placement="bottom" class="option-btn" index="0" src="<?= base_url('/public/icons/share.svg') ?>" draggable="false">
+						</a>
 					<?php endif; ?>
 				</div>
 			</div>
@@ -52,7 +58,7 @@
 		</form>
 
 		<?php if(isset($related_files) && sizeof($related_files) > 0): ?>
-		<div class="related-files">
+		<div class="related-files dynamic-container">
 			<h4>Related Files</h4>
 			<?php $index = 1; 
 				foreach($related_files as $row) : 
@@ -107,18 +113,18 @@
 						</span>
 					</div>
 					<div class="dropdown">
-						<div class="options" index="<?= $index ?>" data-toggle="dropdown" aria-expanded="false">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+						<button class="options" index="<?= $index ?>" data-toggle="dropdown" aria-expanded="false">
+							<svg tabindex="-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 								<path d="M12 16.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5
 										1.5-1.5zM10.5 12c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5
 											1.5zm0-6c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5z"></path>
 							</svg>
-						</div>
+						</button>
 						<div class="d-flex flex-column justify-content-end">
 							<ul class="dropdown-menu">
 								<?php if ($row->is_shared == 0): ?>
-									<li><a class="dropdown-item share-btn" index="<?= $index ?>">Share</a></li>
-									<li><a class="dropdown-item del-btn" rowId="<?= $row->id ?>">Delete</a></li>
+									<li><a tabindex="0" class="dropdown-item share-btn" index="<?= $index ?>">Share</a></li>
+									<li><a tabindex="0" class="dropdown-item del-btn" rowId="<?= $row->id ?>">Delete</a></li>
 								<?php endif; ?>
 								<li><a class="dropdown-item"
 										href="<?= base_url('/Download' . $row->filetype . '?id=' . $row->id) ?>">Download</a>

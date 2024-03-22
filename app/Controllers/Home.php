@@ -21,6 +21,7 @@ class Home extends BaseController
         $data['images'] = $imgModel->getLastTenUpdated();
         $data['audio'] = $audModel->getLastTenUpdated();
         $data['videos'] = $vidModel->getLastTenUpdated();
+        $data['lastShare'] = true;
         $data['imgPreview'] = (sizeof($data['images']) > 2) ? 'normal' : 'small';
         $data['vidPreview'] = (sizeof($data['videos']) > 2) ? 'normal' : 'small';
         $data['audPreview'] = (sizeof($data['audio']) > 2) ? 'normal' : 'small';

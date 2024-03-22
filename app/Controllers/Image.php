@@ -10,7 +10,7 @@ class Image extends BaseController
 {
     public function index()
     {
-        helper(["utility"]);
+        helper(["utility", "render"]);
         $imgModel = new ImageModel();
         $data['title'] = 'Image';
         $data['showNavbar'] = true;
@@ -64,43 +64,6 @@ class Image extends BaseController
     {
         $data= ['message' => $message];
         echo view('errors/html/error_404', $data);
-    }
-
-
-    public function imageUpload()
-    {
-        // Set upload configuration
-        helper(['form', 'url', 'upload', 'date']);
-
-        $files = $this->request->getFileMultiple('file');
-        $filenames = $this->request->getVar('name');
-        $notes = $this->request->getVar('note');
-        $targetPath = UPLOADPATH . 'images/'; 
-
-        foreach($files as $index => $file) {
-            if($file->isValid() && !$file->hasMoved()) {
-                $file->move($targetPath, null);
-                $model = new ImageModel();
-
-                $this->createThumbnail($targetPath . $file->getName());
-    
-                $name = $filenames[$index];
-                $filename = trim($name) === "" ? $file->getName() : $name;
-                $note = $notes[$index];
-        
-                $imgData = [
-                    'name' => $filename,
-                    'type' => $file->getClientMimeType(),
-                    'path' => $targetPath . $file->getName(),
-                    'caption' => $file->getName(),
-                    'updated_at' => date('Y-m-d H:i:s', now()),
-                    'note' => $note,
-                    'user_id' => session()->get("id"),
-                ];
-    
-                $model->saveImage($imgData);
-            } 
-        }
     }
 
     public function imageDownload() {
@@ -186,37 +149,6 @@ class Image extends BaseController
             return redirect()->to(previous_url())->with('errors', $errors);
         }
 	}
-
-    private function createThumbnail($file) {
-        helper('utility');
-        $image = \Config\Services::image();
-
-        $originalImagePath = $file;
-        $temp = explode('/', $file);
-        $filename = nameOfFile(end($temp));
-
-        $lowQualityImagePath = UPLOADPATH . '/images/' . $filename . '_thumb.'.pathinfo($file)['extension'];
-
-        $targetWidth = 500;
-
-        $image->withFile($originalImagePath);
-
-        $originalWidth = $image->getWidth();
-        
-        $originalHeight = $image->getHeight();
-
-        $newHeight = ($originalHeight / $originalWidth) * $targetWidth;
-
-        $image->resize($targetWidth, $newHeight);
-
-        $image->save($lowQualityImagePath);
-
-        // $webpVersionPath =  UPLOADPATH . '/images/' . $filename . '_thumb.' . 'webp';
-        // $image->convert(IMAGETYPE_WEBP);
-        // $image->save($webpVersionPath);
-
-        $image->clear();
-    }
 
     public function delete() {
         helper(['form', 'url', 'upload', 'utility', 'render']);

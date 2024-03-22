@@ -17,7 +17,7 @@ function createSharePopup($file) {
 		return '';
 	}
 
-	return '<div class="share-popup">
+	return '<div class="share-popup" tabindex="0">
 						<div class="share-popup-content position-relative">
 							<div class="card">
 								<div class="card-header">
@@ -97,25 +97,27 @@ function createFilePreview($file)
 
 						.'<div class="d-flex flex-row justify-content-between w-100">
 								<div class="d-flex flex-column m-2">
-									<span class="preview-title" title="'.$file->name.'">'
-									.	htmlspecialchars($file->name)
-								.'</span>'
+									<a class="preview-title file-link" href="'.base_url('/Open'.$file->filetype.'?id='.$file->id).'"> 
+										<span class="" title="'.$file->name.'">'
+										.	htmlspecialchars($file->name)
+									.'</span>
+									</a>'
 								. '<span>Format: '.$filetype.' &#8226; '
 									.	$difference.'</span>'
 								.'</div>'
 								.'<div class="dropdown">'
-									.'<div class="options" data-toggle="dropdown" aria-expanded="false">'
-										.'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+									.'<button class="options" data-toggle="dropdown" aria-expanded="false">'
+										.'<svg tabindex="-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path d="M12 16.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5
 														1.5-1.5zM10.5 12c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5
 															1.5zm0-6c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5z"></path>
 											</svg>'
-										.'</div>'
+										.'</button>'
 									.'<div class="d-flex flex-column justify-content-end">
 											<ul class="dropdown-menu">'
 												.(($file->is_shared == 0) ? 
-												'<li><a class="dropdown-item share-btn">Share</a></li>
-												 <li><a class="dropdown-item del-btn" rowId="'.$file->id.'">Delete</a></li>' : '') 
+												'<li><a tabindex="0" class="dropdown-item share-btn">Share</a></li>
+												 <li><a tabindex="0" class="dropdown-item del-btn" rowId="'.$file->id.'">Delete</a></li>' : '') 
 										. '<li><a class="dropdown-item" href="'.base_url('/Download'.$file->filetype.'?id='.$file->id).'">Download</a></li>'
 										.	'</ul>'
 									.'</div>'

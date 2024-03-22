@@ -1,18 +1,6 @@
 <?php
 function get_time_difference($date1, $date2) {
     $difference = $date1->getTimestamp() - $date2->getTimestamp();
-    // $time = [
-    //     'hours' => 0,
-    //     'minutes' => 0,
-    //     'seconds' => 0,
-    // ];
-    // $time['seconds'] = $difference % 60;
-
-    // $totalMinutes = floor($difference / 60);
-
-    // $time['minutes'] = ($totalMinutes > 60) ? $totalMinutes % 60 : $totalMinutes;
-    
-    // $totalHours = floor($totalMinutes / 60);
 
     if( $difference < 60) {
         return 'moments ago';

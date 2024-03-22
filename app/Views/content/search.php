@@ -19,7 +19,7 @@
 				<?= $query ?>
 			</strong></h5>
 
-		<div class="preview-container <?= $preview === 'small' ? 'small-preview' : ''?>">
+		<div class="preview-container dynamic-container <?= $preview === 'small' ? 'small-preview' : ''?>">
 			<?php
 				foreach ($files as $row) {
 					echo createFilePreview($row);

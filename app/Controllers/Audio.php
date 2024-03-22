@@ -15,7 +15,7 @@ class Audio extends BaseController
 
     public function index()
     {
-        helper(["utility"]);
+        helper(["utility", "render"]);
         $audModel = new AudioModel();
 		$sharedAudModel = new SharedAudioModel();
         $data = [];
@@ -68,49 +68,6 @@ class Audio extends BaseController
     private function show_404($message) {
         $data['message'] = $message;
         echo view('errors/html/error_404', $data);
-    }
-
-
-
-    public function audioUpload()
-    {
-        // The upload helper is a custom helper that can be found in the helpers folder
-        helper(['form', 'url', 'upload', 'date']);
-
-        $files = $this->request->getFileMultiple('file');
-        $filenames = $this->request->getVar('name');
-        $notes = $this->request->getVar('note');
-        $uuid =  $this->request->getVar('uuid');
-        $durations = json_decode($this->request->getVar('durations'), true);
-        $targetPath = UPLOADPATH . 'audios/';
-
-        foreach($files as $index => $file) {
-            if($file->isValid() && !$file->hasMoved()) {
-                $file->move($targetPath, null);
-                $model = new AudioModel();
-                
-                $durationInSeconds = $durations[$uuid[$index]];
-                $time = get_time_from_seconds($durationInSeconds);
-                $duration = sprintf('%02d:%02d:%02d', $time['hours'], $time['minutes'], $time['seconds']);
-                
-                $name = $filenames[$index];
-                $filename = trim($name) === "" ? $file->getName() : $name;
-                $note = $notes[$index];
-    
-                $audioData = [
-                    'name' => $filename,
-                    'type' => $file->getClientMimeType(),
-                    'path' => $targetPath . $file->getName(),
-                    'caption' => $file->getName(),
-                    'updated_at' => date('Y-m-d H:i:s', now()),
-                    'duration' => $duration,
-                    'note' => $note,
-                    'user_id' => session()->get("id"),
-                ];
-    
-                $model->saveAudio($audioData); 
-            }
-        }
     }
 	
 	public function share() {

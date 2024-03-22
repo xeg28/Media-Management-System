@@ -34,6 +34,15 @@
     padding-top: 56.25%;
   }
 
+  .file-link { 
+    text-decoration: inherit;
+    color:inherit;
+  }
+  
+  .file-link:hover { 
+    text-decoration: inherit;
+    color:inherit;
+  }
 
   .file-preview img {
     border-radius: 10px;
@@ -180,7 +189,6 @@
     }
   }
 
-
   .options {
     position: relative;
     display: flex;
@@ -190,7 +198,22 @@
     height: 35px;
     width: 35px;
     border-radius: 50%;
-    cursor: pointer;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background: none;
+    border: none;
+    outline: none;
+    cursor:pointer;
+  }
+  .options > svg {
+    border-radius: 50%;
+  }
+  .options:focus > svg {
+    outline:auto;
+  }
+
+  .options:focus, .options > svg {
+    outline:none;
   }
 
   .options svg {

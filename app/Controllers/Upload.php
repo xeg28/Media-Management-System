@@ -21,6 +21,8 @@ class Upload extends BaseController
 
   public function fileUpload()
   {
+    $filePreviews = array();
+    $sharePopups = array();
     $files = $this->request->getFileMultiple('file');
     $filenames = $this->request->getVar('name');
     $notes = $this->request->getVar('note');
@@ -37,33 +39,40 @@ class Upload extends BaseController
         'note' => $notes[$index]
       ];
 
+      $elements = array();
+
       if ($type == 'image') {
-        $this->imageUpload($uploadData);
-      } else if ($type == 'audio') {
+        $elements = $this->imageUpload($uploadData);
+      } 
+      else if ($type == 'audio') {
         $uploadData['duration'] = $durations[$uuid[$idIndex++]];
-        $this->audioUpload($uploadData);
-      } else if ($extension == 'webm') {
+        $elements = $this->audioUpload($uploadData);
+      } 
+      else if ($extension == 'webm') {
+        // Checks if webm is a video or audio file
         if ($this->webmContainsVideo($file->getRealPath())) {
-          //download a webm with video to test out
-          //needs videoUpload function here
           $uploadData['duration'] = $durations[$uuid[$index]];
-          $this->videoUpload($uploadData);
+          $elements = $this->videoUpload($uploadData);
         } else {
           $uploadData['duration'] = $durations[$uuid[$index]];
-          $this->audioUpload($uploadData);
+          $elements = $this->audioUpload($uploadData);
         }
       } else if ($type == 'video') {
         $uploadData['duration'] = $durations[$uuid[$index]];
-        $this->videoUpload($uploadData);
+        $elements = $this->videoUpload($uploadData);
       }
+      array_push($filePreviews, $elements['filePreview']);
+      array_push($sharePopups, $elements['sharePopup']);
     }
 
+    return $this->response->setJSON(["filePreviews" => $filePreviews,
+                                      "sharePopups" => $sharePopups]);
   }
 
   private function imageUpload($uploadData)
   {
     // Set upload configuration
-    helper(['form', 'url', 'upload', 'date']);
+    helper(['form', 'url', 'upload', 'date', 'render']);
 
     $targetPath = UPLOADPATH . 'images/';
     $file = $uploadData['file'];
@@ -87,15 +96,21 @@ class Upload extends BaseController
         'note' => $note,
         'user_id' => session()->get("id"),
       ];
-
-      $model->saveImage($imgData);
+      $uploadId = $model->insert($imgData);
+      $image = $model->getImage($uploadId);
+      return ['filePreview' => createFilePreview($image),
+              'sharePopup' => createSharePopup($image)
+            ];
+    }
+    else {
+      return null;
     }
   }
 
   private function audioUpload($uploadData)
   {
     // The upload helper is a custom helper that can be found in the helpers folder
-    helper(['form', 'url', 'upload', 'date']);
+    helper(['form', 'url', 'upload', 'date', 'utility', 'render']);
 
     $file = $uploadData['file'];
     $targetPath = UPLOADPATH . 'audios/';
@@ -123,14 +138,19 @@ class Upload extends BaseController
         'user_id' => session()->get("id"),
       ];
 
-      $model->saveAudio($audioData);
+      $uploadId = $model->insert($audioData);
+      $audio = $model->getAudio($uploadId);
+      
+      return ['filePreview' => createFilePreview($audio), 
+              'sharePopup' => createSharePopup($audio)];
     }
+    return null;
   }
 
   public function videoUpload($uploadData)
   {
     // The upload helper is a custom helper that can be found in the helpers folder
-    helper(['form', 'url', 'upload', 'date']);
+    helper(['form', 'url', 'upload', 'date', 'utility', 'render']);
 
     $file = $uploadData['file'];
     $targetPath = ROOTPATH . 'writable/uploads/videos/';
@@ -144,10 +164,25 @@ class Upload extends BaseController
       $ffmpeg = FFMpeg::create([
         'ffmpeg.binaries' => 'app\ffmpeg\bin\ffmpeg.exe',
         'ffprobe.binaries' => 'app\ffmpeg\bin\ffprobe.exe'
-      ]);
+      ]);    
 
       $video = $ffmpeg->open($targetPath . $file->getName());
+      $video_dimensions = $video->getStreams()->videos()->first()->getDimensions();
+      $width = $video_dimensions->getWidth();
+      $height = $video_dimensions->getHeight();
+      
+      $targetWidth = 500;
+      $newHeight = ($height / $width) * $targetWidth;
+
       $frame = $video->frame(TimeCode::fromSeconds(1));
+
+      $frame->addFilter(
+        (new \FFMpeg\Filters\Frame\ImageDimensionFilter())
+            ->setDimension(
+                new \FFMpeg\Coordinate\Dimension($targetWidth, $newHeight)
+            )
+       );
+
       $frame->save($thumbnail);
 
       $durationInSeconds = $uploadData['duration'];
@@ -169,9 +204,12 @@ class Upload extends BaseController
         'user_id' => session()->get("id"),
       ];
 
-      $model->saveVideo($videoData);
+      $uploadId = $model->insert($videoData);
+      $video = $model->getVideo($uploadId);
+      return ['filePreview' => createFilePreview($video),
+              'sharePopup' => createSharePopup($video)];
     }
-
+    return null;
   }
 
   function webmContainsVideo($file_path)

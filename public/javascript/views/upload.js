@@ -15,8 +15,45 @@ Dropzone.options.fileupload = {
   timeout: 600000,
   init: function(){
     var index = 1;
-    this.on("success", function (file) {
-      location.reload();
+    var previewsAdded = false;
+    this.on("queuecomplete", function(file) {
+      this.options.autoProcessQueue = false;
+      var dropzone = Dropzone.forElement("#fileupload");
+      $('input[name="durations"').remove();
+      $('input[name="note[]"').remove();
+      $('input[name="name[]"').remove();
+      setTimeout(function(){
+        dropzone.getAcceptedFiles().forEach(function(accepted) {
+    
+          dropzone.removeFile(accepted);
+        });
+      }, 3000);
+      
+      previewsAdded = false;
+    });
+
+    this.on("success", function (file, response) {
+      let previewContainer= $('.preview-container');
+      
+      if(previewContainer.length > 0 && previewsAdded) return;
+      previewsAdded = true;
+      
+      let wrapper = '<div class="wrapper" id="recent-uploads"><h5>Recently Uploaded</h5></div>';
+      
+      let fileContainer = "<div class=\"preview-container ";
+      fileContainer = fileContainer.concat((response.filePreviews.length <= 2) ? 'small-preview"></div>': '"></div>');
+      if($('#recent-uploads').length === 0) $('.container-fluid').append(wrapper);
+      if(previewContainer.length == 0) $('#recent-uploads').append(fileContainer);
+      
+      response.filePreviews.forEach(function(preview) {
+        $('.preview-container').prepend(preview);
+      });
+
+      response.sharePopups.forEach(function(popup) {
+        $('body').prepend(popup);
+      });
+
+      loadImage($('.blur-load'));
     });
 
     this.on("addedfile", function(file) { 
@@ -97,6 +134,8 @@ $(document).ready(function(){
         $('#fileupload').append('<input type="hidden" name="note[]" value="' + note + '">');
       });
       
+      $('.fileinput-wrapper').remove();
+      $(this).hide();
       dropzone.processQueue();
     });
  });

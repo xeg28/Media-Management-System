@@ -13,7 +13,7 @@ class Video extends BaseController
 {
     public function index()
     {
-        helper(['utility']);
+        helper(['utility', 'render']);
         $vidModel = new VideoModel();
         $sharedVidModel = new SharedVideoModel();
         $data = [];
@@ -64,58 +64,6 @@ class Video extends BaseController
     {
         $data= ['message' => $message];
         echo view('errors/html/error_404', $data);
-    }
-
-
-    public function videoUpload()
-    {
-        // The upload helper is a custom helper that can be found in the helpers folder
-        helper(['form', 'url', 'upload', 'date']);
-
-        $files = $this->request->getFileMultiple('file');
-        $filenames = $this->request->getVar('name');
-        $notes = $this->request->getVar('note');
-        $durations = json_decode($this->request->getVar('durations'), true);
-        $uuid = $this->request->getVar('uuid');
-        $targetPath = ROOTPATH . 'writable/uploads/videos/';
-
-        foreach($files as $index => $file) {
-            if ($file->isValid() && !$file->hasMoved()) {
-                $file->move($targetPath, null);
-                $thumbnail = ROOTPATH . 'public/video/' . '/thumbnails/'.explode('.', $file->getName())[0].'.png';
-                $model = new VideoModel();  
-                
-                $ffmpeg = FFMpeg::create([
-                    'ffmpeg.binaries'  => 'app\ffmpeg\bin\ffmpeg.exe',
-                    'ffprobe.binaries' => 'app\ffmpeg\bin\ffprobe.exe'
-                ]);
-                
-                $video = $ffmpeg->open($targetPath . $file->getName());
-                $frame = $video->frame(TimeCode::fromSeconds(1));
-                $frame->save($thumbnail);
-    
-                $durationInSeconds = $durations[$uuid[$index]];
-                $time = get_time_from_seconds($durationInSeconds);
-                $duration = sprintf('%02d:%02d:%02d', $time['hours'], $time['minutes'], $time['seconds']);
-    
-                $name = $filenames[$index];
-                $filename = (trim($name) === "") ? $file->getName() : $name;
-                $note = $notes[$index];
-                
-                $videoData = [    
-                    'name' => $filename,
-                    'type' => $file->getClientMimeType(),
-                    'path' => $targetPath . $file->getName(),
-                    'caption' => $file->getName(),
-                    'updated_at' => date('Y-m-d H:i:s', now()),
-                    'duration' => $duration,
-                    'note' => $note,
-                    'user_id' => session()->get("id"),
-                ];
-    
-                $model->saveVideo($videoData);
-            }
-        }
     }
 
     public function share() {

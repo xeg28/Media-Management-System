@@ -87,9 +87,15 @@ h4.file-name {
     border-radius: 10px;
 }
 
-.option-btn {
+.edit-btn, .btn-container > .share-btn, .check-btn {
+    padding:0;
     height: 30px;
     width: 30px;
+}
+
+.option-btn {
+    height: 100%;
+    width: 100%;
     padding: 3px;
     border-radius: 5px;
 }
